@@ -1,5 +1,7 @@
 import sqlite3
 from datetime import date
+
+
 def addBike(userName : str, bycode : int = None, dateEntre : date = None, marque : str = None, typeVelo : str = None, tailleRoue : str = None, tailleCadre : str = None, photo1 : bytes = None, photo2 : bytes = None, photo3 : bytes = None, electrique : bool = None, origine : str = None, status : str = None, etatVelo : str = None, prochaineAction : str= None, referent : str = None, valeur : float = None, destinataireVelo : str = None, descriptionPublic : str = None, descriptionPrive : str = None, dateSortie : date = None, typeSortie : str = None):
     """crée un vélo dans la base de donné Bike et une ligne de mémoire dans la table Modification"""
     
@@ -28,6 +30,7 @@ def addBike(userName : str, bycode : int = None, dateEntre : date = None, marque
             return None
         else:
             return listError
+
 
     # vérifie que les entrés soient du bon type
     typeCheck = checkEntry()
@@ -58,6 +61,8 @@ def modifyBike(userName : str, bikeID : int, listAttribute : list, listNewValue 
             return([dictAttributeToType[attribute]])
         return None
 
+
+    
     listError = []
     for i in range(len(listAttribute)):  #" checkError"
             typeCheck = checkEntry(listAttribute[i], listNewValue[i])
@@ -92,7 +97,7 @@ def modifyBike(userName : str, bikeID : int, listAttribute : list, listNewValue 
     connection.close()
 
 
-
+# read n'est pas encore fati (obviouslly)
 def readBike(attributeFitler : list = None):
     """retourne la liste des vélos correspondant aux critères, si pas de critère retourne tout"""
     connection = sqlite3.connect("MyDataBase.db")
