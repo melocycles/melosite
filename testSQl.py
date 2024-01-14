@@ -1,3 +1,4 @@
+"""ajoute et/ou modifie la base de donné. Si une erreur de type est détecté (checkEntry dans addBike et modifyBike) elle est renvoyé dans potentialErrorReturn puis affiché par print."""
 import sqlCRUD
 from datetime import date
 
@@ -15,10 +16,10 @@ if 1: # vélo pour le test
 
 potentialErrorReturn = None
 
+# enlever le dièse dessous pour tester addbike
+#potentialErrorReturn = sqlCRUD.addBike("Louis", 123)
 
-potentialErrorReturn = sqlCRUD.addBike("Louis", 123)
-
-
+# enlever le dièse dessous pour tester modifyBike
 #potentialErrorReturn = sqlCRUD.modifyBike("julien", 1,["marque", "status"], [123, "donné"])
 
 
