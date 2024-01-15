@@ -65,7 +65,7 @@ def modifyBike(userName : str, bikeID : int, dictOfChange):
         cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = ?", (bikeID,)) # sélectionne le suivid de modif du vélo
         result = cursor.fetchone() # voir dessous
         currentSuiviModif = result[0] # récupère le suivi de modif
-        newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} à modifié {key} de {oldValue} à {value}" # ajoute la modif aux précédentes
+        newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} a modifié {key} de {oldValue} à {value}" # ajoute la modif aux précédentes
         cursor.execute("UPDATE Modification SET suiviModif = ? WHERE bikeID = ?", (newInformation, bikeID)) # remplace le suivi de modif par celui update
         connection.commit() # effectue la mise à jour
 
