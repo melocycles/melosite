@@ -31,12 +31,12 @@ def addBike(userName : str, dictOfValue):
     cursor = connection.cursor()
     cursor.execute("INSERT INTO Bike (bycode, dateEntre, marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, electrique, origine, status, etatVelo, prochaineAction, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                    (dictOfValue["bycode"], dictOfValue["dateEntre"], dictOfValue["marque"], dictOfValue["typeVelo"], dictOfValue["tailleRoue"], dictOfValue["tailleCadre"], dictOfValue["photo1"], dictOfValue["photo2"], dictOfValue["photo3"], dictOfValue["electrique"], dictOfValue["origine"], dictOfValue["status"], dictOfValue["etatVelo"], dictOfValue["prochaineAction"], dictOfValue["referent"], dictOfValue["valeur"], dictOfValue["destinataireVelo"], dictOfValue["descriptionPublic"], dictOfValue["descriptionPrive"], dictOfValue["dateSortie"], dictOfValue["typeSortie"]))
-    connection.commit()
 
     # ajout d'une entré pour le vélo danas la table Modification
     bike_id = cursor.lastrowid #on récupère l'id du vélo qui a été crée
     cursor.execute("INSERT INTO Modification (date, benevole, suiviModif, BikeID) VALUES (?, ?, ?, ?)",
                    (date.today(), userName , f"le {date.today()} {userName} à crée le vélo", bike_id))
+    
     connection.commit()
     connection.close()
 
@@ -59,7 +59,6 @@ def modifyBike(userName : str, bikeID : int, dictOfChange):
         oldValue = result[0] 
 
         cursor.execute("UPDATE Bike SET {} = ? WHERE id = ?".format(key), (value, bikeID)) # format car on ne peut pas passer le nom d'une colonne avec "?"
-        connection.commit() # effectue la mise à jour
 
         # ajout de la modificatoin dans la table Modification
         cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = ?", (bikeID,)) # sélectionne le suivid de modif du vélo
