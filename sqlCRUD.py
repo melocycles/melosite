@@ -3,13 +3,18 @@ from datetime import date
 
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     """vérifie que le type de la donné correspond bien au type attendu. Crée un message d'erreur en fonction de l'endroit où la fonctionaété appelé.
+
+        dictionary est un dictionnaire contenant les attributs et les valeurs à vérifier sous la forme {"marque" : "shimano"}
+
+        errorMesssage est en fonction de la fonction d'origine:
         1 : addBike
         2 : modifyBike
         """
     dictExpectedType = {"bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "status":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
     listError = []
-    for key, value in dictionary.items():
-        if type(value) != dictExpectedType[key] and value != None:
+
+    for key, value in dictionary.items(): # on parcour le dictionnaire
+        if type(value) != dictExpectedType[key] and value != None: # si la valeur n'est pas celle attendu et n'est pas None (valeur non renseigné)
             if errorMessage == 1:
                 # éxemple:                   bycode        est  "erreur de saisie" (un     str                  ) alors qu'il devrait être un         int 
                 listError.append(f"{key} est {value} (un {type(value)}) alors qu'il devrait être un {dictExpectedType[key]}")
@@ -18,70 +23,148 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
             
     return listError
 
+
+def checkIsItAColumn(potentialColumn:str) -> bool:
+    """vérifie que potentialColumn est bien une des colonnes de la table de la base de donné"""
+    listAttributesName = ["bycode", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "origine", "status", "etatVelo", "prochaineAction", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
+    if potentialColumn in listAttributesName:
+        return True
+    return False
+
+
 def addBike(userName : str, dictOfValue):
-    """crée un vélo dans la base de donné Bike et une ligne de mémoire dans la table Modification"""
+    """crée un vélo dans la base de donné Bike et une ligne de mémoire dans la table Modification
+    
+        userName est le nom de l'utilisateur qui crée le vélo. Il est utilisé pour créer l'entré du vélo dans la table Modification
+
+        dictOfValue est un dictionnaire contenant les attributs et les valeurs du vélo sous la forme {"marque" : "shimano"}
+    """
 
     # vérifie que les entrés soient du bon type
     typeCheck = checkEntryType(1, dictOfValue)
     if typeCheck: # si il y a des erreurs stop et renvoie de l'erreur sous forme d'un liste de string
         return typeCheck
     
-    # ajout du vélo dans la base de donné Bike
+    # on vérifie que les attributs nécessaires soient remplis sinon on n'ajoute pas le vélo.
+    listAttributesRequired = ["dateEntre", "origine", "status", "referent"]
+    for attribute in listAttributesRequired:
+        if attribute not in dictOfValue:
+            return "%s est nécessaire veuillez le renseigner"
+    # On remplit ceux non nécessaire et manquant par None
+    listAttributesName = ["bycode", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "etatVelo", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
+    for attribute in listAttributesName:
+        if attribute not in dictOfValue:
+            dictOfValue[attribute] = None
+    
+
+    # connexion à la base de donné
     connection = sqlite3.connect("MyDataBase.db")
     cursor = connection.cursor()
+
+    # envoie de la requette à la base de donné
     cursor.execute("INSERT INTO Bike (bycode, dateEntre, marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, electrique, origine, status, etatVelo, prochaineAction, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                    (dictOfValue["bycode"], dictOfValue["dateEntre"], dictOfValue["marque"], dictOfValue["typeVelo"], dictOfValue["tailleRoue"], dictOfValue["tailleCadre"], dictOfValue["photo1"], dictOfValue["photo2"], dictOfValue["photo3"], dictOfValue["electrique"], dictOfValue["origine"], dictOfValue["status"], dictOfValue["etatVelo"], dictOfValue["prochaineAction"], dictOfValue["referent"], dictOfValue["valeur"], dictOfValue["destinataireVelo"], dictOfValue["descriptionPublic"], dictOfValue["descriptionPrive"], dictOfValue["dateSortie"], dictOfValue["typeSortie"]))
+
 
     # ajout d'une entré pour le vélo danas la table Modification
     bike_id = cursor.lastrowid #on récupère l'id du vélo qui a été crée
     cursor.execute("INSERT INTO Modification (date, benevole, suiviModif, BikeID) VALUES (?, ?, ?, ?)",
-                   (date.today(), userName , f"le {date.today()} {userName} à crée le vélo", bike_id))
-    
-    connection.commit()
+                   (date.today(), userName , f"le {date.today()} {userName} à crée le vélo", bike_id)) # envoie de la requette à la base de donné
+    connection.commit() # éxécution des requettes
     connection.close()
 
 
 def modifyBike(userName : str, bikeID : int, dictOfChange):
-    """Modifie un ou plusieurs attribut d'un vélo et enregistre le/les changements dans la table Modification"""
+    """Modifie un ou plusieurs attribut d'un vélo et enregistre le/les changements dans la table Modification
+    
+        userName est le nom de l'utilisateur qui crée le vélo. Il est utilisé pour créer l'entré du vélo dans la table Modification
+
+        dictOfChange est un dictionnaire contenant les attributs et les valeurs à modifier sous la forme {"marque" : "shimano"}
+    """
     # vérifie que les entrés soient du bon type
     typeCheck = checkEntryType(2, dictOfChange)
     if typeCheck: # si il y a des erreurs stop et renvoie de l'erreur sous forme d'un liste de string
         return typeCheck
 
+    # connexion à la base de donné
     connection = sqlite3.connect("MyDataBase.db")
     cursor = connection.cursor()
 
-    # on update toutes les valeurs modifié par l'utilisateur
+    # on update une par une toutes les valeurs modifié par l'utilisateur
     for key, value in dictOfChange.items():
-        # on récupère d'abord l'ancienne valeur de l'attribut pour la phrase de suivis de modif dans la table de Modification
-        cursor.execute("SELECT {} FROM Bike WHERE id = ?".format(key), (bikeID,))
-        result = cursor.fetchone() # voir dessous
-        oldValue = result[0] 
+        if checkIsItAColumn(key): # on vérifie que la clef est bien une colonne de la table de la base de donné
+            # on récupère d'abord l'ancienne valeur de l'attribut pour l'enregistrer dans la table de Modification
+            cursor.execute("SELECT {} FROM Bike WHERE id = ?".format(key), (bikeID,))
+            result = cursor.fetchone() # on récupère la valeur qui nous intéresse
+            oldValue = result[0] 
 
-        cursor.execute("UPDATE Bike SET {} = ? WHERE id = ?".format(key), (value, bikeID)) # format car on ne peut pas passer le nom d'une colonne avec "?"
+            cursor.execute("UPDATE Bike SET {} = ? WHERE id = ?".format(key), (value, bikeID)) # format car on ne peut pas passer le nom d'une colonne avec "?"
 
-        # ajout de la modificatoin dans la table Modification
-        cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = ?", (bikeID,)) # sélectionne le suivid de modif du vélo
-        result = cursor.fetchone() # voir dessous
-        currentSuiviModif = result[0] # récupère le suivi de modif
-        newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} a modifié {key} de {oldValue} à {value}" # ajoute la modif aux précédentes
-        cursor.execute("UPDATE Modification SET suiviModif = ? WHERE bikeID = ?", (newInformation, bikeID)) # remplace le suivi de modif par celui update
-        connection.commit() # effectue la mise à jour
+            # ajout de la modificatoin dans la table Modification
+            cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = ?", (bikeID,)) # sélectionne le suivid de modif du vélo correspondant
+            result = cursor.fetchone() # récupère le suivi de modif
+            currentSuiviModif = result[0] 
+            newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} à modifié {key} de {oldValue} à {value}" # ajoute la modif qui vient d'être faite aux précédentes
+            cursor.execute("UPDATE Modification SET suiviModif = ? WHERE bikeID = ?", (newInformation, bikeID)) # remplace le suivi de modif par celui update
+            connection.commit() # effectue les mise à jour
+
+    connection.close()# récupère le suivi de modif
+
+
+def readBike(dictOfFilter : dict = None) -> list[dict]:
+    """retourne la liste des vélos correspondant aux critères, si pas de critère retourne tout
+        retourne une liste de dictionnaires. Les dictionnaires sont les caractéristique des vélos
+    """
+    #connexion à la base de donné
+    connection = sqlite3.connect("MyDataBase.db")
+    cursor = connection.cursor()
+
+    if dictOfFilter == None: # si il n'y a pas de filtre afficher tous les vélos
+        sqlQuerry = 'SELECT * FROM Bike'
+
+    else: # si il y a au moins un filtre préparer la requette
+        sqlQuerry = 'SELECT * FROM Bike WHERE ' # requette de base
+        conditions = []
+        for key, value in dictOfFilter.items():
+            conditions.append(f"{key} = '{value}'") # marque = "shimano"
+
+        # Ajout des conditions à la requête si des filtres sont présents
+        if conditions:
+            sqlQuerry += " AND ".join(conditions) #transforme la liste crée au dessus en requette SQL 
+    
+    cursor.execute(sqlQuerry) # éxécute la requette
+    result = cursor.fetchall() # on récupère les vélos qui nous intéresse sous forme de liste
 
     connection.close()
+    
+    for i in result:
+        print(i)
+
+    return result 
 
 
+def deleteBike(userName:str, bikeID:int) -> None:
+    
+    # message d'avertissement
+    print("Attention tu vas supprimer un vélo de la base de donné, es tu sur? y/n")
+    if input() != 'y':
+        print("\nsupression annulé")
+        return
+    
+    print("Veux tu ajouter un commentaire? Vide pour non")
+    commentaire = input()
 
-def readBike(attributeFitler : list = None):
-    """retourne la liste des vélos correspondant aux critères, si pas de critère retourne tout"""
+    #connexion à la base de donné
     connection = sqlite3.connect("MyDataBase.db")
     cursor = connection.cursor()
 
-    if not attributeFitler: # pas de critère de filtre on les renvoi tous
-        cursor.execute("SELECT * FROM Bike")
-
-    sql_query = 'SELECT * FROM Bike WHERE 1=1'
-    conditions = []
-
+    # envoie de la requette à la base de donné
+    cursor.execute("DELETE FROM Bike WHERE id = ?", (bikeID,))
     
-    result = cursor
+    # ajout de la modificatoin dans la table Modification
+    cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = ?", (bikeID,)) # sélectionne le suivid de modif du vélo correspondant
+    result = cursor.fetchone() # récupère le suivi de modif
+    currentSuiviModif = result[0] 
+    newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} à supprimer le vélo en précisnat {commentaire}" # ajoute la modif qui vient d'être faite aux précédentes
+    cursor.execute("UPDATE Modification SET suiviModif = ? WHERE bikeID = ?", (newInformation, bikeID)) # remplace le suivi de modif par celui update
+    connection.commit() # effectue la mise à jour
