@@ -17,11 +17,17 @@ if 1: # vélo pour le test
 
 potentialErrorReturn = None
 
-# enlever le dièse dessous pour tester addbike
+# enlever le dièse dessous pour tester addBike
 #potentialErrorReturn = sqlCRUD.addBike("Louis", bike0 )
 
-# enlever le dièse dessous pour tester addbike
+# enlever le dièse dessous pour tester modifyBike
 #potentialErrorReturn = sqlCRUD.modifyBike("julien", 1,{"marque" : 123, "status" : "donné"})
+
+# enlever le dièse dessous pour tester readBike
+#sqlCRUD.readBike({"typeVelo" : "VTT", "tailleCadre" : "L"})
+
+# enlever le dièse dessous pour tester deleteBike
+#sqlCRUD.deleteBike("Louis", 2)
 
 
 if potentialErrorReturn:
