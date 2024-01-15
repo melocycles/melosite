@@ -53,7 +53,7 @@ def modifyBike(userName : str, bikeID : int, dictOfChange):
 
     # on update toutes les valeurs modifié par l'utilisateur
     for key, value in dictOfChange.items():
-        # on récupère d'abord l'ancienne valeur de l'attribut pour l'enregistrer dans la table de Modification
+        # on récupère d'abord l'ancienne valeur de l'attribut pour la phrase de suivis de modif dans la table de Modification
         cursor.execute("SELECT {} FROM Bike WHERE id = ?".format(key), (bikeID,))
         result = cursor.fetchone() # voir dessous
         oldValue = result[0] 
