@@ -16,17 +16,27 @@ La branche main utilise maintenant postgreSQL qui est compatible avec heroku
 
 
 Prochaines étapes:
-* html + css basique & statique de la page vue vélo
-* page vu vélo dynamique sans liaison avec la database
-*  .
-* html + css basique & statiques de modification vélo
-* page modification dynamique sans liaison avec la database
-*  .
-* interfaçage de la page vue vélo et la database
-* interfaçage de la page modification vélo et la database
-* check que tout fonctionne bien
+* html + css basique & statique de la page vue vélo            Fait
+* page vu vélo dynamique sans liaison avec la database         Fait
+* interfaçage de la page vue vélo et la database               Fait
+* cleanage/optimisation
 *  .
 * html + css basique & statique de la page parcourir les vélo
 * page parcourir les vélo dynamique avec liaison database
+* interfaçage de la page parcourir vélo et la database
+* cleanage/optimisation
+*  .
+* recherche de bug dans l'interfaçage + recleanage/optimisation
+*  .
+*  .
+* html + css basique & statiques de modification vélo
+* page modification dynamique sans liaison avec la database
+* interfaçage de la page modification vélo et la database
+* cleanage/optimisation
 *  .
 * jolie css
+* recherche de bug
+* cleanage/optimisation
+* .
+* .
+* Présentation (Sùùùùùùùùùùùùùùù)
