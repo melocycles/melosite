@@ -23,7 +23,7 @@ Prochaines étapes:
 * mise en ligne sur  github
 *  .
 * html + css basique & statique de la page parcourir les vélo
-* page parcourir les vélo dynamique avec liaison database
+* page parcourir les vélo dynamique sans liaison database
 * interfaçage de la page parcourir vélo et la database
 * cleanage/optimisation
 * mise en ligne sur  github
@@ -33,7 +33,7 @@ Prochaines étapes:
 *  .
 *  .
 * html + css basique & statiques de modification vélo
-* page modification dynamique sans liaison avec la database
+* page modification dynamique sans liaison database
 * interfaçage de la page modification vélo et la database
 * cleanage/optimisation
 * mise en ligne sur  github
