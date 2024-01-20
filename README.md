@@ -19,13 +19,13 @@ Prochaines étapes:
 * html + css basique & statique de la page vue vélo            Fait
 * page vu vélo dynamique sans liaison avec la database         Fait
 * interfaçage de la page vue vélo et la database               Fait
-* cleanage/optimisation
-* mise en ligne sur  github
+* cleanage                                                     Fait
+* mise en ligne sur  github                                    Fait
 *  .
 * html + css basique & statique de la page parcourir les vélo
 * page parcourir les vélo dynamique sans liaison database
 * interfaçage de la page parcourir vélo et la database
-* cleanage/optimisation
+* cleanage
 * mise en ligne sur  github
 *  .
 * recherche de bug dans l'interfaçage + recleanage/optimisation
@@ -35,14 +35,14 @@ Prochaines étapes:
 * html + css basique & statiques de modification vélo
 * page modification dynamique sans liaison database
 * interfaçage de la page modification vélo et la database
-* cleanage/optimisation
+* cleanage
 * mise en ligne sur  github
 *  .
 * jolie css
 * mise en ligne sur  github
 *  .
 * recherche de bug
-* cleanage/optimisation
+* cleanage
 * update sur github
 * .
 * .
