@@ -8,15 +8,15 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
 
         errorMesssage est en fonction de la fonction d'origine:
         1 : addBike
-        2 : modifyBike
+        2 : modifyBike, readBike
         """
-    dictExpectedType = {"bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "status":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
+    dictExpectedType = {"id":int, "bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "status":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
     listError = []
 
     for key, value in dictionary.items(): # on parcour le dictionnaire
         if type(value) != dictExpectedType[key] and value != None: # si la valeur n'est pas celle attendu et n'est pas None (valeur non renseigné)
             if errorMessage == 1:
-                # éxemple:                   bycode        est  "erreur de saisie" (un     str                  ) alors qu'il devrait être un         int 
+                # éxemple:        bycode est "input" (un     str      ) alors qu'il devrait être un         int 
                 listError.append(f"{key} est {value} (un {type(value)}) alors qu'il devrait être un {dictExpectedType[key]}")
             elif errorMessage == 2:
                 listError.append(f"{key} est du mauvais type : {type(value)} au lieu de {dictExpectedType[key]}. valeur entré : {value}")
@@ -50,6 +50,7 @@ def addBike(userName : str, dictOfValue):
     for attribute in listAttributesRequired:
         if attribute not in dictOfValue:
             return "%s est nécessaire veuillez le renseigner"
+        
     # On remplit ceux non nécessaire et manquant par None
     listAttributesName = ["bycode", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "etatVelo", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
     for attribute in listAttributesName:
@@ -124,13 +125,62 @@ def modifyBike(userName : str, bikeID : int, dictOfChange):
     connection.close()# récupère le suivi de modif
 
 
+def readBike(whoCall : str, dictOfFilters : dict = None) -> dict:
+    """ Whocall : "search", "global", "detail", "edit"
+        dictOfFilters : {"attibut1" : "valeur1", "attribut2" : "valeur2" ....}
+    
+    
+    
+        SELECT 1 FROM Bike WHERE 2
+        whoCall gère le 1 et prend soit la valeur:
+            "search" page recherche vélo
+            "global" page vélo caractères globaux
+            "detail" page vélo info caché pour les utilisateurs readOnly
+            "edit"   page modification d'un vélo
 
-def readBike(dictOfFilter : dict = None) -> list[dict]:
-    """retourne la liste des vélos correspondant aux critères, si pas de critère retourne tout
-        retourne une liste de dictionnaires. Les dictionnaires sont les caractéristique des vélos
+        dicOfFilters gère le 2, cad {"marque = "shimano"} pour la gestion des filtre sur la page de recherche de vélo
+            ou bien {"id" = bikeId} pour la page de détail
 
-        dictoOfFilter = {"marque : "shimao", "tailleCadre" : "L" ...}        
+
+        search : photo1, descriptionPublic
+        global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, status, état, valeur, descriptionPublic
+        detail : bycode, origine, prochaine action, référent, destinataire, descriptionPrive
     """
+
+    # on sélectionne les attrtibuts à renvoyer en fonction de l'endroit où à lieux l'appel
+    if whoCall == "search":
+        caracteristicToReturn = "photo1, descriptionPublic"
+    elif whoCall == "global":
+        caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, status, etatVelo, valeur, descriptionPublic"
+    elif whoCall == "detail":
+        caracteristicToReturn = "bycode, origine, prochaineAction, referent, destinataireVelo, descriptionPrive"
+    elif whoCall == "edit":
+        caracteristicToReturn = "*"
+    else:
+        return "Error in whoCall" # !! gestion d'erreur non implémenté !!
+
+    
+    # vérifie que les entrés soient du bon type
+    if dictOfFilters != None: # si il y a un/des filtres OU que l'on sélectionne un seul vélo
+        typeCheck = checkEntryType(2, dictOfFilters)
+        if typeCheck: # si il y a des erreurs stop et renvoie de l'erreur sous forme d'un liste de string
+            return typeCheck
+    
+    
+    # préparationd e la requette SQL
+    sqlQuerry = "SELECT %s FROM Bike "%(caracteristicToReturn)
+
+
+    if dictOfFilters: # si il y a au moins un filtre, sinon la requêtte est prete
+        sqlQuerry += 'WHERE ' # requette de base
+        conditions = []
+        for key, value in dictOfFilters.items():
+            conditions.append(f"{key} = '{value}'") # marque = "shimano"
+
+        # Ajout des conditions à la requête si des filtres sont présents
+        if conditions:
+            sqlQuerry += " AND ".join(conditions) #transforme la liste crée au dessus en requette SQL 
+    
 
     # Connexion à la base de données
     connection = psycopg2.connect(
@@ -139,30 +189,19 @@ def readBike(dictOfFilter : dict = None) -> list[dict]:
         user="postgres",
         password="mdp"
     )
+
     cursor = connection.cursor()
-
-    if dictOfFilter == None: # si il n'y a pas de filtre afficher tous les vélos
-        sqlQuerry = 'SELECT * FROM Bike'
-
-    else: # si il y a au moins un filtre préparer la requette
-        sqlQuerry = 'SELECT * FROM Bike WHERE ' # requette de base
-        conditions = []
-        for key, value in dictOfFilter.items():
-            conditions.append(f"{key} = '{value}'") # marque = "shimano"
-
-        # Ajout des conditions à la requête si des filtres sont présents
-        if conditions:
-            sqlQuerry += " AND ".join(conditions) #transforme la liste crée au dessus en requette SQL 
-    
     cursor.execute(sqlQuerry) # éxécute la requette
-    result = cursor.fetchall() # on récupère les vélos qui nous intéresse sous forme de liste
-
-    connection.close()
+    result = cursor.fetchone() # on récupère les vélos qui nous intéresse sous forme de liste
+    columns = [desc[0] for desc in cursor.description]
     
-    for i in result:
-        print(i)
+    connection.close()
 
-    return result 
+    if result:
+        dictReturn = dict(zip(columns, result))
+
+    return dictReturn 
+
 
 
 def deleteBike(userName:str, bikeID:int) -> None:
