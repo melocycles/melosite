@@ -22,7 +22,7 @@ Prochaines étapes:
 * cleanage                                                     Fait
 * mise en ligne sur  github                                    Fait
 *  .
-* html + css basique & statique de la page parcourir les vélo
+* html + css basique & statique de la page parcourir les vélo  Fait
 * page parcourir les vélo dynamique sans liaison database
 * interfaçage de la page parcourir vélo et la database
 * cleanage
