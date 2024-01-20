@@ -23,8 +23,8 @@ Prochaines étapes:
 * mise en ligne sur  github                                    Fait
 *  .
 * html + css basique & statique de la page parcourir les vélo  Fait
-* page parcourir les vélo dynamique sans liaison database
-* interfaçage de la page parcourir vélo et la database
+* page parcourir les vélo dynamique sans liaison database      Fait
+* interfaçage de la page parcourir vélo et la database         (manque "juste" le filtrage)
 * cleanage
 * mise en ligne sur  github
 *  .
