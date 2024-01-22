@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesParcourVelo.css') }}">
+        <title>Ma Page</title>
+    </head>
+
+    <header>
+        <h1>Mon Titre</h1>
+        <div id="header_buttons">
+            <button id="addButton" class="btn-left">Ajouter</button>
+            <button id="filterButton" class="btn-right">Filtrer</button>
+        </div>
+    </header>
+
+    
+    <body>
+    <div class="bodyContent">
+        <form class="form form-container" id="formContainer" action="Non">
+            <label for="marque">Marque:</label>
+            <select class="filter" id="marque" name="marque">
+                <option value="None"></option>
+            </select>
+
+            <label for="type">Type de vélo:</label>
+            <select class="filter" id="type" name="type">
+                <option value="None"></option>
+            </select>
+
+            <label for="taille-roues">Taille des roues:</label>
+            <select class="filter" id="taille-roues" name="taille-roues">
+                <option value="None"></option>
+            </select>
+
+            <label for="taille-cadre">Taille du cadre:</label>
+            <select class="filter" id="taille-cadre" name="taille-cadre">
+                <option value="None"></option>
+            </select>
+
+            <label for="etat-velo">État du vélo:</label>
+            <select class="filter" id="etat-velo" name="etat-velo">
+                <option value="None"></option>
+            </select>
+            <div class="button">
+                <button id="confirmButton" class="btn-right">confirmer</button>
+                <button id="cancelButton" class="btn-left">annuler</button>
+            </div>
+            <button id="resetButton">reset</button>
+
+        </form>
+
+        <!-- Cadres avec image et texte -->
+        <div id="veloPart" class="veloPart">
+        </div>
+        <!-- Ajoutez plus de cadres selon vos besoins -->
+        <script src="{{ url_for('static', filename='scriptParcourVelo.js') }}" ></script>
+    </div>
+    </body>
+</html>

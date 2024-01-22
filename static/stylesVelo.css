@@ -1,0 +1,49 @@
+li{
+    padding: 2px 0px
+}
+
+.grandeImage{
+    max-width: 80%;
+    height: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.petites-images {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.petites-images img {
+    max-width: 5rem; /* Définit la largeur maximale à 100% de la largeur du conteneur parent */
+    height: auto;    /* Permet au navigateur de calculer automatiquement la hauteur pour maintenir les proportions */
+}
+
+
+.caracteristiques {
+    display: flex;
+    padding: 20px;
+}
+
+.colonne {
+    flex: 1;
+}
+
+.colonne ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+.btn-detail {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.detail {
+    display: none;
+    padding: 20px;
+}

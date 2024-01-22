@@ -81,7 +81,6 @@ def addBike(userName : str, dictOfValue):
     connection.close()
 
 
-
 def modifyBike(userName : str, bikeID : int, dictOfChange):
     """Modifie un ou plusieurs attribut d'un vélo et enregistre le/les changements dans la table Modification
     
@@ -125,7 +124,7 @@ def modifyBike(userName : str, bikeID : int, dictOfChange):
     connection.close()# récupère le suivi de modif
 
 
-def readBike(whoCall : str, dictOfFilters : dict = None) -> dict:
+def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     """ Whocall : "search", "global", "detail", "edit"
         dictOfFilters : {"attibut1" : "valeur1", "attribut2" : "valeur2" ....}
     
@@ -142,14 +141,14 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> dict:
             ou bien {"id" = bikeId} pour la page de détail
 
 
-        search : photo1, descriptionPublic
+        search : photo1, descriptionPublic, id
         global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, status, état, valeur, descriptionPublic
         detail : bycode, origine, prochaine action, référent, destinataire, descriptionPrive
     """
 
     # on sélectionne les attrtibuts à renvoyer en fonction de l'endroit où à lieux l'appel
     if whoCall == "search":
-        caracteristicToReturn = "photo1, descriptionPublic"
+        caracteristicToReturn = "photo1, descriptionPublic, id"
     elif whoCall == "global":
         caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, status, etatVelo, valeur, descriptionPublic"
     elif whoCall == "detail":
@@ -192,15 +191,44 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> dict:
 
     cursor = connection.cursor()
     cursor.execute(sqlQuerry) # éxécute la requette
-    result = cursor.fetchone() # on récupère les vélos qui nous intéresse sous forme de liste
-    columns = [desc[0] for desc in cursor.description]
-    
+    result = cursor.fetchall()
+
     connection.close()
 
-    if result:
-        dictReturn = dict(zip(columns, result))
+    rows = []
 
-    return dictReturn 
+    for row in result:
+        columns = [desc[0] for desc in cursor.description]
+        row_dict = dict(zip(columns, row))
+        rows.append(row_dict)
+    return rows
+
+
+def getAttributesValues() -> dict[list]:
+    """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
+        listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
+    """
+    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
+    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "etatVelo" : []}
+
+    # Connexion à la base de données
+    connection = psycopg2.connect(
+        host="localhost",
+        database="melodb",
+        user="postgres",
+        password="mdp"
+    )
+
+    cursor = connection.cursor()
+    for attribut in listAttributes: # parcourt les attributs
+        cursor.execute( "SELECT %s From bike" %(attribut)) # création de la requette qui sélectionne toutes les valeur un attribut après l'autre
+        result = cursor.fetchall()
+        for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
+            if valueTupple[0] not in dictReturn[attribut]: # on vérifie que c'est la première occurence 
+                dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
+    connection.close()
+
+    return dictReturn
 
 
 
