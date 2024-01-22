@@ -24,20 +24,26 @@ Prochaines étapes:
 *  .
 * html + css basique & statique de la page parcourir les vélo  Fait
 * page parcourir les vélo dynamique sans liaison database      Fait
-* interfaçage de la page parcourir vélo et la database         (manque "juste" le filtrage)
-* cleanage
-* mise en ligne sur  github
+* interfaçage de la page parcourir vélo et la database         Fait
+* cleanage                                                     Fait
+* mise en ligne sur  github                                    Fait
 *  .
-* recherche de bug dans l'interfaçage + recleanage/optimisation
-* update sur github
+* Interfaçage des deux pages                                   Fait
+* update sur github                                            Fait
 *  .
 *  .
-* html + css basique & statiques de modification vélo
-* page modification dynamique sans liaison database
+* html + css basique dynamique de modification vélo
 * interfaçage de la page modification vélo et la database
+* interfaçage avec la page vue vélo
 * cleanage
 * mise en ligne sur  github
 *  .
+* html + css basique dynamique de création vélo
+* intefaçage avec la database
+* interfaçage avec parcourir vélo
+* cleanage
+* mise en ligne gitHub
+* .
 * jolie css
 * mise en ligne sur  github
 *  .
