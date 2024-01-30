@@ -38,7 +38,7 @@ def readBikeJs() -> list[dict] or list[list]:
             if i in result[bikeIndex]: # si une photo est présente
                 result[bikeIndex][i] = base64.b64encode(result[bikeIndex][i]).decode('utf-8') # transforme en format jsCompatible
 
-    if len(result) == 1: # un seul vélo a été renvoyé
+    if whoCall != "search": # un seul vélo a été renvoyé
         result = result[0] # on récupère le seul vélo de la liste
 
         # on transforme le dictionnaire en une liste avec en entré paire les clef et en impaire les valeures. (pourquoi? parceque le js c'est vraiment de la merde)11
