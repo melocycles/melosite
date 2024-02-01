@@ -32,15 +32,15 @@ Prochaines étapes:
 * update sur github                                            Fait
 *  .
 *  .
-* html + css basique dynamique de modification vélo
-* interfaçage de la page modification vélo et la database
-* interfaçage avec la page vue vélo
+* html + css basique dynamique de modification vélo            Fait
+* interfaçage de la page modification vélo et la database      Fait
+* interfaçage avec la page vue vélo                            Fait
 * cleanage
 * mise en ligne sur  github
 *  .
-* html + css basique dynamique de création vélo
+* html + css basique dynamique de création vélo                Fait
 * intefaçage avec la database
-* interfaçage avec parcourir vélo
+* interfaçage avec vélo                                        Fait
 * cleanage
 * mise en ligne gitHub
 * .
