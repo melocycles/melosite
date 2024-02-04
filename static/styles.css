@@ -19,6 +19,11 @@ button{
     padding: 5px 15px;
 }
 
+button:disabled{
+    filter: grayscale(60%);
+    color: rgba(175, 175, 175, 0.5);
+}
+
 #header_buttons {
     bottom: 10px;
     display: flex;
@@ -26,11 +31,16 @@ button{
     justify-content: space-between;
 }
 
-.btn-left{
+.buttonLeft{
     align-self: left;
 
 }
 
-.btn-right{
+.buttonRight{
     align-self: right;
+}
+
+.buttonCenter{
+    margin-left: auto;
+    margin-right: auto;
 }

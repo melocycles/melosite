@@ -11,15 +11,17 @@
     <header>
         <h1>Mon Titre</h1>
         <div id="header_buttons">
-            <button id="addButton" class="btn-left">Ajouter</button>
-            <button id="filterButton" class="btn-right">Filtrer</button>
+            <button id="addButton" class="buttonLeft">Ajouter</button>
+            <button id="filterButton" class="buttonRight">Filtrer</button>
         </div>
     </header>
 
     
     <body>
     <div class="bodyContent">
-        <form class="form form-container" id="formContainer" action="Non">
+        <form id="formContainer" action="Non">
+            <button id="resetButton">reset</button>
+
             <label for="marque">Marque:</label>
             <select class="filter" id="marque" name="marque">
                 <option value="None"></option>
@@ -45,10 +47,9 @@
                 <option value="None"></option>
             </select>
             <div class="button">
-                <button id="confirmButton" class="btn-right">confirmer</button>
-                <button id="cancelButton" class="btn-left">annuler</button>
+                <button id="confirmButton" class="buttonRight">confirmer</button>
+                <button id="cancelButton" class="buttonLeft">annuler</button>
             </div>
-            <button id="resetButton">reset</button>
 
         </form>
 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, json, redirect, url_for
 import sqlCRUD
 import base64
+
 app = Flask(__name__)
 app.secret_key = 'test'
 app.config['SESSION_COOKIE_SAMESITE'] = None  # 'None' signifie que SameSite=None sera utilisé
@@ -8,15 +9,42 @@ app.config['SESSION_COOKIE_SAMESITE'] = None  # 'None' signifie que SameSite=Non
 # ce qui s'affiche quand on se connecte au serveur (la page où l'on voit tous les vélos)
 @app.route('/')
 def index():
-    return render_template('parcourVelo.html')
+    return render_template('parcourVelo.html')    #document.cookie = "melocycle="+  bikeId + "; expires=" + new Date(Date.now() + 60000).toUTCString() + "; path=/";
 
-# page où un seul vélo s'affiche
+# page d'un vélo
 @app.route('/velo')
 def show_bike_page():
     return render_template('velo.html')
 
+# page ajouter un vélo
+@app.route('/ajouterVelo')
+def addBikePage():
+    return render_template("ajouterVelo.html")
+
+# page modifier vélo
+@app.route('/modifierVelo')
+def modifyBike():
+    return render_template("modifierVelo.html")
+
+
+
+### les interractions avec la databse
+
+@app.route("/api/addBikeJS", methods=["POST"])
+def addbike():
+    data = request.get_json()
+    for i in data:
+        if i.startswith("photo"):
+            if data[i].startswith("data:image/jpeg;base64,"):
+                data[i] = data[i].replace("data:image/jpeg;base64,", "")
+            data[i] = base64.b64decode(data[i])
+
+    result = sqlCRUD.addBike(data)
+    return result  # Réponse de succès à renvoyer au frontend
+
+
 @app.route("/api/readBikeJs", methods=["POST"])
-def readBikeJs() -> list[dict] or list[list]:
+def readBikeJs() -> list[dict]  or list[list]:
     """Appel la fonction sclCRUD.readbike
         requiert whoCall (str) et parameter(dict). 
         renvoie une liste de dict si plusieurs vélos sont retournés (1dict = 1vélo)
@@ -35,7 +63,7 @@ def readBikeJs() -> list[dict] or list[list]:
     # on transforme les byte en str car js c'est de la merde
     for bikeIndex in range(len(result)): # parcourt tous les vélos
         for i in ["photo1", "photo2", "photo3"]: # on parcourt les photos possibles
-            if i in result[bikeIndex]: # si une photo est présente
+            if i in result[bikeIndex] and result[bikeIndex][i] != None: # si une photo est présente
                 result[bikeIndex][i] = base64.b64encode(result[bikeIndex][i]).decode('utf-8') # transforme en format jsCompatible
 
     if whoCall != "search": # un seul vélo a été renvoyé
@@ -48,6 +76,7 @@ def readBikeJs() -> list[dict] or list[list]:
 
     return jsonify({'result': result})
 
+
 # renvoie les valeurs possible de filtre (aka toutes les marques enregistrés, tous les types de vélo....)
 @app.route('/api/getFilterValue', methods=["POST"])
 def getFilterValue():
@@ -55,5 +84,22 @@ def getFilterValue():
     return jsonify({'result': result})
 
 
+@app.route("/api/modifyBikeJs", methods=["POST"])
+def modifyBikeJS():
+    """Appel la fonction sqlCRUD.modifyBike
+        requiert dictOdChange (dict) contenant les parmaètres à modifier
+    """
+    data = request.json
+    for i in data:
+        if i.startswith("photo"):
+            if data[i].startswith("data:image/jpeg;base64,"):
+                data[i] = data[i].replace("data:image/jpeg;base64,", "")
+            data[i] = base64.b64decode(data[i])
+    response = sqlCRUD.modifyBike(data)
+    return response
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    context = ('server.crt', 'server.key')
+    #app.run(debug=True, host='0.0.0.0')
+    app.run(ssl_context=context, debug=True, host='0.0.0.0')

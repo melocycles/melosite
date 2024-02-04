@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () { // quand la page se charge
     var bikeId = parseInt(sessionStorage.getItem("bikeId"));
     var returnButton = document.getElementById('returnButton');
+    var modifyButton = document.getElementById("editButton")
 
     // Appel à la db pour récupérer les infos du vélos puis les ajouter à l'html
     fetchData('/api/readBikeJs', 'global', { id: bikeId }, genererListeCaracteristiques);
@@ -9,7 +10,11 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     fetchData('/api/readBikeJs', 'detail', { id: bikeId }, genererListeDetail);
 
     returnButton.addEventListener('click', function() { // au click sur le bouton retour
+        sessionStorage.removeItem("bikeId"); // supprime le bikeId du vélo que l'on consultait
         window.location.href = "/";; // retourne à la page parcourVelo
+    });
+    modifyButton.addEventListener('click', function() {
+        window.location.href = "/modifierVelo"
     });
 });
 

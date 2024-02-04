@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     formContainer.addEventListener('submit', function(event) { 
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
+    addButton.addEventListener('click', function(){
+        window.location.href = "/ajouterVelo";
+    });
     // ajoute les évenements reliés aux bouttons
     filterButton.addEventListener('click', function() { // au click sur le bouton filtrer
         toggleForm(); // affiche le formulaire
@@ -71,6 +74,7 @@ function sendFilter(){
     addToFormData('tailleRoue', 'taille-roues');
     addToFormData('tailleCadre', 'taille-cadre');
     addToFormData('etatVelo', 'etat-velo');
+
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
     fetchData('/api/readBikeJs', "search", formData, displayBikes)
