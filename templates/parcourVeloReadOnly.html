@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesParcourVelo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesParcourVeloReadOnly.css') }}">
     <title>parcour vélo</title>
-    <link rel="preload" as="image" href="static/images/connectionLogoWhite.png" />
-    <link rel="preload" as="image" href="static/images/logoHeader.jpg" />
-
 </head>
 
 <body>
     <header id="header">
         <div id="headerButtons">
-            <button id="addButton" class="buttonLeft">Ajouter</button>
             <button id="filterButton" class="buttonRight">Filtrer</button>
         </div>
     </header>
@@ -47,12 +43,6 @@
             <select id="etatVelo" class="filter" name="etatVelo">
                 <option value="None"></option>
             </select>
-
-            <label for="statusVelo">Status du vélo</label>
-            <select id="statusVelo" class="filter" name="statusVelo">
-                <option value="None"></option>
-            </select>
-
             <div id="buttonFilterContainer">
                 <button id="confirmButton" class="buttonRight">confirmer</button>
                 <button id="cancelButton" class="buttonLeft">annuler</button>
@@ -63,7 +53,7 @@
         <!-- Cadres avec image et texte -->
         <div id="veloPart"></div>
         <!-- Ajoutez plus de cadres selon vos besoins -->
-        <script src="{{ url_for('static', filename='scriptParcourVelo.js') }}" ></script>
+        <script src="{{ url_for('static', filename='scriptParcourVeloReadOnly.js') }}" ></script>
         <script src="{{ url_for('static', filename='script.js') }}" ></script>
     </div>
 </body>

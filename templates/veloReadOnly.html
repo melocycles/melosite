@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesVelo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesVeloReadOnly.css') }}">
     <title>Ma Page</title>
 </head>
 <body>
     <header id="header">
         <div id="headerButtons">
             <button id="returnButton" class="buttonLeft">Retour</button>
-            <button id="editButton" class="buttonRight">Editer</button>
         </div>
     </header>
     
@@ -36,20 +35,7 @@
         </div>
     </div>
 
-    <button id="detailButton">Détail</button>
-
-    <div id="detail" class="detail" display="none">
-        <div id="columnLeftDetail" class="column">
-            <ul>
-            </ul>
-        </div>
-        <div id="columnRightDetail" class="column">
-            <ul>
-            </ul>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='scriptVelo.js') }}" ></script>
+    <script src="{{ url_for('static', filename='scriptVeloReadOnly.js') }}" ></script>
     <script src="{{ url_for('static', filename='script.js') }}" ></script>
 </body>
 </html>

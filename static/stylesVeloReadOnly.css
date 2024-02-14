@@ -3,12 +3,6 @@ li{
     list-style-type: none;
 }
 
-#detailButton {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 #largeImage {
     max-width: 80%;
     height: 200px;
@@ -37,9 +31,4 @@ li{
 
 .column {
     flex: 1;
-}
-
-.detail {
-    display: none;
-    padding: 20px;
 }

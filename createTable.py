@@ -1,11 +1,24 @@
 import psycopg2
 
 def createTable():
+    # Connexion à la base de données
+    connection = psycopg2.connect(
+        host="localhost",
+        database="melodb",
+        user="postgres",
+        password="mdp"
+    )
+
+    # création du curseur
+    cursor = connection.cursor()
+
     # table user
     cursor.execute('''CREATE TABLE IF NOT EXISTS Member
                    (id SERIAL PRIMARY KEY NOT NULL,       --Id interne à la base de donné, obligatoire
                     username VARCHAR(30) UNIQUE NOT NULL, --Nom d'utilisateur
-                    role VARCHAR(6) NOT NULL              --Role (admin, readOnly, membre)
+                    password CHAR(64) NOT NULL,           --mot de passe de l'utilisateur
+                    role VARCHAR(6) NOT NULL,             --Role (admin, readOnly, membre)
+                    uuid CHAR(36) NOT NULL             --uuid associé au compte
                    )''')            
 
     # table vélo
@@ -22,10 +35,10 @@ def createTable():
                     photo3 BYTEA,                    --photo du vélo                
                     electrique BOOLEAN,             --est ce un vélo électrique
                     origine VARCHAR(11) NOT NULL,   --don, trouvé, récup...
-                    status VARCHAR(17) NOT NULL,    --en stock, réservé, donné....
+                    statusVelo VARCHAR(17) NOT NULL,    --en stock, réservé, donné....
                     etatVelo VARCHAR(11),           --Très bon, moyen, mauvais, pour pièces
                     prochaineAction VARCHAR(10),    --à vendre, à reparer, à recycler....
-                    referent VARCHAR(30) NOT NULL,  --personne en charge du velo
+                    referent VARCHAR(30),           --personne en charge du velo
                     valeur FLOAT,                   --valeur en euro
                     destinataireVelo TEXT,          --personne ou entité qui a récuperé le vélo
                     descriptionPublic TEXT,         --texte libre affiché sur le site
@@ -37,28 +50,14 @@ def createTable():
     # table modif
     cursor.execute('''CREATE TABLE IF NOT EXISTS Modification(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
-                   date DATE,                               --date de la création, est ce utilile?
-                   benevole VARCHAR(30),                    --le nom du bénévole qui a apporté la
-                   suiviModif TEXT,                         --la que sera stocké les modifications au fur et à mesure
-                   bikeID INTEGER                           --id d'entrée de table de la table Bike
+                   date DATE NOT NULL,                        --date de la création, est ce utilile?
+                   benevole VARCHAR(30) NOT NULL,              --le nom du bénévole qui a apporté la
+                   suiviModif TEXT NOT NULL,                    --la que sera stocké les modifications au fur et à mesure
+                   bikeID INTEGER NOT NULL                  --id d'entrée de table de la table Bike
                    )''')
     
     connection.commit()
 
-# Connexion à la base de données
-connection = psycopg2.connect(
-    host="localhost",
-    database="melodb",
-    user="postgres",
-    password="mdp"
-)
-
-# création du curseur
-cursor = connection.cursor()
-
-# création des tables
-createTable()
-
-# fermeture de la connection
-cursor.close()
-connection.close()
+    # fermeture de la connection
+    cursor.close()
+    connection.close()

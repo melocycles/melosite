@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () { // action lors du changement de la page
         // récupération des élémennts html
     var formContainer = document.getElementById('formContainer');
-    var addButton = document.getElementById('addButton');
     var filterButton = document.getElementById('filterButton');
     var cancelButton = document.getElementById('cancelButton');
     var confirmButton = document.getElementById('confirmButton');
@@ -17,9 +16,6 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
     formContainer.addEventListener('submit', function(event) { 
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
-    addButton.addEventListener('click', function(){
-        window.location.href = "/ajouterVelo"; // envoi vers la page addBike
-    });
 
     filterButton.addEventListener('click', function() { // bouton filtrer
         toggleForm(); // affiche les filtres
@@ -32,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'etatVelo', 'statusVelo']); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'etatVelo']); // enlève toutes les valeur de filtre
     });
 });
 
@@ -78,7 +74,6 @@ function sendFilter(){
     addToFormData('tailleRoue');
     addToFormData('tailleCadre');
     addToFormData('etatVelo');
-    addToFormData('statusVelo');
 
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
@@ -149,15 +144,12 @@ function addOptionsToSelect(returnFromFetch) {
     var tailleRoueSelect = document.getElementById("tailleRoue");
     var tailleCadreSelect = document.getElementById("tailleCadre");
     var etatVeloSelect = document.getElementById("etatVelo");
-    var statusVeloSelect = document.getElementById("statusVelo");
-
         // pour chaque attributs on ajoute les valeurs possibles
     addOption(result.marque, marqueSelect);
     addOption(result.typeVelo, typeVeloSelect);
     addOption(result.tailleRoue, tailleRoueSelect);
     addOption(result.tailleCadre, tailleCadreSelect);
     addOption(result.etatVelo, etatVeloSelect);
-    addOption(result.statusVelo, statusVeloSelect);
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes

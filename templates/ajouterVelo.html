@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesAjouterVelo.css') }}">
+
+    <title>Ajouter un vélo</title>
+</head>
+<body>
+
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+        </div>
+    </header>
+
+
+    <form id="formContainer">
+        <div id="canvasContener">   
+                <canvas id="canvas1"></canvas>
+                <canvas id="canvas2"></canvas>
+                <canvas id="canvas3"></canvas>
+        </div>
+
+        <label>bénévole <b>*</b></label>
+        <input type="text" id="benevole" name="benevole" required/>
+
+        <label>référent du vélo</label>
+        <input type="text" id="referent" name="referent"/>
+
+        <label for="dateEntre">Date d'entrée: <b>*</b></label>
+        <input type="date" id="dateEntre" name="dateEntre" required>
+
+        <label for="origine">Origine: <b>*</b></label>
+        <select id="origine" name="origine" required>
+            <option value=""></option>
+            <option value="don">Don</option>
+            <option value="trouvé">trouvé </option>
+            <option value="achat">achat</option>
+            <option value="récup">récup</option>
+            <option value="déchetterie">déchetterir</option>
+        </select>
+
+        <label for="etatVelo">État du Vélo:</label>
+        <select id="etatVelo" name="etatVelo">
+            <option value=""></option>
+            <option value="très bon">très bon</option>
+            <option value="moyen">moyen</option>
+            <option value="mauvaus">mauvais</option>
+            <option value="pour pièce">pour pièce</option>
+        </select>
+        
+        <label for="marque">Marque:</label>
+        <input type="text" id="marque" name="marque">
+
+        <label for="typeVelo">Type de Vélo:</label>
+        <select id="typeVelo" name="typeVelo">
+            <option value=""></option>
+            <option value="VTT">VTT</option>
+            <option value="Vélo de route">Vélo de route</option>
+            <option value="Vélo électrique">Vélo électrique</option>
+        </select>
+
+        <label for="tailleRoue">Taille de Roue:</label>
+        <select id="tailleRoue" name="tailleRoue">
+            <option value=""></option>
+            <option value="12pouces">12 pouces</option>
+            <option value="14pouces">14 pouces</option>
+            <option value="16pouces">16 pouces</option>
+            <option value="20pouces">20 pouces</option>
+            <option value="24pouces">24 pouces</option>
+            <option value="26pouces">26 pouces</option>
+            <option value="27.5pouces">27.5 pouces</option>
+            <option value="29 pouces">29 pouces</option>
+            <option value="600">600</option>
+            <option value="650">650</option>
+            <option value="700">700</option>
+        </select>
+
+        <label for="tailleCadre">Taille de Cadre:</label>
+        <select id="tailleCadre" name="tailleCadre">
+            <option value=""></option>
+            <option value="enfant">enfant</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+        </select>
+
+        <label for="bycode">bycode</label>
+        <input type="bycode" id="bycode" name="bycode">
+
+
+        <label for="electrique">Électrique:</label>
+        <select id="electrique" name="electrique">
+            <option value=""></option>
+                <option value="False">Non</option>
+                <option value="True">Oui</option>
+        </select>
+
+        <label for="prochaineAction">Prochaine Action:</label>
+        <select id="prochaineAction" name="prochaineAction">
+            <option value=""></option>
+            <option value="vendre">à vendre</option>
+            <option value="donner">à donner</option>
+            <option value="démonter">à démonter</option>
+            <option value="recycler">à recycler</option>
+        </select>
+
+        <label for="valeur">Valeur:</label>
+        <input type="number" step="0.1" id="valeur" name="valeur">
+
+        <label for="destinataireVelo">Destinataire du Vélo:</label>
+        <input type="text" id="destinataireVelo" name="destinataireVelo">
+
+        <label for="descriptionPublic">Description Publique:</label>
+        <textarea id="descriptionPublic" name="descriptionPublic" rows="4"></textarea>
+
+        <label for="descriptionPrive">Description Privée:</label>
+        <textarea id="descriptionPrive" name="descriptionPrive" rows="4"></textarea>
+
+
+        <button id="confirmButton" class="buttonCenter" type="submit">Valider</button>
+    
+    </form>
+
+
+    <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script>
+    <script src="{{ url_for('static', filename='script.js') }}" ></script>
+
+</body>
+</html>

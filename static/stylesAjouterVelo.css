@@ -1,0 +1,59 @@
+header{
+    margin-bottom: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+video{
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+}
+
+select, input{
+    max-width: 40%;
+    background-color: #c2dcfc;
+    color: black;
+    border: none;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+label{
+    margin-left: 1rem;
+}
+
+textarea{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+canvas{
+    max-width: 30%;
+    margin-bottom: 1rem;
+
+}
+
+#returnButton{
+    display: block;
+}
+
+
+#confirmButton{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#canvasContener{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
