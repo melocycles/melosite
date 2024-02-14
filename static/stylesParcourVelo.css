@@ -1,0 +1,70 @@
+form {
+    position: fixed;
+    top: 0;
+    right: -80%; /* Initially hide the form off-screen */
+    width: 80%;
+    height: 100%;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s; /* Add smooth transition effect */
+    display: flex;
+    flex-direction: column;
+}
+
+select{
+    max-width: 40%;
+    background-color: #c2dcfc;
+    color: black;
+    border: none;
+}
+
+label:first-of-type{ /* ne s'applique qu'au 1er label sinon espace moche entre le boutton reset et lui */
+    margin-top: 10px;
+}
+
+label{
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+select{
+    margin-left: 10px²;
+}
+
+#resetButton    {
+    margin: 15px auto 0 auto;
+}
+
+#buttonFilterContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 15px;
+}
+
+#bodyContent{
+    display: flex;
+    flex-direction:row-reverse;
+
+}
+
+.form select {
+    margin: 5px;
+}
+
+#veloPart{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.veloCadre {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    margin: 15px auto;
+}
+
+.veloCadre img {
+    max-width: 80%;
+    max-height: 150px;
+}

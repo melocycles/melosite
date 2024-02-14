@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesLog.css') }}">
+    <title>Login</title>
+</head>
+<body>
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+        </div>
+    </header>
+
+    <div id="popUp" class="hidden">
+        <p id="popUpText">Ceci est un pop-up !</p>
+    </div>
+      
+
+    <form id="form" method="post">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <button type="submit" id="connectButton">se connecter</button>
+    </form>
+</body>
+<script src="{{ url_for('static', filename='scriptLog.js') }}" ></script>
+<script src="{{ url_for('static', filename='script.js') }}" ></script>
+
+</html>

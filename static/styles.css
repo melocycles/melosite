@@ -1,0 +1,54 @@
+html    body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    padding-top: 1px;
+    background-color: black;/* #c2dcfc;*/
+    color: white;
+}
+
+button{
+    background-color: rgb(147, 18, 18);/*#eddea4;*/
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+
+#headerLogo{
+    max-width: 100%;
+}
+
+#connectionLogo{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#headerButtons {
+    bottom: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.buttonLeft{
+    align-self: left;
+}
+
+.buttonRight{
+    align-self: flex-end;     ;
+}
+
+.buttonCenter{
+    margin-left: auto;
+    margin-right: auto;
+}
