@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
         window.location.href = "/parcourVelo"; // retourne à la page du vélo
     });
 
-    if(document.getElementById("connectButton")){ // si le boutton connection  éxiste (aka l'utilisateur est déconnecté) page logIn
+
+        // si le boutton connection  éxiste (aka l'utilisateur est déconnecté) page logIn
+    if(document.getElementById("connectButton")){ 
         const connectButton = document.getElementById("connectButton")
         const userNameField = document.getElementById("username")
         const passawordField = document.getElementById("password")
@@ -22,12 +24,17 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
             fetchData("/api/logIn", formData, processResponse) // envoie des donnés au backend puis on le traite
         });
     
-    }else{ // si le boutton connection n'éxiste pas (aka l'utilisateur est connecté) page logOut
+    }
+    
+        // si le boutton connection n'éxiste pas (aka l'utilisateur est connecté) page logOut
+    else{ 
 
         if(document.getElementById('disconnectButton')){ // boutton déconnection
             const disconnectButton = document.getElementById('disconnectButton');
             disconnectButton.addEventListener('click', function() { // bouton déconnection
                 document.cookie = "uuid=; expires=Thu, 10 Mai 1896 06:06:18 UTC; path=/;"; // on retire le cookie (en définissant sa date d'expiration dans le passé)
+                console.log("prout")
+                console.log(document.cookie)
                 window.location.href = "/parcourVelo"; // redirection vers la page parcourVelo
                 });
             }

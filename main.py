@@ -45,7 +45,9 @@ def redirectToHomePage():
 @app.route('/parcourVelo') 
 def showAllBikes():
     if checkCookieUser():
-        return render_template('parcourVelo.html')          
+        return render_template('parcourVelo.html')
+    elif checkCookieAdmin():
+        return render_template("admin.html")      
     else:
         return render_template('parcourVeloReadOnly.html')      
 
@@ -79,11 +81,18 @@ def modifyBike():
 
 @app.route("/log")
 def log():
-    if checkCookieUser():
+    if checkCookieUser() or checkCookieAdmin():
         return render_template("logOut.html")
     else:
         return render_template("logIn.html")
 
+
+@app.route("/export")
+def export():
+    if checkCookieAdmin():
+        return render_template("/export.html")
+    else:
+        abort(418)
 
 
     ### les interractions du site web avec la database
@@ -210,6 +219,12 @@ def APIfetchTest():
     return {"status": "OK"}
 
 
+@app.route("/api/getBikeOut", methods=["POST"])
+def getBikeOut():
+    data = request.json
+    response = sqlCRUD.getBikeOut(data)
+
+    return {"status" : "ok", "csv" : response}
 
     ### lancement du serveur
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesAdmin.css') }}">
+    <title>page admin</title>
+</head>
+<body>
+    <header id="header">
+        <div id="headerButtons">
+        </div>
+    </header>
+
+    <h1 id="title">tableau de bord</h1>
+    
+    <section id="dataPresentation"></section>
+
+    <div id="navigationButtons">
+        <button id="exportButton" class="bigButton">exporter</button>
+        <button id="bikeButton" class="bigButton">vélos</button>
+    </div>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    <script src="{{ url_for('static', filename='scriptAdmin.js') }}" ></script>
+</body>
+</html>

@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const returnButton = document.getElementById('returnButton');
     const submitButton = document.getElementById("confirmButton");
 
-
     // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'edit', "parameters" : { id: bikeId }}, fillForm);
 
@@ -38,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
 */
 function fillForm(returnFromFetch) {
     formData = returnFromFetch.result
-    console.log(formData)
     // formSata est le retour de fetchData
     formData.forEach(function(attribute) { // parcourt tous les attributs renvoyé par le backend
         var element = document.getElementById(attribute[0]); // on récupère l'élément html correspondant

@@ -2,6 +2,9 @@ import psycopg2
 from datetime import date
 import utility
 from hashlib import sha256
+from datetime import datetime
+import csv
+
 uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     """vérifie que le type de la donné correspond bien au type attendu. Crée un message d'erreur en fonction de l'endroit où la fonctionaété appelé.
@@ -16,8 +19,6 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     listError = []
 
     for key, value in dictionary.items(): # on parcour le dictionnaire
-        print("HERE ",value)
-        print(key,"\n   ")
         if type(value) != dictExpectedType[key] and value != None: # si la valeur n'est pas celle attendu et n'est pas None (valeur non renseigné)
             if key == "valeur" and type(value) == int:  # js = caca pas capable de faire un float correctement
                 pass
@@ -96,7 +97,6 @@ def addBike(dictOfValue):
         psycopg2.Binary(dictOfValue["photo2"]),
         psycopg2.Binary(dictOfValue["photo3"])
     )
-
     cursor.execute(query, values)
     bike_id = cursor.fetchone()[0] #on récupère l'id du vélo qui a été crée pour l'enregistrer dans la table modification (on la récupère car à la fin de la query il y a RETURNING id)
     suiviModif = f"le {date.today()} {dictOfValue['benevole']} à crée le vélo"
@@ -105,9 +105,9 @@ def addBike(dictOfValue):
     values =(date.today(), dictOfValue["benevole"], suiviModif, bike_id)
 
     # ajout du vélo dans la table Modification
-    cursor.execute(query, values) # envoie de la requette à la base de donné
+    #cursor.execute(query, values) # envoie de la requette à la base de donné
 
-    connection.commit() # éxécution des requette
+    #connection.commit() # éxécution des requette
     connection.close()
 
     return {"status": "OK"}
@@ -256,6 +256,69 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     return rows
 
 
+def getBikeOut(dictOfValues):
+    """"""
+    columnsLabel = "bycode, dateEntre, marque, typeVelo, tailleRoue, tailleCadre, electrique, origine, statusVelo, etatVelo, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie"
+    returnValues = [("bycode", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "origine", "statusVelo", "etatVelo", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie",)]
+
+    query = "SELECT %s FROM bike WHERE 1=1"%(columnsLabel)
+    values = []
+    conditions = []
+
+
+    if dictOfValues["inStartDate"]:
+        conditions.append("dateentre >= %s")
+        values.append(dictOfValues["inStartDate"])
+    if dictOfValues["inEndDate"]:
+        conditions.append("dateentre <= %s")
+        values.append(dictOfValues["inEndDate"])
+    if dictOfValues["outStartDate"]:
+        conditions.append("datesortie >= %s")
+        values.append(dictOfValues["outStartDate"])
+    if dictOfValues["outEndDate"]:
+        conditions.append("datesortie <= %s")
+        values.append(dictOfValues["outEndDate"])
+
+    # Ajout des conditions à la requête si des paramètres ont été renseignés
+    if conditions:
+        query += " AND " + " AND ".join(conditions)
+
+    if dictOfValues["bikeStatus"]:
+        status_clause = " OR ".join(["statusVelo = %s" for _ in dictOfValues["bikeStatus"]])
+        values.extend(dictOfValues["bikeStatus"])
+        query += " AND (" + status_clause + ")"
+
+    connection = psycopg2.connect(
+        host="localhost",
+        database="melodb",
+        user="postgres",
+        password="mdp"
+    )
+
+    cursor = connection.cursor()
+    cursor.execute(query, values)
+    connection.commit()
+    results = cursor.fetchall()
+    connection.close()
+
+    for i in results:
+        returnValues.append(i)
+
+
+
+    if 0:
+        csvPath = "C://Users//a//Documents//code//méloapp//file.csv"
+        with open(csvPath, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(columnsLabel.split(', '))
+            writer.writerows(results)
+    
+    returnValues = tuple(returnValues)
+
+    return returnValues
+
+
+    
 def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
@@ -316,6 +379,18 @@ def checkUser(userName, password):
     
     else:
         return {"status" : False, "role" : None}  # on retourne l'échec
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # potentiellement inutile en prod

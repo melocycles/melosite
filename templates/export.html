@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesExport.css') }}">
+    <title>page d'export</title>
+</head>
+
+<body>
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+        </div>
+    </header>
+
+    <form id="form" action="#" method="POST">
+
+        <div id="dateWrapper">
+            <div id="startDateWrapper">
+                <label id="inDateLabel" class="dateLabel" for="startDate">Date d'entré :</label>
+                <input type="date" id="inStartDateInput" class="dateInput" name="inStartDateInput">
+                <input type="date" id="inEndDateInput" class="dateInput" name="inEndDateInput">
+            </div>
+            <div id="endDateWrapper">
+                <label id="outDateLabel" class="dateLabel" for="endDate">Date de sortie :</label>
+                <input type="date" id="outStartDateInput" class="dateInput" name="outStartDateInput">
+                <input type="date" id="outEndDateInput" class="dateInput" name="outEndDateInput">
+            </div>
+        </div>
+
+
+        <label id="statusLabel">Statut :</label>
+        <div id="checkBoxes">
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="enStock" name="status" value="en stock">
+                <label for="enStock">En stock</label>
+            </div>
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="réservé" name="status" value="réservé">
+                <label for="réservé">Réservé</label>
+            </div>
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="vendu" name="status" value="vendu">
+                <label for="vendu">Vendu</label>
+            </div>
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="donné" name="status" value="donné">
+                <label for="donné">Donné</label>
+            </div>
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="recyclé" name="status" value="recyclé">
+                <label for="recyclé">Recyclé</label>
+            </div>
+
+            <div class="checkBoxWrapper">
+                <input type="checkbox" id="perduVolé" name="status" value="perdu">
+                <label for="perduVolé">Perdu ou volé</label>
+        </div>
+    </div>
+    
+    <button id="submitButton">envoyer</button>
+
+    <button id="downloadButton">Télécharger</button>
+    </form>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    <script src="{{ url_for('static', filename='scriptExport.js') }}" ></script>
+</body>
+</html>
