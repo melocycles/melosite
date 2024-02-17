@@ -225,12 +225,3 @@ def getBikeOut():
     response = sqlCRUD.getBikeOut(data)
 
     return {"status" : "ok", "csv" : response}
-
-    ### lancement du serveur
-
-
-
-if __name__ == '__main__':
-    context = ('server.crt', 'server.key')
-    #app.run(debug=True, host='0.0.0.0') # version http
-    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https
