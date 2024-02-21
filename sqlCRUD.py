@@ -4,6 +4,7 @@ import utility
 from hashlib import sha256
 from datetime import datetime
 import csv
+import json
 
 uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
@@ -99,15 +100,24 @@ def addBike(dictOfValue):
     )
     cursor.execute(query, values)
     bike_id = cursor.fetchone()[0] #on récupère l'id du vélo qui a été crée pour l'enregistrer dans la table modification (on la récupère car à la fin de la query il y a RETURNING id)
-    suiviModif = f"le {date.today()} {dictOfValue['benevole']} à crée le vélo"
 
-    query = f"INSERT INTO Modification (date, benevole, suiviModif, BikeID) VALUES (%s, %s, %s, %s)"
-    values =(date.today(), dictOfValue["benevole"], suiviModif, bike_id)
+    suiviModifData ={
+        "dateOfModification" : date.today().isoformat(),
+        "timestamp" : datetime.now().isoformat(),
+        "benevole" : dictOfValue["benevole"],
+        "fieldModified" : "création",
+        "oldValue" : None,
+        "newValue" : None
+    }
+
+    jsonObject = json.dumps(suiviModifData)
+    query = f"INSERT INTO Modification (BikeID, suiviModifJSON) VALUES (%s, array[%s::jsonb])"
+    values =(bike_id, jsonObject)
 
     # ajout du vélo dans la table Modification
-    #cursor.execute(query, values) # envoie de la requette à la base de donné
+    cursor.execute(query, values) # envoie de la requette à la base de donné
 
-    #connection.commit() # éxécution des requette
+    connection.commit() # éxécution des requette
     connection.close()
 
     return {"status": "OK"}
@@ -136,7 +146,6 @@ def modifyBike(dictOfChange):
     )
 
     cursor = connection.cursor() # création du curseur
-
     for key, value in dictOfChange.items():
         if checkIsItAColumn(key) and key != "benevole": # on vérifie que la clef est bien une colonne de la table de la base de donné
             # on récupère d'abord l'ancienne valeur de l'attribut pour l'enregistrer dans la table de Modification
@@ -147,20 +156,46 @@ def modifyBike(dictOfChange):
             cursor.execute("UPDATE Bike SET {} = %s WHERE id = %s".format(key), (value, dictOfChange["id"])) # format car on ne peut pas passer le nom d'une colonne avec "?"
 
             # ajout de la modificatoin dans la table Modification
-            cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = %s", (dictOfChange["id"],)) # sélectionne le suivid de modif du vélo correspondant
+            cursor.execute("SELECT suiviModifJSON FROM Modification WHERE bikeID = %s", (dictOfChange["id"],)) # sélectionne le suivid de modif du vélo correspondant
             
             # récupère le suivi de modif
             result = cursor.fetchone() 
             currentSuiviModif = result[0]
+            print("type(currentSuiviModif): %s\n%s\n\n"%(type(currentSuiviModif),currentSuiviModif))
 
             if "photo" in key:
                 if oldValue:
-                    newInformation = f"{currentSuiviModif}\nle {date.today()} {dictOfChange['benevole']} à modifié la {key}" # ajoute la modif qui vient d'être faite aux précédentes
+                    suiviModifData ={
+                        "dateOfModification" : date.today().isoformat(),
+                        "benevole" : dictOfChange["benevole"],
+                        "fieldModified" : key,
+                        "oldValue" : True,
+                        "nexValue" : True
+                    }
                 else:
-                    newInformation = f"{currentSuiviModif}\nle {date.today()} {dictOfChange['benevole']} à ajouté la {key}" # ajoute la modif qui vient d'être faite aux précédentes
+                    suiviModifData ={
+                        "dateOfModification" : date.today().isoformat(),
+                        "benevole" : dictOfChange["benevole"],
+                        "fieldModified" : key,
+                        "oldValue" : False,
+                        "nexValue" : True
+                    }
             else:
-                newInformation = f"{currentSuiviModif}\nle {date.today()} {dictOfChange['benevole']} à modifié {key} de {oldValue} à {value}" # ajoute la modif qui vient d'être faite aux précédentes
-            cursor.execute("UPDATE Modification SET suiviModif = %s WHERE bikeID = %s", (newInformation, dictOfChange["id"])) # remplace le suivi de modif par celui update
+                suiviModifData ={
+                    "dateOfModification" : date.today().isoformat(),
+                    "timestamp" : datetime.now().isoformat(),
+                    "benevole" : dictOfChange["benevole"],
+                    "fieldModified" : key,
+                    "oldValue" : oldValue,
+                    "newValue" : value
+                }
+
+            newSuiviModif = json.dumps(suiviModifData)
+            query = f"UPDATE Modification SET suiviModifJSON = array_append(suiviModifJSON, %s::jsonb) WHERE bikeID = %s"
+            values = (newSuiviModif, dictOfChange["id"])
+
+            
+            cursor.execute(query, values) # remplace le suivi de modif par celui update
             connection.commit() # effectue les mise à jour
 
     connection.close()# récupère le suivi de modif
@@ -450,7 +485,7 @@ def deleteBike(userName:str, bikeID:int) -> None:
 ###!! uniquement pour intéragir avec le terminal, pas encore implémenté !!
 def readModification(bikeID):
     # préparationd e la requette SQL
-    sqlQuerry = f"SELECT suiviModif FROM modification WHERE bikeID = {bikeID}"
+    sqlQuerry = f"SELECT suiviModifJSON FROM modification WHERE bikeID = {bikeID}"
 
     # Connexion à la base de données
     connection = psycopg2.connect(

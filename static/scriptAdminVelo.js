@@ -4,19 +4,30 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
 
         // récupération des élémennts html
     const returnButton = document.getElementById("returnButton");
-    const photo1Contener = document.getElementById("photo1")
-    const photo2Contener = document.getElementById("photo2")
-    const photo3Contener = document.getElementById("photo3")
+    const switchButton = document.getElementById("switchButton");
 
-        // récupération des donnés depuis le backend
+    const modificationTrackingSection = document.getElementById('modificationTrackingSection');
+    const bikeInfoSection = document.getElementById('bikeInfoSection');
+
+    const photo1Contener = document.getElementById("photo1");
+    const photo2Contener = document.getElementById("photo2");
+    const photo3Contener = document.getElementById("photo3");
+
+        // récupération des donnés depuis le backend pour l'onglet info
     fetchData('/api/readBike', {"whoCall" : 'global', "parameters" : {"id": bikeId} }, genererListeCaracteristiques); // récupération des infos générales
+    fetchData('/api/readBike', {"whoCall" : 'detail', "parameters" : {"id": bikeId} }, genererListeDetail); // récupération des infos affichés dans détail
+    
+    fetchData('/api/readModification', {"bikeId" : bikeId}, genereListModificationTracking)
 
 
         // gestion des bouttons
     returnButton.addEventListener('click', function() { // bouton retour
         sessionStorage.removeItem("bikeId"); // supprime le bikeId du vélo que l'on consultait
-        window.location.href = "/";; // retourne à la page parcourVelo
+        window.location.href = "/parcourVelo";; // retourne à la page parcourVelo
     });
+    switchButton.addEventListener("click", function() {
+        switchDisplay()
+    })
 
         // gestion du changement d'image
     photo1Contener.addEventListener("click", function(){ // miniature 1
@@ -31,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
 });
 
 
-/* genere la liste des caractéristiques global du vélo
+/* genere la liste des caractéristiques de l'onglet info
     est appelé par le callabck de fetchData('/api/readBike', {"whoCall" : 'global', "parameters" : {"id": bikeId} }, genererListeCaracteristiques);
 */
 function genererListeCaracteristiques(returnFromFetch) {
@@ -67,6 +78,52 @@ function genererListeCaracteristiques(returnFromFetch) {
     });
 };
 
+/* genere la liste affiché de l'onglet info
+    est appelé par le callabck de fetchData('/api/readBike', {"whoCall" : 'detail', "parameters" : {"id": bikeId} }, genererListeDetail);
+*/
+function genererListeDetail(returnFromFetch) {
+    caracteristics = returnFromFetch.result
+    // caracteristics est le retour de fetchData
+    const listColumnCaracteristics = document.getElementById('columnLeftDetail'); // repère l'ellement html à modifier
+    const listColumnValues = document.getElementById("columnRightDetail"); // repère l'ellement html à modifier
+
+    caracteristics.forEach(function(pair) {// parcourt tous les ellements retourné par flask. function(pair) permet de les avoir sous la forme clef value
+        // Créez un élément li pour la colonne de gauche (caractéristiques)
+        listColumnCaracteristics.appendChild(createLi([pair[0]]));
+
+        // Créez un élément li pour la colonne de droite (valeurs)
+        if(pair[1]){ // si l'attribut à une valeur on l'ajoute
+            var li = createLi(pair[1]);
+        } else{
+            var li = createLi("."); // sinon on mets un point invisble (blanc) pour que les attributs et valeurs restent allignés
+            li.style.color = "white";
+        }
+        listColumnValues.appendChild(li)
+    });
+};  
+
+
+function genereListModificationTracking(returnFromFetch){
+    modificationTracking = returnFromFetch.result[0]
+    const listColumnModificationTracking = document.getElementById('modificationTrackingSection'); // repère l'ellement html à modifier
+    var phraseToDisplay = ""
+    modificationTracking.sort((a, b) => a.timestamp - b.timestamp);
+
+    modificationTracking.forEach(function(object) {// parcourt tous les ellements retourné par flask. function(pair) permet de les avoir sous la forme clef value
+        // Créez un élément li pour la colonne de gauche (caractéristiques)
+        if(object.fieldModified == "création"){
+            phraseToDisplay = `le ${object.dateOfModification} ${object.benevole} a crée le vélo`
+        }
+        else if(object.fieldModified == ``){
+        }
+        else{
+            phraseToDisplay = `le ${object.dateOfModification} ${object.benevole} a changé ${object.fieldModified} de ${object.oldValue} a ${object.newValue}`
+        }
+        listColumnModificationTracking.appendChild(createLi(phraseToDisplay))
+    });
+};
+
+
 // crée les ellements de liste. Est appelé par genererListeCaracteristiques et genererListeDetail
 function createLi(textContent) {
     var liElement = document.createElement('li'); // crée un ellement <li>
@@ -81,3 +138,19 @@ function changeImage(id) {
     console.log(imageToPut)
     imgElement.src = imageToPut; // modifie l'html pour afficher la nouvelle image
 };
+
+
+function switchDisplay(){
+    let actualStatut = switchButton.textContent;
+    
+    if(actualStatut == "info"){
+        modificationTrackingSection.style.display = 'none'
+        bikeInfoSection.style.display = "block"
+        switchButton.textContent = 'suiviModif'
+    }
+    else{
+        modificationTrackingSection.style.display = 'flex'
+        bikeInfoSection.style.display = "none"
+        switchButton.textContent = 'info'
+    }
+}

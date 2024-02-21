@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
         // gestion des bouttons
     returnButton.addEventListener('click', function() { // bouton retour
         sessionStorage.removeItem("bikeId"); // supprime le bikeId du vélo que l'on consultait
-        window.location.href = "/parcourVelo";; // retourne à la page parcourVelo
+        window.location.href = "/";; // retourne à la page parcourVelo
     });
     modifyButton.addEventListener('click', function() { // boutton éditer
         window.location.href = "/modifierVelo" // redirection vers modifyBike (le bikeId est toujours stocké dans le navigateur)

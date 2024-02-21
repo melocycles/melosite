@@ -6,4 +6,9 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
     exportButton.addEventListener('click', function () { // boutton exporter
         window.location.href = "/export"; // redirige vers la page d'export
     });
+
+    bikeButton.addEventListener("click",  function() {
+        window.location.href = "/parcourVelo"
+    })
+
 })

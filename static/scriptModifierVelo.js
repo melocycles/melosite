@@ -96,8 +96,7 @@ function updateBike(){
     
 
     // Envoie des données au backend
-    fetchData('/api/modifyBike', formData, window.location.href = "/velo")
-
+    fetchData('/api/modifyBike', formData,  window.location.href = "/velo")
 
     function hasTheValueChange(attribut, value){
         if(attribut == "valeur" && isNaN(parseFloat(value))){ // si l'attribut est valeur et que value n'est pas un nombre value devient null

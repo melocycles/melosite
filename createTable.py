@@ -50,10 +50,8 @@ def createTable():
     # table modif
     cursor.execute('''CREATE TABLE IF NOT EXISTS Modification(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
-                   date DATE NOT NULL,                        --date de la création, est ce utilile?
-                   benevole VARCHAR(30) NOT NULL,              --le nom du bénévole qui a apporté la
-                   suiviModif TEXT NOT NULL,                    --la que sera stocké les modifications au fur et à mesure
-                   bikeID INTEGER NOT NULL                  --id d'entrée de table de la table Bike
+                   bikeID INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
+                   suiviModifJSON JSONB[] NOT NULL             --la que sera stocké les modifications au fur et à mesure
                    )''')
     
     connection.commit()

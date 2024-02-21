@@ -20,7 +20,7 @@ def checkCookieUser():
 
     if cookieUuid == info.listUuid["user"]: # on compare les uuid
         return True # identique on renvoié true
-    
+      
     return False # différent on renvoi false
 
 # vérifie la connexion au compte admin (cf ci dessus)
@@ -38,16 +38,17 @@ def checkCookieAdmin():
 # redirige depuis la site racine vers parcourVélo
 @app.route('/')
 def redirectToHomePage():
-    return redirect('/parcourVelo')
+    if checkCookieAdmin():
+        return render_template("admin.html")
+    else:
+        return redirect('/parcourVelo')
 
 
 #page avec tous les vélos
 @app.route('/parcourVelo') 
 def showAllBikes():
     if checkCookieUser():
-        return render_template('parcourVelo.html')
-    elif checkCookieAdmin():
-        return render_template("admin.html")      
+        return render_template('parcourVelo.html')      
     else:
         return render_template('parcourVeloReadOnly.html')      
 
@@ -57,6 +58,8 @@ def showAllBikes():
 def showSingleBike():
     if checkCookieUser():
         return render_template('velo.html')
+    elif checkCookieAdmin():
+        return render_template('adminVelo.html')
     else:
         return render_template("veloReadOnly.html")
 
@@ -78,7 +81,7 @@ def modifyBike():
     else:
         abort(418)
 
-
+# page de login/logut
 @app.route("/log")
 def log():
     if checkCookieUser() or checkCookieAdmin():
@@ -86,11 +89,19 @@ def log():
     else:
         return render_template("logIn.html")
 
-
+# page d'export vers csv
 @app.route("/export")
 def export():
     if checkCookieAdmin():
         return render_template("/export.html")
+    else:
+        abort(418)
+
+# page suiviModif d'un vélo
+@app.route("/suiviModif")
+def suiviModif():
+    if checkCookieAdmin():
+        return render_template("/adminVelo.html")
     else:
         abort(418)
 
@@ -197,8 +208,9 @@ def login():
 @app.route("/api/readModification", methods=["POST"])
 def APIreadModification():
     data = request.json # récupération des donnés
-    response = sqlCRUD.reafModification(data)
-    return(response)
+    bikeId = data["bikeId"]
+    result = sqlCRUD.readModification(bikeId)
+    return({'result': result})
 
 
 

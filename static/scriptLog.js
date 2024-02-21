@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
 
     const returnButton = document.getElementById('returnButton');
     returnButton.addEventListener('click', function() { // bouton retour
-        window.location.href = "/parcourVelo"; // retourne à la page du vélo
+        window.location.href = "/"; // retourne à la page du vélo
     });
 
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
                 document.cookie = "uuid=; expires=Thu, 10 Mai 1896 06:06:18 UTC; path=/;"; // on retire le cookie (en définissant sa date d'expiration dans le passé)
                 console.log("prout")
                 console.log(document.cookie)
-                window.location.href = "/parcourVelo"; // redirection vers la page parcourVelo
+                window.location.href = "/"; // redirection vers la page parcourVelo
                 });
             }
         }
@@ -47,7 +47,7 @@ function processResponse(response){
         popUp(response.result)
     }else{
         document.cookie = "uuid=" + response.result + "; max-age=" + "3153600000"; // on met le cookie de connexion pour 100ans
-        window.location.href = "/parcourVelo" // redirection vers parcourVelo
+        window.location.href = "/" // redirection vers parcourVelo
     }
 }
 

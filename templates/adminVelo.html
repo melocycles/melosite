@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesAdminVelo.css') }}">
+    <title>Ma Page</title>
+</head>
+<body>
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+            <button id="switchButton" class="buttonRight">info</button>
+        </div>
+    </header>
+    
+    <img id="largeImage" src="">
+    
+    <section id="bikeInfoSection" class="section">    
+        <div id="smallImageContener">
+            <img id="photo1" src="">
+            <img id="photo2" src="">
+            <img id="photo3" src="">
+        </div>
+
+        <div id="caracteristics">
+            <div id="columnLeftCaracteristics" class="column">
+                <ul>
+
+                </ul>
+            </div>
+            <div id="columnRightCaracteristics" class="column">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+
+        <div id="detail" class="detail" display="none">
+            <div id="columnLeftDetail" class="column">
+                <ul>
+                </ul>
+            </div>
+            <div id="columnRightDetail" class="column">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="modificationTrackingSection" class="section">
+        <ul>
+        </ul>
+    </section>
+
+    <script src="{{ url_for('static', filename='scriptAdminVelo.js') }}" ></script>
+    <script src="{{ url_for('static', filename='script.js') }}" ></script>
+</body>
+</html>

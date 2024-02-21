@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
     returnButton.addEventListener('click', function () { // boutton Retour
-        window.location.href = "/parcourVelo"; // retourne à la page parcourVelo
+        window.location.href = "/"; // retourne à la page parcourVelo
     });
 
 
