@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'etatVelo']); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo']); // enlève toutes les valeur de filtre
     });
 });
 
@@ -73,6 +73,7 @@ function sendFilter(){
     addToFormData('typeVelo');
     addToFormData('tailleRoue');
     addToFormData('tailleCadre');
+    addToFormData('electrique');
     addToFormData('etatVelo');
 
 
@@ -143,17 +144,19 @@ function addOptionsToSelect(returnFromFetch) {
     var typeVeloSelect = document.getElementById("typeVelo");
     var tailleRoueSelect = document.getElementById("tailleRoue");
     var tailleCadreSelect = document.getElementById("tailleCadre");
+    var electriqueSelect = document.getElementById("electrique")
     var etatVeloSelect = document.getElementById("etatVelo");
         // pour chaque attributs on ajoute les valeurs possibles
     addOption(result.marque, marqueSelect);
     addOption(result.typeVelo, typeVeloSelect);
     addOption(result.tailleRoue, tailleRoueSelect);
     addOption(result.tailleCadre, tailleCadreSelect);
+    addOption(result.electrique, electriqueSelect);
     addOption(result.etatVelo, etatVeloSelect);
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
-            if(optionValue != "" && optionValue != null){ // si l'option est valide
+            if(optionValue !== "" && optionValue != null){ // si l'option est valide
                 var option = document.createElement("option"); // création d'une option (d'un élément html)
                 option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
                 option.text = optionValue; // assignatioin d'un texte

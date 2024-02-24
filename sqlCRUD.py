@@ -358,8 +358,8 @@ def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
     """
-    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo", "statusVelo"]
-    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "etatVelo" : [], "statusVelo" : []}
+    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "valeur", "destinataireVelo"]
+    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "valeur" : [], "destinataireVelo" : []}
 
     # Connexion à la base de données
     connection = psycopg2.connect(
@@ -414,18 +414,6 @@ def checkUser(userName, password):
     
     else:
         return {"status" : False, "role" : None}  # on retourne l'échec
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # potentiellement inutile en prod

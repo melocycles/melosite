@@ -16,6 +16,8 @@ select{
     background-color: #c2dcfc;
     color: black;
     border: none;
+    margin: 5px;
+    margin-left: 13px;
 }
 
 label:first-of-type{ /* ne s'applique qu'au 1er label sinon espace moche entre le boutton reset et lui */
@@ -25,10 +27,6 @@ label:first-of-type{ /* ne s'applique qu'au 1er label sinon espace moche entre l
 label{
     margin-top: 20px;
     margin-left: 10px;
-}
-
-select{
-    margin-left: 10px²;
 }
 
 #resetButton    {
@@ -46,10 +44,6 @@ select{
     display: flex;
     flex-direction:row-reverse;
 
-}
-
-.form select {
-    margin: 5px;
 }
 
 #veloPart{

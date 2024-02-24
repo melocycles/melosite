@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'etatVelo', 'statusVelo']); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataire']); // enlève toutes les valeur de filtre
     });
 });
 
@@ -54,7 +54,11 @@ function hideForm() {
 // remet toutes les valeurs de filtres à 0
 function resetSelectOptions(selectIds) {
     selectIds.forEach(selectId => { // parcourt les filtres
-        document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
+        if(selectId == "statusVelo"){
+            document.getElementById(selectId).value = 'en stock';    
+        }else{
+            document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
+        }
     });
 }
 
@@ -77,8 +81,14 @@ function sendFilter(){
     addToFormData('typeVelo');
     addToFormData('tailleRoue');
     addToFormData('tailleCadre');
+    addToFormData('electrique');
     addToFormData('etatVelo');
     addToFormData('statusVelo');
+    addToFormData('origine');
+    addToFormData('prochaineAction');
+    addToFormData('referent');
+    addToFormData('valeur');
+    addToFormData('destinataire');
 
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
@@ -148,25 +158,48 @@ function addOptionsToSelect(returnFromFetch) {
     var typeVeloSelect = document.getElementById("typeVelo");
     var tailleRoueSelect = document.getElementById("tailleRoue");
     var tailleCadreSelect = document.getElementById("tailleCadre");
+    var electriqueSelect = document.getElementById("electrique")
     var etatVeloSelect = document.getElementById("etatVelo");
     var statusVeloSelect = document.getElementById("statusVelo");
+    var origineSelect = document.getElementById("origine")
+    var prochaineActionSelect = document.getElementById("prochaineAction")
+    var referentSelect = document.getElementById("referent")
+    var valeurSelect = document.getElementById("valeur")
+    var destinataireVeloSelect = document.getElementById("destinataireVelo")
+
 
         // pour chaque attributs on ajoute les valeurs possibles
     addOption(result.marque, marqueSelect);
     addOption(result.typeVelo, typeVeloSelect);
     addOption(result.tailleRoue, tailleRoueSelect);
     addOption(result.tailleCadre, tailleCadreSelect);
+    console.log("HERE")
+    addOption(result.electrique, electriqueSelect);
+    console.log("/HERE")
+
     addOption(result.etatVelo, etatVeloSelect);
     addOption(result.statusVelo, statusVeloSelect);
+    addOption(result.origine, origineSelect);
+    addOption(result.prochaineAction, prochaineActionSelect);
+    addOption(result.referent, referentSelect);
+    addOption(result.valeur, valeurSelect);
+    addOption(result.destinataireVelo, destinataireVeloSelect);
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
-            if(optionValue != "" && optionValue != null){ // si l'option est valide
+            if(optionValue !== "" && optionValue != null){ // si l'option est valide
+                console.log(optionValue, " est crée")
                 var option = document.createElement("option"); // création d'une option (d'un élément html)
                 option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
                 option.text = optionValue; // assignatioin d'un texte
                 selectElement.add(option); // ajout de l'ellement
+            }else{
+                console.log(optionValue, " n'est pas crée ")
+                console.log(optionValue != "")
+                console.log(optionValue != null)
+                console.log("end")
             }
+
         }
     )};
 };
