@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
 
         // récupération des donnés depuis le backend
-    fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
+    fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {"statusVelo" : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
     
 
