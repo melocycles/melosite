@@ -40,8 +40,10 @@ def checkCookieAdmin():
 def redirectToHomePage():
     if checkCookieAdmin():
         return render_template("admin.html")
-    else:
+    elif checkCookieUser:
         return redirect('/parcourVelo')
+    else:
+        return redirect("/log")
 
 
 #page avec tous les vélos
@@ -50,7 +52,7 @@ def showAllBikes():
     if checkCookieUser():
         return render_template('parcourVelo.html')      
     else:
-        return render_template('parcourVeloReadOnly.html')      
+        return redirect("/log")
 
 
 # page d'un vélo avec ces détails
@@ -61,7 +63,7 @@ def showSingleBike():
     elif checkCookieAdmin():
         return render_template('adminVelo.html')
     else:
-        return render_template("veloReadOnly.html")
+        return redirect("/log")
 
 
 # page ajouter un vélo
