@@ -1,1 +1,1 @@
-web: gunicorn app:app --log-file=-
+web: waitress-serve app:app --log-file=-
