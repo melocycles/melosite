@@ -12,7 +12,7 @@ uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    psycopg2.connect(database_url, sslmode='require')
+    return psycopg2.connect(database_url, sslmode='require')
     # return psycopg2.connect(
     #     host="localhost",
     #     database="melodb",
