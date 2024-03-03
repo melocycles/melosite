@@ -4,7 +4,7 @@ import base64
 import info # contient les infos secètes qu'on ne veux pas exposer sur github
 
 app = Flask(__name__)
-app.secret_key = info.appSecretKey
+app.secret_key = info.APP_SECRET
 
 app.config['SESSION_COOKIE_SAMESITE'] = None  # 'None' signifie que SameSite=None sera utilisé
 
@@ -18,7 +18,7 @@ def checkCookieUser():
     except:
         cookieUuid = None   # si il n'éxiste pas le cookie est assigné à None
 
-    if cookieUuid == info.listUuid["user"]: # on compare les uuid
+    if cookieUuid == info.USER_UUID: # on compare les uuid
         return True # identique on renvoié true
       
     return False # différent on renvoi false
@@ -30,7 +30,7 @@ def checkCookieAdmin():
     except:
         cookieUuid = None
 
-    if cookieUuid == info.listUuid["admin"]:
+    if cookieUuid == info.ADMIN_UUID:
         return True
     
     return False
