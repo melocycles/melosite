@@ -1,1 +1,1 @@
-web: waitress-serve app:app --log-file=-
+web: waitress-serve --call 'app:create_app' --port $PORT --url-scheme http
