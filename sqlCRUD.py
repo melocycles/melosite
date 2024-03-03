@@ -1,3 +1,4 @@
+import os
 import csv
 import json
 from datetime import date, datetime
@@ -10,7 +11,8 @@ import utility
 uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
 
 def getConnection():
-    psycopg2.connect(os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb"))
+    database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
+    psycopg2.connect(database_url, sslmode='require')
     # return psycopg2.connect(
     #     host="localhost",
     #     database="melodb",
