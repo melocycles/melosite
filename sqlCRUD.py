@@ -1,12 +1,23 @@
-import psycopg2
-from datetime import date
-import utility
-from hashlib import sha256
-from datetime import datetime
 import csv
 import json
+from datetime import date, datetime
+from hashlib import sha256
+
+import psycopg2
+
+import utility
 
 uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
+
+def getConnection():
+    psycopg2.connect(os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb"))
+    # return psycopg2.connect(
+    #     host="localhost",
+    #     database="melodb",
+    #     user="postgres",
+    #     password="mdp"
+    # )
+    
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     """vérifie que le type de la donné correspond bien au type attendu. Crée un message d'erreur en fonction de l'endroit où la fonctionaété appelé.
 
@@ -65,12 +76,7 @@ def addBike(dictOfValue):
             dictOfValue[attribute] = None
 
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
     cursor = connection.cursor() # création du curseur
     
     # ajout du vélo dans la base de donné Bike
@@ -138,12 +144,7 @@ def modifyBike(dictOfChange):
     
     
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor() # création du curseur
     for key, value in dictOfChange.items():
@@ -261,12 +262,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     
 
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor()
     cursor.execute(sqlQuerry) # éxécute la requette
@@ -323,12 +319,7 @@ def getBikeOut(dictOfValues):
         values.extend(dictOfValues["bikeStatus"])
         query += " AND (" + status_clause + ")"
 
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor()
     cursor.execute(query, values)
@@ -362,12 +353,7 @@ def getFilterValues() -> dict[list]:
     dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "valeur" : [], "destinataireVelo" : []}
 
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor()
     for attribut in listAttributes: # parcourt les attributs
@@ -388,12 +374,7 @@ def checkUser(userName, password):
     userName = userName.lower() # on enlève les majuscules
 
         # connection à la data base
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
          # on récupère le hash du mot de passse enregistré
     cursor = connection.cursor()
@@ -421,12 +402,7 @@ def addUser(userName, password, role):
     hashingMachine = sha256(password.encode("utf8")).hexdigest() # hashage du mot de passe pour ne pas les conserver en clair
     userName = userName.lower()
         # connection à la data base
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor()
     query = "INSERT INTO member (username, password, role, uuid) VALUES (%s, %s, %s, %s)"
@@ -449,12 +425,7 @@ def deleteBike(userName:str, bikeID:int) -> None:
     commentaire = input()
 
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
     cursor = connection.cursor()
 
     # envoie de la requette à la base de donné
@@ -476,12 +447,7 @@ def readModification(bikeID):
     sqlQuerry = f"SELECT suiviModifJSON FROM modification WHERE bikeID = {bikeID}"
 
     # Connexion à la base de données
-    connection = psycopg2.connect(
-        host="localhost",
-        database="melodb",
-        user="postgres",
-        password="mdp"
-    )
+    connection = getConnection()
 
     cursor = connection.cursor()
     cursor.execute(sqlQuerry) # éxécute la requette
