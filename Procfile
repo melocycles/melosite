@@ -1,1 +1,1 @@
-web: waitress-serve --call 'app:create_app' --port $PORT --url-scheme http
+web: gunicorn app:app --log-file=-
