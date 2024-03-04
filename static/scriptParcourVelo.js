@@ -173,9 +173,7 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.typeVelo, typeVeloSelect);
     addOption(result.tailleRoue, tailleRoueSelect);
     addOption(result.tailleCadre, tailleCadreSelect);
-    console.log("HERE")
     addOption(result.electrique, electriqueSelect);
-    console.log("/HERE")
 
     addOption(result.etatVelo, etatVeloSelect);
     addOption(result.statusVelo, statusVeloSelect);
@@ -187,18 +185,11 @@ function addOptionsToSelect(returnFromFetch) {
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
-            if(optionValue !== "" && optionValue != null){ // si l'option est valide
-                console.log(optionValue, " est crée")
-                var option = document.createElement("option"); // création d'une option (d'un élément html)
-                option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
-                option.text = optionValue; // assignatioin d'un texte
-                selectElement.add(option); // ajout de l'ellement
-            }else{
-                console.log(optionValue, " n'est pas crée ")
-                console.log(optionValue != "")
-                console.log(optionValue != null)
-                console.log("end")
-            }
+            var option = document.createElement("option"); // création d'une option (d'un élément html)
+            option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
+            option.text = optionValue; // assignatioin d'un texte
+            selectElement.add(option); // ajout de l'ellement
+
 
         }
     )};

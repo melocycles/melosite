@@ -47,7 +47,6 @@ function fillForm(returnFromFetch) {
             }
             if (element.type === 'checkbox') { // pas utilisé pour l'instant, je le laisse pour que l'implémentation de chackbox soit plus simple
                 element.checked = attribute[1];
-                console.log("checkbox²")
             } else if (element.type === 'date') {
                 // Formater la date au format YYYY-MM-DD
                 const formattedDate = new Date(attribute[1]).toISOString().split('T')[0];

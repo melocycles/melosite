@@ -134,6 +134,5 @@ function afficherDetail() {
 function changeImage(id) {
     var imgElement = document.getElementById("largeImage"); // recupère l'ellement html grandeImage
     var imageToPut = document.getElementById(id).src;   // récupère la photo stocké dans l'image clické
-    console.log(imageToPut)
     imgElement.src = imageToPut; // modifie l'html pour afficher la nouvelle image
 };
