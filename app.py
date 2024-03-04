@@ -49,7 +49,7 @@ def redirectToHomePage():
 #page avec tous les vélos
 @app.route('/parcourVelo') 
 def showAllBikes():
-    if checkCookieUser():
+    if checkCookieUser() or checkCookieAdmin():
         return render_template('parcourVelo.html')      
     else:
         return redirect("/log")

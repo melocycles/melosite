@@ -33,8 +33,6 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
             const disconnectButton = document.getElementById('disconnectButton');
             disconnectButton.addEventListener('click', function() { // bouton déconnection
                 document.cookie = "uuid=; expires=Thu, 10 Mai 1896 06:06:18 UTC; path=/;"; // on retire le cookie (en définissant sa date d'expiration dans le passé)
-                console.log("prout")
-                console.log(document.cookie)
                 window.location.href = "/"; // redirection vers la page parcourVelo
                 });
             }
