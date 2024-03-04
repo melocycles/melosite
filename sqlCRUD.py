@@ -8,11 +8,11 @@ import psycopg2
 
 import utility
 
-uuid = "48409ed5-a1a5-42cb-ae91-8f6a4311f22d"
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    return psycopg2.connect(database_url, sslmode='require')
+    dicoBourrin = {"DATABASE_URL" : 'require', "postgres://postgres:mdp@localhost/melodb" : 'disable'}
+    return psycopg2.connect(database_url, sslmode=dicoBourrin[database_url])
     # return psycopg2.connect(
     #     host="localhost",
     #     database="melodb",
@@ -345,8 +345,7 @@ def getBikeOut(dictOfValues):
 
     return returnValues
 
-
-    
+   
 def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
@@ -398,22 +397,6 @@ def checkUser(userName, password):
     else:
         return {"status" : False, "role" : None}  # on retourne l'échec
 
-
-# potentiellement inutile en prod
-def addUser(userName, password, role):
-    hashingMachine = sha256(password.encode("utf8")).hexdigest() # hashage du mot de passe pour ne pas les conserver en clair
-    userName = userName.lower()
-        # connection à la data base
-    connection = getConnection()
-
-    cursor = connection.cursor()
-    query = "INSERT INTO member (username, password, role, uuid) VALUES (%s, %s, %s, %s)"
-    values =  (userName, hashingMachine, role, uuid)
-    cursor.execute(query, values)
-    connection.commit()
-    connection.close()
-    
-    return {"status" : "ok"}
 
 ### !! old pas encore imlplémenté !!
 def deleteBike(userName:str, bikeID:int) -> None:

@@ -17,7 +17,7 @@ def createTable():
                    (id SERIAL PRIMARY KEY NOT NULL,       --Id interne à la base de donné, obligatoire
                     username VARCHAR(30) UNIQUE NOT NULL, --Nom d'utilisateur
                     password CHAR(64) NOT NULL,           --mot de passe de l'utilisateur
-                    role VARCHAR(6) NOT NULL,             --Role (admin, readOnly, membre)
+                    role VARCHAR(6) NOT NULL,             --Role (admin, readOnly, user)
                     uuid CHAR(36) NOT NULL             --uuid associé au compte
                    )''')            
 

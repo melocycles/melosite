@@ -196,8 +196,14 @@ def login():
     data = request.json
     if "userName" in data and "password" in data: 
         result = sqlCRUD.checkUser(data["userName"], data["password"])
+
         if result["status"]:
-            return jsonify({"result" : info.listUuid[result["role"]]})
+            if result["role"] == "user":
+                return jsonify({"result" : info.USER_UUID})
+            elif result["role"] == "admin":
+                return jsonify({"result" : info.ADMIN_UUID})
+            else:
+                return jsonify({"result" : "erreur dans app.login le role est inconnu"})
         else:
             return jsonify({"result" : "mauvaise combianaison username/mot de passe"})
 
