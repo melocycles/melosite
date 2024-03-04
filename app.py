@@ -69,7 +69,7 @@ def showSingleBike():
 # page ajouter un vélo
 @app.route('/ajouterVelo')
 def addBikePage():
-    if checkCookieUser():
+    if checkCookieUser() or checkCookieAdmin():
         return render_template("ajouterVelo.html")
     else:
         abort(418)
