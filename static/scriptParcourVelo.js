@@ -88,7 +88,7 @@ function sendFilter(){
     addToFormData('prochaineAction');
     addToFormData('referent');
     addToFormData('valeur');
-    addToFormData('destinataire');
+    addToFormData('destinataireVelo');
 
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
