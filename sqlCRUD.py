@@ -11,8 +11,7 @@ import utility
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    dicoBourrin = {"DATABASE_URL" : 'require', "postgres://postgres:mdp@localhost/melodb" : 'disable'}
-    return psycopg2.connect(database_url, sslmode=dicoBourrin[database_url])
+    return psycopg2.connect(database_url, sslmode='require')
     # return psycopg2.connect(
     #     host="localhost",
     #     database="melodb",
