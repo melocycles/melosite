@@ -65,6 +65,12 @@ function booltoFrench(value){
     else{return value}
 }
 
+function frenchToBool(value){
+    if(value == "oui"){return true}
+    else if(value == "non"){return false}
+    else{return value}
+}
+
 
 
 /* fonction de débugage */

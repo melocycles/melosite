@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataire', "id"]); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataireVelo', "id"]); // enlève toutes les valeur de filtre
     });
 });
 
@@ -54,11 +54,7 @@ function hideForm() {
 // remet toutes les valeurs de filtres à 0
 function resetSelectOptions(selectIds) {
     selectIds.forEach(selectId => { // parcourt les filtres
-        if(selectId == "statusVelo"){
-            document.getElementById(selectId).value = 'en stock';    
-        }else{
-            document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
-        }
+        document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
     });
 }
 
@@ -75,7 +71,7 @@ function sendFilter(){
             if(elementId == "id"){ // éxeption pour id car on veut récupérer une int pas une string
                 formData[elementId] = parseInt(value)
             }else{
-                formData[elementId] = value;
+                formData[elementId] = frenchToBool(value);
             }
         }
     }
