@@ -11,9 +11,9 @@ import utility
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
+    #return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
 
-    #return psycopg2.connect(database_url, sslmode='require')
+    return psycopg2.connect(database_url, sslmode='require')
     
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     """vérifie que le type de la donné correspond bien au type attendu. Crée un message d'erreur en fonction de l'endroit où la fonctionaété appelé.
