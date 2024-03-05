@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
 });
 
 function processResponse(response){
-    if (response.result == "mauvaise combianaison username/mot de passe"){ // si la combinaison est mauvaise on affiche le popUp d'erreur
+    if (response.result == "mauvaise combinaison username/mot de passe"){ // si la combinaison est mauvaise on affiche le popUp d'erreur
         popUp(response.result)
     }else{
         document.cookie = "uuid=" + response.result + "; max-age=" + "3153600000"; // on met le cookie de connexion pour 100ans
