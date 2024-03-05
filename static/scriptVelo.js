@@ -66,7 +66,7 @@ function genererListeCaracteristiques(returnFromFetch) {
 
             // Créez un élément li pour la colonne de droite (valeurs)
             if(pair[1]){ // si l'attribut à une valeur on l'ajoute
-                var li = createLi(pair[1]);
+                var li = createLi(booltoFrench(pair[1]));
             } else{
                 var li = createLi("."); // sinon on mets un point invisble (blanc) pour que les attributs et valeurs restent allignés
                 li.style.color = "white";

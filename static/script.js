@@ -59,6 +59,12 @@ function fetchData(url, dataToSend, callback) {
 };
 
 
+function booltoFrench(value){
+    if(value == true){return "oui"}
+    else if(value == false){return "non"}
+    else{return value}
+}
+
 
 
 /* fonction de débugage */

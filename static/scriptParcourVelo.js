@@ -72,7 +72,7 @@ function sendFilter(){
     function addToFormData(elementId) { // vérifie qu'une valeur de filtre a été choisi avant de l'envoyer à flask
         var value = document.getElementById(elementId).value; 
         if (value !== "None") {
-            if(elementId == "id"){
+            if(elementId == "id"){ // éxeption pour id car on veut récupérer une int pas une string
                 formData[elementId] = parseInt(value)
             }else{
                 formData[elementId] = value;
@@ -192,8 +192,8 @@ function addOptionsToSelect(returnFromFetch) {
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
             var option = document.createElement("option"); // création d'une option (d'un élément html)
-            option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
-            option.text = optionValue; // assignatioin d'un texte
+            option.value = booltoFrench(optionValue); // assignation de sa valeur pour le renvoi du formulaire
+            option.text = booltoFrench(optionValue); // assignatioin d'un texte
             selectElement.add(option); // ajout de l'ellement
         }
     )};
