@@ -11,7 +11,7 @@ import utility
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
+    #return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
 
     return psycopg2.connect(database_url, sslmode='require')
     
