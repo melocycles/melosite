@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataire']); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataire', "id"]); // enlève toutes les valeur de filtre
     });
 });
 
@@ -72,7 +72,11 @@ function sendFilter(){
     function addToFormData(elementId) { // vérifie qu'une valeur de filtre a été choisi avant de l'envoyer à flask
         var value = document.getElementById(elementId).value; 
         if (value !== "None") {
-            formData[elementId] = value;
+            if(elementId == "id"){
+                formData[elementId] = parseInt(value)
+            }else{
+                formData[elementId] = value;
+            }
         }
     }
     var formData = {};
@@ -89,6 +93,7 @@ function sendFilter(){
     addToFormData('referent');
     addToFormData('valeur');
     addToFormData('destinataireVelo');
+    addToFormData('id')
 
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
@@ -166,6 +171,7 @@ function addOptionsToSelect(returnFromFetch) {
     var referentSelect = document.getElementById("referent")
     var valeurSelect = document.getElementById("valeur")
     var destinataireVeloSelect = document.getElementById("destinataireVelo")
+    var idSelect = document.getElementById("id")
 
 
         // pour chaque attributs on ajoute les valeurs possibles
@@ -174,7 +180,6 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.tailleRoue, tailleRoueSelect);
     addOption(result.tailleCadre, tailleCadreSelect);
     addOption(result.electrique, electriqueSelect);
-
     addOption(result.etatVelo, etatVeloSelect);
     addOption(result.statusVelo, statusVeloSelect);
     addOption(result.origine, origineSelect);
@@ -182,6 +187,7 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.referent, referentSelect);
     addOption(result.valeur, valeurSelect);
     addOption(result.destinataireVelo, destinataireVeloSelect);
+    addOption(result.id, idSelect)
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
@@ -189,8 +195,6 @@ function addOptionsToSelect(returnFromFetch) {
             option.value = optionValue; // assignation de sa valeur pour le renvoi du formulaire
             option.text = optionValue; // assignatioin d'un texte
             selectElement.add(option); // ajout de l'ellement
-
-
         }
     )};
 };

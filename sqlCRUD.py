@@ -11,7 +11,7 @@ import utility
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    #return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
+    return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
 
     return psycopg2.connect(database_url, sslmode='require')
     
@@ -216,7 +216,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
             ou bien {"id" : bikeId} pour la page de détail
 
         search : photo1, descriptionPublic, id
-        global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, statusVelo, état, valeur, descriptionPublic
+        global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, statusVelo, état, valeur, descriptionPublic, id
         detail : bycode, origine, prochaine action, référent, destinataire, descriptionPrive
         edit   : tous les ellements
     """
@@ -227,7 +227,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     elif whoCall == "global":
         caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, statusVelo, etatVelo, descriptionPublic"
     elif whoCall == "detail":
-        caracteristicToReturn = "bycode, origine, prochaineAction, referent, valeur, destinataireVelo, descriptionPrive"
+        caracteristicToReturn = "bycode, origine, prochaineAction, referent, valeur, destinataireVelo, descriptionPrive, id"
     elif whoCall == "edit":
         caracteristicToReturn = "*"
     else:
@@ -239,7 +239,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     if dictOfFilters != None: # si il y a un/des filtres OU que l'on sélectionne un seul vélo
         typeCheck = checkEntryType(2, dictOfFilters)
         if typeCheck: # si il y a des erreurs stop et renvoie de l'erreur sous forme d'un liste de string
-            print("error in typeCheck")
+            print("sqlCRUD error in typeCheck : %s"%(dictOfFilters))
             return typeCheck
     
     
@@ -345,8 +345,8 @@ def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
     """
-    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "valeur", "destinataireVelo"]
-    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "valeur" : [], "destinataireVelo" : []}
+    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "valeur", "destinataireVelo", "id"]
+    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "valeur" : [], "destinataireVelo" : [], "id" : []}
 
     # Connexion à la base de données
     connection = getConnection()
