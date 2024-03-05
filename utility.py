@@ -11,7 +11,7 @@ def toCamelCase(word):
 
 
 def addSpaceBetweenWord(word):
-    dictOfWordToSpace = {"dateentre" : "date entré", "etatvelo" : "etat vélo", "typevelo" : "type vélo", "tailleroue" : "taille roue", "taillecadre" : "taille cadre", "prochaineaction" : "prochaine action", "destinatairevelo" : "destinataire vélo", "descriptionpublic" : "description public", "descriptionprive" : "description prive"}
+    dictOfWordToSpace = {"dateentre" : "date entré", "etatvelo" : "état vélo", "typevelo" : "type vélo", "tailleroue" : "taille roue", "taillecadre" : "taille cadre", "prochaineaction" : "prochaine action", "destinatairevelo" : "destinataire vélo", "descriptionpublic" : "description publique", "descriptionprive" : "description privée", "referent" : "référent", "statusvelo" : "status vélo"}
 
     if word in dictOfWordToSpace:
         return dictOfWordToSpace[word]
