@@ -22,9 +22,11 @@ select, #id {
 
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: textfield;
 }
 input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 label:first-of-type{ /* ne s'applique qu'au 1er label sinon espace moche entre le boutton reset et lui */
