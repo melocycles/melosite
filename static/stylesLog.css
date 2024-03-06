@@ -37,4 +37,10 @@ p{
 #popUp.hidden {
 opacity: 0;
 }
-  
+
+
+#showPassword{
+    position: absolute;
+    margin-left: 6px;
+    transform: translateY(-1    0%);
+    }

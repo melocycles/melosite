@@ -11,9 +11,11 @@ import utility
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
-    #return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
-
-    return psycopg2.connect(database_url, sslmode='require')
+    
+    try:
+        return psycopg2.connect(host="localhost",database="melodb",user="postgres",password="mdp")
+    except:
+        return psycopg2.connect(database_url, sslmode='require')
     
 def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
     """vérifie que le type de la donné correspond bien au type attendu. Crée un message d'erreur en fonction de l'endroit où la fonctionaété appelé.
@@ -345,8 +347,8 @@ def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
     """
-    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "valeur", "destinataireVelo", "id"]
-    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "valeur" : [], "destinataireVelo" : [], "id" : []}
+    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "destinataireVelo", "id"]
+    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "destinataireVelo" : [], "id" : []}
 
     # Connexion à la base de données
     connection = getConnection()

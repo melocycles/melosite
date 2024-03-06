@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
     resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'valeur', 'destinataireVelo', "id"]); // enlève toutes les valeur de filtre
+        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'destinataireVelo', "id"]); // enlève toutes les valeur de filtre
     });
 });
 
@@ -87,7 +87,6 @@ function sendFilter(){
     addToFormData('origine');
     addToFormData('prochaineAction');
     addToFormData('referent');
-    addToFormData('valeur');
     addToFormData('destinataireVelo');
     addToFormData('id')
 
@@ -165,7 +164,6 @@ function addOptionsToSelect(returnFromFetch) {
     var origineSelect = document.getElementById("origine")
     var prochaineActionSelect = document.getElementById("prochaineAction")
     var referentSelect = document.getElementById("referent")
-    var valeurSelect = document.getElementById("valeur")
     var destinataireVeloSelect = document.getElementById("destinataireVelo")
     var idSelect = document.getElementById("id")
 
@@ -181,7 +179,6 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.origine, origineSelect);
     addOption(result.prochaineAction, prochaineActionSelect);
     addOption(result.referent, referentSelect);
-    addOption(result.valeur, valeurSelect);
     addOption(result.destinataireVelo, destinataireVeloSelect);
     addOption(result.id, idSelect)
 

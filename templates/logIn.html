@@ -20,10 +20,15 @@
       
 
     <form id="form" method="post">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+
+        <label for="password">Password:</label>
+        <div>
+            <input type="password" id="password" name="password">
+            <img id="showPassword" src="static/images/show.png"/>
+        </div>
+
         <button type="submit" id="connectButton">se connecter</button>
     </form>
 </body>

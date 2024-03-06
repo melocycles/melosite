@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
     if(document.getElementById("connectButton")){ 
         const connectButton = document.getElementById("connectButton")
         const userNameField = document.getElementById("username")
-        const passawordField = document.getElementById("password")
+        const passwordField = document.getElementById("password")
+        const showPasswordButton = document.getElementById("showPassword")
         const form = document.getElementById("form")
 
         form.addEventListener('submit', function (event) {
@@ -20,10 +21,17 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
         });
         
         connectButton.addEventListener("click", function(){ // boutton connection 
-            const formData = {"userName" : userNameField.value, "password" : passawordField.value} // ajout des valeurs du formulaires au formData, envoyé ensuite au backend
+            const formData = {"userName" : userNameField.value, "password" : passwordField.value} // ajout des valeurs du formulaires au formData, envoyé ensuite au backend
             fetchData("/api/logIn", formData, processResponse) // envoie des donnés au backend puis on le traite
-        });
-    
+        });   
+        
+        showPasswordButton.addEventListener("click", function(){  
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        })
     }
     
         // si le boutton connection n'éxiste pas (aka l'utilisateur est connecté) page logOut
@@ -37,8 +45,13 @@ document.addEventListener('DOMContentLoaded', function () { // au chargement de 
                 });
             }
         }
+        
+
 
 });
+
+
+    
 
 function processResponse(response){
     if (response.result == "mauvaise combinaison username/mot de passe"){ // si la combinaison est mauvaise on affiche le popUp d'erreur

@@ -205,7 +205,7 @@ def login():
             else:
                 return jsonify({"result" : "erreur dans app.login le role est inconnu"})
         else:
-            return jsonify({"result" : "mauvaise combianaison username/mot de passe"})
+            return jsonify({"result" : "mauvaise combinaison username/mot de passe"})
 
 
 
