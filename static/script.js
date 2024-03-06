@@ -60,12 +60,14 @@ function fetchData(url, dataToSend, callback) {
 
 
 function booltoFrench(value){
+    // transforme boolean en français pour l'affichage
     if(value == true){return "oui"}
     else if(value == false){return "non"}
     else{return value}
 }
 
 function frenchToBool(value){
+    // transforme oui/non en bool pour l'enregistrement dans la db
     if(value == "oui"){return true}
     else if(value == "non"){return false}
     else{return value}

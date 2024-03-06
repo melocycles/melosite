@@ -67,7 +67,7 @@ function resetSelectOptions(selectIds) {
 function sendFilter(){
     function addToFormData(elementId) { // vérifie qu'une valeur de filtre a été choisi avant de l'envoyer à flask
         var value = document.getElementById(elementId).value; 
-        if (value !== "None") {
+        if (value !== "None" && value != "") {
             if(elementId == "id"){ // éxeption pour id car on veut récupérer une int pas une string
                 formData[elementId] = parseInt(value)
             }else{
@@ -75,6 +75,7 @@ function sendFilter(){
             }
         }
     }
+
     var formData = {};
     // récupération des valeurs de filtres dans formData si elles ne sont pas None
     addToFormData('marque');
@@ -165,7 +166,6 @@ function addOptionsToSelect(returnFromFetch) {
     var prochaineActionSelect = document.getElementById("prochaineAction")
     var referentSelect = document.getElementById("referent")
     var destinataireVeloSelect = document.getElementById("destinataireVelo")
-    var idSelect = document.getElementById("id")
 
 
         // pour chaque attributs on ajoute les valeurs possibles
