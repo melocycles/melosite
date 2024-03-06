@@ -180,7 +180,6 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.prochaineAction, prochaineActionSelect);
     addOption(result.referent, referentSelect);
     addOption(result.destinataireVelo, destinataireVeloSelect);
-    addOption(result.id, idSelect)
 
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes

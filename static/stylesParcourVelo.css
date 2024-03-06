@@ -11,13 +11,20 @@ form {
     flex-direction: column;
 }
 
-select{
+select, #id {
     max-width: 40%;
     background-color: #c2dcfc;
     color: black;
     border: none;
     margin: 5px;
     margin-left: 13px;
+}
+
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 label:first-of-type{ /* ne s'applique qu'au 1er label sinon espace moche entre le boutton reset et lui */
