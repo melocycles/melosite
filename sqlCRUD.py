@@ -328,15 +328,6 @@ def getBikeOut(dictOfValues):
 
     for i in results:
         returnValues.append(i)
-
-
-
-    if 0:
-        csvPath = "C://Users//a//Documents//code//méloapp//file.csv"
-        with open(csvPath, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(columnsLabel.split(', '))
-            writer.writerows(results)
     
     returnValues = tuple(returnValues)
 
