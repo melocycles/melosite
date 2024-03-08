@@ -40,19 +40,19 @@ function fillForm(returnFromFetch) {
     // formSata est le retour de fetchData
     formData.forEach(function(attribute) { // parcourt tous les attributs renvoyé par le backend
         var element = document.getElementById(attribute[0]); // on récupère l'élément html correspondant
-        
+        console.log(attribute[0],"  ",attribute[1])
         if (element) { // on vérifie que l'élément éxiste
             if(element.type != "date"){ // il faut enregistrer la date à part car elle a besoin d'être formatté sous forme yyyy-mm-dd
                 memoire[attribute[0]] = attribute[1]
             }
             if (element.type === 'checkbox') { // pas utilisé pour l'instant, je le laisse pour que l'implémentation de chackbox soit plus simple
                 element.checked = attribute[1];
-            } else if (element.type === 'date') {
+            }else if (element.type === 'date') {
                 // Formater la date au format YYYY-MM-DD
                 const formattedDate = new Date(attribute[1]).toISOString().split('T')[0];
                 memoire[attribute[0]] = formattedDate   
                 element.value = formattedDate;
-            } else if (attribute[0].includes("photo")) {
+            }else if (attribute[0].includes("photo")) {
                 photoList.push(attribute[1]);
             }else {
                 element.value = attribute[1];
