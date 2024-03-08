@@ -56,6 +56,9 @@ function fillForm(returnFromFetch) {
                 photoList.push(attribute[1]);
             }else {
                 element.value = attribute[1];
+                if(attribute[0]=="tailleRoue"){
+                    console.log(attribute[1])
+                }
             }
         } 
         
