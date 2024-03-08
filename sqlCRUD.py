@@ -217,7 +217,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
         dicOfFilters gère le 2, cad {"marque = "shimano"} pour la gestion des filtre sur la page de recherche de vélo
             ou bien {"id" : bikeId} pour la page de détail
 
-        search : photo1, descriptionPublic, id
+        search : photo1, title, id
         global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, statusVelo, état, valeur, descriptionPublic, id
         detail : bycode, origine, prochaine action, référent, destinataire, descriptionPrive
         edit   : tous les ellements
@@ -225,7 +225,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
 
     # on sélectionne les attrtibuts à renvoyer en fonction de l'endroit où à lieux l'appel
     if whoCall == "search":
-        caracteristicToReturn = "photo1, descriptionPublic, id"
+        caracteristicToReturn = "photo1, title, id"
     elif whoCall == "global":
         caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, statusVelo, etatVelo, descriptionPublic, electrique"
     elif whoCall == "detail":

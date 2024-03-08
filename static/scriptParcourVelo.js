@@ -118,7 +118,7 @@ function displayBikes(returnFromFetch) {
 
         // ajoute le conteneur de la description. Vérifie que la description n'est pas trop longue (cutString) puis l'ajoute
         var descriptionParagraph = document.createElement('p');
-        descriptionParagraph.textContent = cutString(bike.descriptionpublic)// cutString(bike.descriptionpublic); // on coupe la description pour qu'elle ne fasse pas plus de deux ligne (cf la fonction)
+        descriptionParagraph.textContent = cutString(bike.title)// cutString(bike.descriptionpublic); // on coupe la description pour qu'elle ne fasse pas plus de deux ligne (cf la fonction)
 
         // ajoute les 3 ellements précedemment crée à l'html
         veloCadre.appendChild(veloImage);
