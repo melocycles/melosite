@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
         // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'global', "parameters" : {"id": bikeId} }, genererListeCaracteristiques); // récupération des infos générales
     fetchData('/api/readBike', {"whoCall" : 'detail', "parameters" : {"id": bikeId} }, genererListeDetail); // récupération des infos affichés dans détail
-
+    fetchData('/api/readBike', {"whoCall" : "title", "parameters" : {"id": bikeId} }, genererTitre)
 
         // gestion des bouttons
     returnButton.addEventListener('click', function() { // bouton retour
@@ -38,6 +38,13 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
         changeImage("photo3")
     });
 });
+
+
+function genererTitre(returnFromFetch){
+    console.log(returnFromFetch.result[0][1])
+    const h3 = document.getElementById('title');
+    h3.textContent = returnFromFetch.result[0][1]
+}
 
 
 /* genere la liste des caractéristiques global du vélo

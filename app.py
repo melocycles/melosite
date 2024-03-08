@@ -168,6 +168,7 @@ def APIaddbike():
         retourne un dictionnaire confirmant le succès de l'opération
         """
     data = request.get_json() # récupération des donnés
+
     for attribute in data:
         if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])

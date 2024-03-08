@@ -3,6 +3,10 @@ li{
     list-style-type: none;
 }
 
+#title{
+    text-align: center;
+}
+
 #detailButton {
     display: block;
     margin-left: auto;

@@ -59,3 +59,7 @@ button{
     margin: 1rem auto;
     border-radius: 21px;
 }
+
+.bigFont{
+    font-size: large;
+}

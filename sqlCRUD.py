@@ -26,7 +26,7 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
         1 : addBike
         2 : modifyBike, readBike
         """
-    dictExpectedType = {"id":int, "benevole" : str, "bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "statusVelo":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
+    dictExpectedType = {"id":int, "benevole" : str, "title" : str, "bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "statusVelo":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
     listError = []
 
     for key, value in dictionary.items(): # on parcour le dictionnaire
@@ -63,7 +63,7 @@ def addBike(dictOfValue):
         return typeCheck
     
     # on vérifie que les attributs nécessaires soient remplis sinon on n'ajoute pas le vélo.
-    listAttributesRequired = ["dateEntre", "origine", "statusVelo", "benevole"]
+    listAttributesRequired = ["dateEntre", "origine", "statusVelo", "benevole", "title"]
     for attribute in listAttributesRequired:
         if attribute not in dictOfValue:
             return "%s est nécessaire veuillez le renseigner"
@@ -77,12 +77,13 @@ def addBike(dictOfValue):
     # Connexion à la base de données
     connection = getConnection()
     cursor = connection.cursor() # création du curseur
-    
+
     # ajout du vélo dans la base de donné Bike
-    query = (f"INSERT INTO Bike (bycode, dateEntre, marque, typeVelo, tailleRoue, tailleCadre, electrique, origine, statusVelo, etatVelo, prochaineAction, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie, photo1, photo2, photo3) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
+    query = (f"INSERT INTO Bike (bycode, dateEntre, title, marque, typeVelo, tailleRoue, tailleCadre, electrique, origine, statusVelo, etatVelo, prochaineAction, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie, photo1, photo2, photo3) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
     values =(
         dictOfValue['bycode'],
         dictOfValue['dateEntre'],
+        dictOfValue['title'],
         dictOfValue['marque'],
         dictOfValue['typeVelo'],
         dictOfValue['tailleRoue'],
@@ -114,7 +115,6 @@ def addBike(dictOfValue):
         "oldValue" : None,
         "newValue" : None
     }
-
     jsonObject = json.dumps(suiviModifData)
     query = f"INSERT INTO Modification (BikeID, suiviModifJSON) VALUES (%s, array[%s::jsonb])"
     values =(bike_id, jsonObject)
@@ -232,6 +232,8 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
         caracteristicToReturn = "bycode, origine, prochaineAction, referent, valeur, destinataireVelo, descriptionPrive, id"
     elif whoCall == "edit":
         caracteristicToReturn = "*"
+    elif whoCall == "title":
+        caracteristicToReturn = "title"
     else:
         print("Error in whoCall")
         return "Error in whoCall" # !! gestion d'erreur non implémenté !!
