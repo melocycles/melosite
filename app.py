@@ -250,4 +250,4 @@ def getBikeOut():
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')
     #app.run(debug=True, host='0.0.0.0') # version http
-    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https
+    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https    

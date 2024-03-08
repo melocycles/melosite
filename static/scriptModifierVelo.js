@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     submitButton.addEventListener('click', function () { // bouton valider
-        const requiredFields = ["dateEntre", "origine", "benevole", "statusVelo", "titre"];
+        const requiredFields = ["dateEntre", "origine", "benevole", "statusVelo", "title"];
         const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
 
         if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
