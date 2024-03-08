@@ -40,7 +40,7 @@ function fillForm(returnFromFetch) {
     // formSata est le retour de fetchData
     formData.forEach(function(attribute) { // parcourt tous les attributs renvoyé par le backend
         var element = document.getElementById(attribute[0]); // on récupère l'élément html correspondant
-        console.log(attribute[0],"  ",attribute[1])
+
         if (element) { // on vérifie que l'élément éxiste
             if(element.type != "date"){ // il faut enregistrer la date à part car elle a besoin d'être formatté sous forme yyyy-mm-dd
                 memoire[attribute[0]] = attribute[1]
