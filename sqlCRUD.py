@@ -351,7 +351,7 @@ def getFilterValues() -> dict[list]:
         cursor.execute( "SELECT %s From bike" %(attribut)) # création de la requette qui sélectionne toutes les valeur un attribut après l'autre
         result = cursor.fetchall()
         for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
-            if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None: # on vérifie que c'est la première occurence 
+            if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None and valueTupple[0] != "": # on vérifie que c'est la première occurence 
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
 
     print(dictReturn["prochaineAction"])
