@@ -355,7 +355,7 @@ def getFilterValues() -> dict[list]:
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
         if attribut == "prochaineAction":
             print("here")
-            print(valueTupple)
+            print(result)
     connection.close()
 
     return dictReturn
