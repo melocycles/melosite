@@ -353,9 +353,8 @@ def getFilterValues() -> dict[list]:
         for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
             if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None: # on vérifie que c'est la première occurence 
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
-        if attribut == "prochaineAction":
-            print("here")
-            print(result)
+
+    print(dictReturn["prochaineAction"])
     connection.close()
 
     return dictReturn
