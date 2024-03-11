@@ -69,8 +69,11 @@ function genererListeCaracteristiques(returnFromFetch) {
             }
         } else { // ce n'est pas une photo on l'ajoute dans les listes
             // Créez un élément li pour la colonne de gauche (caractéristiques)
-            listColumnCaracteristics.appendChild(createLi(pair[0]));
-
+            if(pair[0]=="electrique"){
+                listColumnCaracteristics.appendChild(createLi("électrique"));
+            }else{
+                listColumnCaracteristics.appendChild(createLi(pair[0]));
+            }
             // Créez un élément li pour la colonne de droite (valeurs)
             if(pair[1]){ // si l'attribut à une valeur on l'ajoute
                 var li = createLi(booltoFrench(pair[1]));
