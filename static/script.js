@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     connexionLogo.addEventListener("click", function(){
         window.location.href = "/log"
     });
+
+    assoLogo.addEventListener("click", function(){
+        window.location.href = "/"
+    })
     
 })
 
