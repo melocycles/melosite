@@ -227,7 +227,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     if whoCall == "search":
         caracteristicToReturn = "photo1, title, id"
     elif whoCall == "global":
-        caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, statusVelo, etatVelo, descriptionPublic, electrique"
+        caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, statusVelo, etatVelo, electrique, descriptionPublic"
     elif whoCall == "detail":
         caracteristicToReturn = "bycode, origine, prochaineAction, referent, valeur, destinataireVelo, descriptionPrive, id"
     elif whoCall == "edit":
