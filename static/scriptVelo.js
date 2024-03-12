@@ -75,7 +75,7 @@ function genererListeCaracteristiques(returnFromFetch) {
                 listColumnCaracteristics.appendChild(createLi(pair[0]));
             }
             // Créez un élément li pour la colonne de droite (valeurs)
-            if(pair[1]){ // si l'attribut à une valeur on l'ajoute
+            if(booltoFrench(pair[1])){ // si l'attribut à une valeur on l'ajoute
                 var li = createLi(booltoFrench(pair[1]));
             } else{
                 var li = createLi("."); // sinon on mets un point invisble (blanc) pour que les attributs et valeurs restent allignés
