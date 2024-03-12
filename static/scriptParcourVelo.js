@@ -54,7 +54,11 @@ function hideForm() {
 // remet toutes les valeurs de filtres à 0
 function resetSelectOptions(selectIds) {
     selectIds.forEach(selectId => { // parcourt les filtres
-        document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
+        if(selectId == "statusVelo"){
+            document.getElementById(selectId).value = 'en stock'    
+        }else{
+            document.getElementById(selectId).value = 'None'; // assigne la value None à chacun
+        }
     });
 }
 
