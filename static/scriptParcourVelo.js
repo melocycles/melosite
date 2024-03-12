@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
     
 
-        // gestion des bouttons
+    // gestion des bouttons
     formContainer.addEventListener('submit', function(event) { 
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
@@ -153,6 +153,21 @@ function displayBikes(returnFromFetch) {
     est appelé par le callback de fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect);
 */
 function addOptionsToSelect(returnFromFetch) {
+
+    function addOption(optionsArray, selectElement){
+        optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
+            var option = document.createElement("option"); // création d'une option (d'un élément html)
+            option.value = booltoFrench(optionValue); // assignation de sa valeur pour le renvoi du formulaire
+            option.text = booltoFrench(optionValue); // assignatioin d'un texte
+            selectElement.add(option); // ajout de l'ellement
+
+            if(selectElement == statusVeloSelect && option.value == "en stock"){
+                option.selected =true
+            }
+        }
+    )};
+
+
     result = returnFromFetch.result
         // recupère les ellemeents html où seront placés nos options
     var marqueSelect = document.getElementById("marque");
@@ -180,15 +195,6 @@ function addOptionsToSelect(returnFromFetch) {
     addOption(result.prochaineAction, prochaineActionSelect);
     addOption(result.referent, referentSelect);
     addOption(result.destinataireVelo, destinataireVeloSelect);
-
-    function addOption(optionsArray, selectElement){
-        optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
-            var option = document.createElement("option"); // création d'une option (d'un élément html)
-            option.value = booltoFrench(optionValue); // assignation de sa valeur pour le renvoi du formulaire
-            option.text = booltoFrench(optionValue); // assignatioin d'un texte
-            selectElement.add(option); // ajout de l'ellement
-        }
-    )};
 };
 
 
