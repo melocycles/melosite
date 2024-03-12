@@ -268,7 +268,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     cursor = connection.cursor()
     cursor.execute(sqlQuerry) # éxécute la requette
     result = cursor.fetchall()
-
+    print(result)
     connection.close()
     rows = []
 
