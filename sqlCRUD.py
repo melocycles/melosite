@@ -285,6 +285,10 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
         row_dict = dict(zip(columns, row)) # on met les colonne dans l'ordre pour avoir le bon ordre d'affichage
         rows.append(row_dict)
 
+
+    if whoCall == "edit":
+        print("SQLCRUD ligne 290 : ",row_dict["tailleRoue"])
+
     return rows
 
 

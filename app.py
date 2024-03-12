@@ -150,6 +150,11 @@ def APIreadBike() -> list[dict] | list[list]:
         # si il y a plusieurs vélo result est déjà dans le bon format de list[dict] on peut le renvoyer direct
         pass
 
+    if whoCall == "edit":
+
+        for i in result:
+            if i[0] == "tailleRoue":
+                print("app.py ligne 154 : ", i[1])
     return  ({'result': result})
 
 
