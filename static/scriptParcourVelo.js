@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
-    
 
-    // gestion des bouttons
+
+        // gestion des bouttons
     formContainer.addEventListener('submit', function(event) { 
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
