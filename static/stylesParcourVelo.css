@@ -55,6 +55,12 @@ label{
 
 }
 
+#noBike{
+    margin-top: 30px;
+    text-align: center;
+    display: none;
+}
+
 #veloPart{
     width: 100%;
     display: flex;

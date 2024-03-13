@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
     var cancelButton = document.getElementById('cancelButton');
     var confirmButton = document.getElementById('confirmButton');
     var resetButton = document.getElementById('resetButton');
-
+    const noBike = document.getElementById('noBike');
 
         // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statusVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
@@ -109,6 +109,14 @@ function sendFilter(){
 function displayBikes(returnFromFetch) {
     bikesData = returnFromFetch.result
     var veloPart = document.getElementById('veloPart'); // récupère le conteneur global des vélo
+
+    if(bikesData.length == 0){
+        noBike.style.display = 'block';
+    }else{
+        if (noBike.style.display == "block") {
+            noBike.style.display = "none";
+        }
+    }
 
     bikesData.forEach(function(bike) { // parcourt tous les vélos pour les créer un par un dans la page web
         // crée le conteneur du vélo avec  comme classe veloCadre
