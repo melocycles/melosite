@@ -1,12 +1,14 @@
-import os
 import csv
 import json
+import logging
+import os
 from datetime import date, datetime
 from hashlib import sha256
 
 import psycopg2
 
 import utility
+
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
@@ -104,6 +106,8 @@ def addBike(dictOfValue):
         psycopg2.Binary(dictOfValue["photo2"]),
         psycopg2.Binary(dictOfValue["photo3"])
     )
+    logging.info(query)
+    logging.info(values)
     cursor.execute(query, values)
     bike_id = cursor.fetchone()[0] #on récupère l'id du vélo qui a été crée pour l'enregistrer dans la table modification (on la récupère car à la fin de la query il y a RETURNING id)
 
