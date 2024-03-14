@@ -157,6 +157,9 @@ def modifyBike(dictOfChange):
             result = cursor.fetchone() # on récupère la valeur qui nous intéresse
             oldValue = result[0] 
 
+            if key == "tailleRoue":
+                print("modification value = ", value)
+
             cursor.execute("UPDATE Bike SET {} = %s WHERE id = %s".format(key), (value, dictOfChange["id"])) # format car on ne peut pas passer le nom d'une colonne avec "?"
 
             # ajout de la modificatoin dans la table Modification
