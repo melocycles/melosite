@@ -156,12 +156,7 @@ def modifyBike(dictOfChange):
             cursor.execute("SELECT {} FROM Bike WHERE id = %s".format(key), (dictOfChange["id"],))
             result = cursor.fetchone() # on récupère la valeur qui nous intéresse
             oldValue = result[0] 
-
-            if key == "tailleRoue" and "pouces" in key:
-                newVal = value.split(" ")
-                newVal = list(filter(lambda newVal: newVal != "", newVal))
-                newVal = " ".join(newVal)
-                
+              
 
             cursor.execute("UPDATE Bike SET {} = %s WHERE id = %s".format(key), (value, dictOfChange["id"])) # format car on ne peut pas passer le nom d'une colonne avec "?"
 
@@ -170,7 +165,6 @@ def modifyBike(dictOfChange):
             
             # récupère le suivi de modif
             result = cursor.fetchone() 
-            currentSuiviModif = result[0]
 
             if "photo" in key:
                 if oldValue:
@@ -277,7 +271,7 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
     cursor = connection.cursor()
     cursor.execute(sqlQuerry) # éxécute la requette
     result = cursor.fetchall()
-    print("sqlCRUD ligne 271 : ", result)
+
     connection.close()
     rows = []
 
@@ -293,10 +287,6 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
 
         row_dict = dict(zip(columns, row)) # on met les colonne dans l'ordre pour avoir le bon ordre d'affichage
         rows.append(row_dict)
-
-
-    if whoCall == "edit":
-        print("SQLCRUD ligne 290 : ",row_dict["tailleRoue"])
 
     return rows
 
@@ -355,7 +345,7 @@ def getFilterValues() -> dict[list]:
     """
     listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "destinataireVelo", "id"]
     dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "destinataireVelo" : [], "id" : []}
-    dictSort = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
+    dictSort = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleRoue" : ["12 pouces", "14 pouces", "16 pouces", "20 pouces", "24 pouces", "26 pouces", "27.5 pouces", "29 pouces", "600", "650"," 700"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
     
 
     # Connexion à la base de données
