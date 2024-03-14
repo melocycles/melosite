@@ -158,7 +158,9 @@ def modifyBike(dictOfChange):
             oldValue = result[0] 
 
             if key == "tailleRoue":
+                print("\n\nHERE")
                 print("modification value = ", value)
+                print("/HERE\n\n")
 
             cursor.execute("UPDATE Bike SET {} = %s WHERE id = %s".format(key), (value, dictOfChange["id"])) # format car on ne peut pas passer le nom d'une colonne avec "?"
 
@@ -168,7 +170,6 @@ def modifyBike(dictOfChange):
             # récupère le suivi de modif
             result = cursor.fetchone() 
             currentSuiviModif = result[0]
-            print("type(currentSuiviModif): %s\n%s\n\n"%(type(currentSuiviModif),currentSuiviModif))
 
             if "photo" in key:
                 if oldValue:
