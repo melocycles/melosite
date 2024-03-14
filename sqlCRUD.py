@@ -354,7 +354,7 @@ def getFilterValues() -> dict[list]:
     """
     listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "destinataireVelo", "id"]
     dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "destinataireVelo" : [], "id" : []}
-    dictSort = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à reparer"]}
+    dictSort = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
     
 
     # Connexion à la base de données
