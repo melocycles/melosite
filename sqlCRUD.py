@@ -46,7 +46,7 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
 
 def checkIsItAColumn(potentialColumn:str) -> bool:
     """vérifie que potentialColumn est bien une des colonnes de la table de la base de donné"""
-    listAttributesName = ["bycode", "benevole", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "origine", "statusVelo", "etatVelo", "prochaineAction", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
+    listAttributesName = ["bycode", "benevole", "title", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "origine", "statusVelo", "etatVelo", "prochaineAction", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
     if potentialColumn in listAttributesName:
         return True
     return False
