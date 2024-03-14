@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, jsonify, abort, url_for, redirect
-import sqlCRUD
 import base64
-import info # contient les infos secètes qu'on ne veux pas exposer sur github
+
+from flask import (Flask, abort, jsonify, redirect, render_template, request,
+                   url_for)
+
+import info  # contient les infos secètes qu'on ne veux pas exposer sur github
+import sqlCRUD
 
 app = Flask(__name__)
 app.secret_key = info.APP_SECRET
@@ -177,7 +180,9 @@ def APIaddbike():
     for attribute in data:
         if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])
-
+    
+    app.logger.info(data)
+    
     result = sqlCRUD.addBike(data)
     return result # renvoie une réponse de succès sous forme {"status" : "ok"}
 
