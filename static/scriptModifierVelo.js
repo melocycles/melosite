@@ -71,7 +71,7 @@ function fillForm(returnFromFetch) {
 */
 function updateBike(){
     var formData = {"id" : bikeId}; // crée le dictionnaire à envoyer à sqlCRUD.py
-    const listeAttributes = ["benevole", "referent", "dateEntre", "statusVelo", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
+    const listeAttributes = ["benevole", "referent", "title", "dateEntre", "statusVelo", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
     
         // vérifie si les photos dans les <img> de l'html sont différentes de celles de la mémoire
     for (let i = 0; i < photoList.length; i++) { 
