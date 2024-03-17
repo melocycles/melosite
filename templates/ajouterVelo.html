@@ -36,6 +36,18 @@
         <label for="dateEntre">date d'entrée: <b>*</b></label>
         <input type="date" id="dateEntre" name="dateEntre" required>
 
+        <label for="statusVelo" name="statusVelo">statut : <b>*</b></label>
+        <select name="statusVelo" id="statusVelo" required>
+            <option value=""></option>
+            <option value="en stock" selected>en stock</option>
+            <option value="réservé">réservé</option>
+            <option value="vendu">vendu</option>
+            <option value="donné">donné</option>
+            <option value="recyclé">recyclé</option>
+            <option value="perdu">perdu</option>
+            <option value="démonté">démonté</option>
+        </select>
+
         <label for="origine">origine: <b>*</b></label>
         <select id="origine" name="origine" required>
             <option value=""></option>

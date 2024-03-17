@@ -1,7 +1,6 @@
 import base64
 
-from flask import (Flask, abort, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
 
 import info  # contient les infos secètes qu'on ne veux pas exposer sur github
 import sqlCRUD

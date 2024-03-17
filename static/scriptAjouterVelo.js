@@ -153,7 +153,7 @@ function addBike(){
         }
     }
     
-    const listeAttributes = ["benevole", "referent", "title", "dateEntre", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
+    const listeAttributes = ["benevole", "referent", "title", "dateEntre", "statusVelo", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
     
     // crée le dictionnaire à envoyer à sqlCRUD.py
     for (const attribute of listeAttributes) { // parcourt tous les ellements qui peuvent être rensignés
