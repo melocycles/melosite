@@ -32,7 +32,7 @@ button{
 /* ordinateurs */
 @media only screen and (min-width: 992px) {
     #headerLogo{
-        max-width: 50%;
+        width: 50%;
 	}
 }
 
