@@ -345,8 +345,8 @@ def getFilterValues() -> dict[list]:
     """
     listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "destinataireVelo", "id"]
     dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "destinataireVelo" : [], "id" : []}
-    dictSort = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleRoue" : ["12 pouces", "14 pouces", "16 pouces", "20 pouces", "24 pouces", "26 pouces", "27.5 pouces", "29 pouces", "600", "650","700"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu", "démonté"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
-    
+    dictSortOrder = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleRoue" : ["12 pouces", "14 pouces", "16 pouces", "20 pouces", "24 pouces", "26 pouces", "27.5 pouces", "29 pouces", "600", "650","700"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu", "démonté"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
+    listAttributesToOrder = ["marque"]
 
     # Connexion à la base de données
     connection = getConnection()
@@ -358,9 +358,11 @@ def getFilterValues() -> dict[list]:
         for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
             if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None and valueTupple[0] != "": # on vérifie que c'est la première occurence 
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
-        if attribut in dictSort:
-            indexOfelement = lambda x: dictSort[attribut].index(x)
+        if attribut in dictSortOrder:
+            indexOfelement = lambda x: dictSortOrder[attribut].index(x)
             dictReturn[attribut].sort(key = indexOfelement)
+        elif attribut in listAttributesToOrder:
+            dictReturn[attribut].sort()
 
     connection.close()
 
