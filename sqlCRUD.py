@@ -166,6 +166,10 @@ def modifyBike(dictOfChange):
             # récupère le suivi de modif
             result = cursor.fetchone() 
 
+            if "date" in key:
+                oldValue = str(oldValue)
+           
+
             if "photo" in key:
                 if oldValue:
                     suiviModifData ={
@@ -264,7 +268,8 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
         if conditions:
             sqlQuerry += " AND ".join(conditions) #transforme la liste crée au dessus en requette SQL 
     
-
+    if whoCall == "search":
+        sqlQuerry += "ORDER BY dateentre DESC "
     # Connexion à la base de données
     connection = getConnection()
 
