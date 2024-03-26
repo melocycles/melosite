@@ -1,4 +1,8 @@
     // déclaration à la racine car utilisé à plusieurs endroits.
+
+let requiredFields
+let listeAttributes
+fetchData("api/config", {}, getConfig) 
     
 // C'est là que seront stocké les photos prises. On les stock dans une liste pour y accéder plus simplement
 let capturedPhoto1 = null;
@@ -7,9 +11,9 @@ let capturedPhoto3 = null;
 var photoList = [capturedPhoto1, capturedPhoto2, capturedPhoto3]
 
 // récupération des canvas où seront affichés les photos sur la page
-let canvas1 = document.getElementById("canvas1")
-let canvas2 = document.getElementById("canvas2")
-let canvas3 = document.getElementById("canvas3")
+let canvas1 = document.getElementById("photo1")
+let canvas2 = document.getElementById("photo2")
+let canvas3 = document.getElementById("photo3")
 
 
 
@@ -28,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
 
 
     submitButton.addEventListener('click', function () { // vérifie que "dateEntre", "origine", "benevole" sont bien renseigné avant d'enregistrer le vélo
-        const requiredFields = ["dateEntre", "origine", "benevole"];
         const missingFields = requiredFields.filter(field => !document.getElementById(field).value);
 
         if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
@@ -65,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
         // gestion de la prise des photos
 
     for (let i = 1; i <= 3; i++) {
-        const canvasButton = document.getElementById('canvas' + i); // on récupère les canvas un par un (car dans l'html ils s'appellent canvas1, canvas2 et canvas3)
+        const canvasButton = document.getElementById('photo' + i); // on récupère les canvas un par un (car dans l'html ils s'appellent canvas1, canvas2 et canvas3)
         const index = i; // on conserve i car on en a besoin dans displayNike() pour enregistrer la photo prise dans photoList
 
 
@@ -92,6 +95,10 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
 
 }, false);
 
+function getConfig(returnFromFetch){
+    requiredFields = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addRequired);
+    listeAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addBike);
+}
 
 // enregistre la photo prise dans photoList (pour pouvoir l'envoyer à la database après) + l'affiche sur la page web
 function displayPicture(file, canvas, index) {
@@ -144,7 +151,7 @@ function displayPicture(file, canvas, index) {
         est appelé par le boutton valider    
     */
 function addBike(){
-    var formData = {"statusVelo" : "en stock"}; // on définit le vélo comme en stock de base
+    var formData = {}; // on définit le vélo comme en stock de base
 
     // on parcourt les 3 photos dans photoList. Si une photo a été prise on l'ajoute dans formData
     for (let i = 0; i < photoList.length; i++) {
@@ -152,28 +159,19 @@ function addBike(){
             formData[`photo${i + 1}`] = photoList[i].src;
         }
     }
-    
-    const listeAttributes = ["benevole", "referent", "title", "dateEntre", "statusVelo", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
-    
     // crée le dictionnaire à envoyer à sqlCRUD.py
     for (const attribute of listeAttributes) { // parcourt tous les ellements qui peuvent être rensignés
         if (document.getElementById(attribute).value !== "") { // si l'utilisateur a renseigné une valeur            
-            if(attribute == "electrique"){ // si l'attribut est ellectrique on le transforme en boolean
-                if(document.getElementById(attribute).value == "True"){
-                    formData[attribute] = true
-                }else{
-                    formData[attribute] = false
-                }
-            } else if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float (aka nombre à virgules)
-                formData[attribute] = parseFloat(document.getElementById(attribute).value)
+            if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float (aka nombre à virgules)
+                formData[attribute] = parseInt(document.getElementById(attribute).value)
 
-            } else if(attribute == "dateEntre"){ // si l'attribut est la date on la formate
+            }else if(attribute == "dateEntre"){ // si l'attribut est la date on la formate
                 let dateValue = new Date(document.getElementById(attribute).value);
                 const formattedDate = new Date(dateValue).toISOString().split('T')[0]; // formate sous la forme yyyy-mm-dd
                 formData[attribute] = formattedDate
                 
             }else{ // sinon on l'ajoute sans avoir à la préparer (car c'est une string (aka chaine de caractère))
-                formData[attribute] = document.getElementById(attribute).value; // on assigne à l'attribut sa valeur 
+                formData[attribute] = frenchToBool(document.getElementById(attribute).value); // on assigne à l'attribut sa valeur 
             }
         }
     }

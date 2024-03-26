@@ -72,8 +72,8 @@ function booltoFrench(value){
 
 function frenchToBool(value){
     // transforme oui/non en bool pour l'enregistrement dans la db
-    if(value == "oui"){return true}
-    else if(value == "non"){return false}
+    if(value == "oui" || value == "True"){return true}
+    else if(value == "non" || value == "False"){return false}
     else{return value}
 }
 
