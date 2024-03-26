@@ -4,6 +4,7 @@ from flask import Flask, abort, jsonify, redirect, render_template, request, url
 
 import info  # contient les infos secètes qu'on ne veux pas exposer sur github
 import sqlCRUD
+import json
 
 app = Flask(__name__)
 app.secret_key = info.APP_SECRET
@@ -255,6 +256,12 @@ def getBikeOut():
     response = sqlCRUD.getBikeOut(data)
 
     return {"status" : "ok", "csv" : response}
+
+@app.route('/api/config', methods=["POST"])
+def get_config():
+    with open('config.json', 'r') as f:
+        config_data = json.load(f)
+    return jsonify(config_data)
 
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')

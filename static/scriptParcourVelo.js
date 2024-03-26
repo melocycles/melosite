@@ -1,3 +1,4 @@
+let filteredAttributes
 document.addEventListener("DOMContentLoaded", function () { // action lors du changement de la page
         // récupération des élémennts html
     var formContainer = document.getElementById('formContainer');
@@ -6,11 +7,14 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
     var cancelButton = document.getElementById('cancelButton');
     var confirmButton = document.getElementById('confirmButton');
     var resetButton = document.getElementById('resetButton');
-    const noBike = document.getElementById('noBike');
+
+
+    fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
 
         // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statusVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
+    
 
 
         // gestion des bouttons
@@ -31,12 +35,15 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
         hideForm(); // masque le formulaire
         sendFilter(); // envoi les valeurs de filtre au backend puis affiche les vélos correspondants
     });
-    resetButton.addEventListener('click', function () { // boutton reset de la page filtre
-        resetSelectOptions(['marque', 'typeVelo', 'tailleRoue', 'tailleCadre', 'electrique', 'etatVelo', 'statusVelo','origine', 'prochaineAction', 'referent', 'destinataireVelo', "id"]); // enlève toutes les valeur de filtre
-    });
+    resetButton.addEventListener('click', function () {
+        resetSelectOptions(filteredAttributes)
+    })
+ 
 });
 
-
+function getConfig(returnFromFetch){
+    filteredAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].filter);
+}
 
 /* affiche/masque le formualaire. En réalité il fait 80% de l'écran en largeur. pour le cacher on l'envoie de sa taille à droite (donc hors de l'écran).
     La ligne overflow-x:hidden;  dans stylesParcourVelo.css empèche le scroll à droite il est donc invisible pour l'utilisateur.
@@ -78,19 +85,10 @@ function sendFilter(){
 
     var formData = {};
     // récupération des valeurs de filtres dans formData si elles ne sont pas None
-    addToFormData('marque');
-    addToFormData('typeVelo');
-    addToFormData('tailleRoue');
-    addToFormData('tailleCadre');
-    addToFormData('electrique');
-    addToFormData('etatVelo');
-    addToFormData('statusVelo');
-    addToFormData('origine');
-    addToFormData('prochaineAction');
-    addToFormData('referent');
-    addToFormData('destinataireVelo');
-    addToFormData('id')
 
+    for (const i of filteredAttributes) {
+        addToFormData(i)
+    }
 
     document.getElementById('veloPart').innerHTML = ''; // supprime les vélos affichés
     fetchData('/api/readBike',{"whoCall" : "search", "parameters" : formData}, displayBikes) // récupération des vélos correspodnants aux filtres
@@ -168,41 +166,19 @@ function addOptionsToSelect(returnFromFetch) {
             option.value = booltoFrench(optionValue); // assignation de sa valeur pour le renvoi du formulaire
             option.text = booltoFrench(optionValue); // assignatioin d'un texte
             selectElement.add(option); // ajout de l'ellement
-
-            if(selectElement == statusVeloSelect && option.value == "en stock"){
+            if(selectElement.id == "statusVelo" && option.value == "en stock"){
                 option.selected =true
             }
         }
     )};
 
-
     result = returnFromFetch.result
-        // recupère les ellemeents html où seront placés nos options
-    var marqueSelect = document.getElementById("marque");
-    var typeVeloSelect = document.getElementById("typeVelo");
-    var tailleRoueSelect = document.getElementById("tailleRoue");
-    var tailleCadreSelect = document.getElementById("tailleCadre");
-    var electriqueSelect = document.getElementById("electrique")
-    var etatVeloSelect = document.getElementById("etatVelo");
-    var statusVeloSelect = document.getElementById("statusVelo");
-    var origineSelect = document.getElementById("origine")
-    var prochaineActionSelect = document.getElementById("prochaineAction")
-    var referentSelect = document.getElementById("referent")
-    var destinataireVeloSelect = document.getElementById("destinataireVelo")
-
-
-        // pour chaque attributs on ajoute les valeurs possibles
-    addOption(result.marque, marqueSelect);
-    addOption(result.typeVelo, typeVeloSelect);
-    addOption(result.tailleRoue, tailleRoueSelect);
-    addOption(result.tailleCadre, tailleCadreSelect);
-    addOption(result.electrique, electriqueSelect);
-    addOption(result.etatVelo, etatVeloSelect);
-    addOption(result.statusVelo, statusVeloSelect);
-    addOption(result.origine, origineSelect);
-    addOption(result.prochaineAction, prochaineActionSelect);
-    addOption(result.referent, referentSelect);
-    addOption(result.destinataireVelo, destinataireVeloSelect);
+    
+    for (const i of filteredAttributes) {
+        if(document.getElementById(i).tagName.toLowerCase() === "select"){ // pour ajouter uniquement aux éléments de type select
+            addOption(result[i], document.getElementById(i))
+        }
+    }    
 };
 
 

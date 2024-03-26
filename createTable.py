@@ -26,6 +26,7 @@ def createTable():
                     id SERIAL PRIMARY KEY NOT NULL, --Id interne à la base de donné, obligatoire
                     bycode VARCHAR(12),             --Numéro d identification antivol si existant
                     dateEntre DATE NOT NULL,        --date entré en stock
+                    dateSortie DATE,                --date de la sortie du stock
                     marque VARCHAR(20),             --marque du vélo
                     typeVelo VARCHAR(20),           --vtc, vtt....
                     tailleRoue VARCHAR(10),         --12pouces, 14pouces...
@@ -43,7 +44,6 @@ def createTable():
                     destinataireVelo TEXT,          --personne ou entité qui a récuperé le vélo
                     descriptionPublic TEXT,         --texte libre affiché sur le site
                     descriptionPrive TEXT,          --aucune idée de l'utilité mais je suis un bon petit soldat
-                    dateSortie DATE,                --date de la sortie du stock
                     typeSortie VARCHAR(7)           --vendu, donné, démonté....
                 )''')
 
