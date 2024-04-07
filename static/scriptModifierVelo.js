@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     submitButton.addEventListener('click', function () { // bouton valider
-        const requiredFields = ["dateEntre", "origine", "benevole", "statusVelo", "title"];
         const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
 
         if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
@@ -38,8 +37,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function getConfig(returnFromFetch){
-    requiredFields = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addRequired);
-    listeAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addBike);
+    const returnFromFetchArray = Object.entries(returnFromFetch);
+    returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
+    objects = Object.fromEntries(returnFromFetchArray);
+
+    requiredFields = Object.keys(objects).filter(key => objects[key].addRequired);
+    listeAttributes = Object.keys(objects).filter(key => objects[key].addBike);
+
+    addField()
 }
 
 
@@ -66,12 +71,9 @@ function fillForm(returnFromFetch) {
             }else if (attribute[0].includes("photo")) {
                 photoList.push(attribute[1]);
             }else {
-                element.value = attribute[1];
-                if(attribute[0]=="tailleRoue"){
-                    console.log(attribute[1])
+                element.value = booltoFrench(attribute[1]);
                 }
-            }
-        } 
+        }
         
     })
     addPicture(photoList)
@@ -93,11 +95,8 @@ function updateBike(){
         // ajouts des attributs ayant été modifié au dictionnaire formData. On vérifie si un élément à été modifié dans hasTheValueChange()
     for (const attribute of listeAttributes) { // parcourt tous les ellements du formulaire
             if(attribute == "electrique"){ // si l'attribut est ellectrique on le transforme en boolean
-                if(document.getElementById(attribute).value == "true"){
-                    hasTheValueChange(attribute, true)
-                }else if(document.getElementById(attribute).value == "false"){
-                    hasTheValueChange(attribute, false)
-                }
+                //hasTheValueChange(attribute, booltoFrench(document.getElementById(attribute).value))
+                hasTheValueChange(attribute, frenchToBool(document.getElementById(attribute).value)); // on assigne à l'attribut sa valeur 
             } else if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float
                 hasTheValueChange(attribute, parseFloat(document.getElementById(attribute).value))
 
@@ -106,9 +105,8 @@ function updateBike(){
             }
     }
     
-
     // Envoie des données au backend
-    fetchData('/api/modifyBike', formData,  window.location.href = "/velo")
+    fetchData('/api/modifyBike', formData, window.location.href = "/velo")
 
     function hasTheValueChange(attribut, value){
         if(attribut == "valeur" && isNaN(parseFloat(value))){ // si l'attribut est valeur et que value n'est pas un nombre value devient null
@@ -116,11 +114,9 @@ function updateBike(){
         }else if(value === ""){ // pour tous les autres attributs si value est vide value devient null
             value = null
         };
-        
         if(memoire[attribut] != value){ // on assigne la valeur à formData pour l'envoyer au backend
             formData[attribut] = value
         }
-
     }
 }
 
@@ -231,5 +227,74 @@ function addPicture(photoList){
                 context.drawImage(img, 0, 0, img.width*ratio, img.height*ratio); // on affiche l'image dans le canvas
             };
         };
+    }
+}
+
+function addField(){
+    function textInput(){
+        // <input type="text" id="title" name="titre" required />
+        const newInput = document.createElement("input")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["lowCase"]);
+        newInput.setAttribute("type", objects[currentAttribut]["entryType"][1]);
+
+        if(requiredFields.includes(currentAttribut)){
+            newInput.setAttribute("required", "");
+        }
+        formContainer.insertBefore(newInput, lastButtons);
+    }
+    function textAreaInput(){
+        const newInput = document.createElement("textarea")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("rows", "4");
+        formContainer.insertBefore(newInput, lastButtons);
+    }
+    function selectInput(){
+        const newInput = document.createElement("select")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["camelCase"]);
+
+        if(requiredFields.includes(currentAttribut)){
+            newInput.setAttribute("required", "");
+        }
+        var emptyOption = document.createElement("option");
+        emptyOption.setAttribute("value", "");
+        newInput.appendChild(emptyOption);
+        
+        for(item of objects[currentAttribut]["values"]){
+            var option = document.createElement("option");
+            option.setAttribute("value", booltoFrench(item));
+            option.textContent = booltoFrench(item)
+            newInput.appendChild(option);
+        }
+        formContainer.insertBefore(newInput, lastButtons);
+
+    }
+
+    const lastButtons = document.getElementById("confirmButton")
+    
+    for(currentAttribut of listeAttributes){
+        
+        const newLabel = document.createElement('label');
+        newLabel.setAttribute('for', currentAttribut);
+        newLabel.textContent = currentAttribut + ":";
+        if(requiredFields.includes(currentAttribut)){
+            newLabel.innerHTML += (" <b>*</b>");
+        }
+        formContainer.insertBefore(newLabel, lastButtons);
+
+        switch (objects[currentAttribut]["entryType"][0]){
+            case "input":
+                returnedHTML = textInput();
+                break
+            case "textarea":
+                returnedHTML = textAreaInput();
+                break
+            case "select":
+                returnedHTML = selectInput();
+                break
+        }
+       
     }
 }

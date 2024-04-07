@@ -1,7 +1,7 @@
     // déclaration à la racine car utilisé à plusieurs endroits.
-
 let requiredFields
 let listeAttributes
+let allAttributes
 fetchData("api/config", {}, getConfig) 
     
 // C'est là que seront stocké les photos prises. On les stock dans une liste pour y accéder plus simplement
@@ -96,8 +96,14 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
 }, false);
 
 function getConfig(returnFromFetch){
-    requiredFields = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addRequired);
-    listeAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].addBike);
+    const returnFromFetchArray = Object.entries(returnFromFetch);
+    returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
+    objects = Object.fromEntries(returnFromFetchArray);
+
+    requiredFields = Object.keys(objects).filter(key => objects[key].addRequired);
+    listeAttributes = Object.keys(objects).filter(key => objects[key].addBike)
+
+    addField()
 }
 
 // enregistre la photo prise dans photoList (pour pouvoir l'envoyer à la database après) + l'affiche sur la page web
@@ -159,8 +165,10 @@ function addBike(){
             formData[`photo${i + 1}`] = photoList[i].src;
         }
     }
+
     // crée le dictionnaire à envoyer à sqlCRUD.py
     for (const attribute of listeAttributes) { // parcourt tous les ellements qui peuvent être rensignés
+
         if (document.getElementById(attribute).value !== "") { // si l'utilisateur a renseigné une valeur            
             if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float (aka nombre à virgules)
                 formData[attribute] = parseInt(document.getElementById(attribute).value)
@@ -179,3 +187,74 @@ function addBike(){
     // envoi deu formulaire au backend pour l'enregistrement dans la database pui redirection vers la apge parcoursVelo
     fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
 };
+
+
+function addField(){
+    function textInput(){
+        // <input type="text" id="title" name="titre" required />
+        const newInput = document.createElement("input")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["lowCase"]);
+        newInput.setAttribute("type", objects[currentAttribut]["entryType"][1]);
+
+        if(requiredFields.includes(currentAttribut)){
+            newInput.setAttribute("required", "");
+        }
+        formContainer.insertBefore(newInput, lastButtons);
+    }
+    function textAreaInput(){
+        const newInput = document.createElement("textarea")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("rows", "4");
+        formContainer.insertBefore(newInput, lastButtons);
+    }
+    function selectInput(){
+        const newInput = document.createElement("select")
+        newInput.setAttribute("id", objects[currentAttribut]["camelCase"]);
+        newInput.setAttribute("name", objects[currentAttribut]["camelCase"]);
+
+        if(requiredFields.includes(currentAttribut)){
+            newInput.setAttribute("required", "");
+        }
+        var emptyOption = document.createElement("option");
+        emptyOption.setAttribute("value", "");
+        newInput.appendChild(emptyOption);
+        
+        for(item of objects[currentAttribut]["values"]){
+            var option = document.createElement("option");
+            option.setAttribute("value", item);
+            option.textContent = item
+            newInput.appendChild(option);
+        }
+        formContainer.insertBefore(newInput, lastButtons);
+
+    }
+
+    const lastButtons = document.getElementById("confirmButton")
+    
+    for(currentAttribut of listeAttributes){
+        
+        const newLabel = document.createElement('label');
+        newLabel.setAttribute('for', currentAttribut);
+        newLabel.textContent = currentAttribut + ":";
+
+        if(requiredFields.includes(currentAttribut)){
+            newLabel.innerHTML += (" <b>*</b>");
+        }
+        formContainer.insertBefore(newLabel, lastButtons);
+
+        switch (objects[currentAttribut]["entryType"][0]){
+            case "input":
+                returnedHTML = textInput();
+                break
+            case "textarea":
+                returnedHTML = textAreaInput();
+                break
+            case "select":
+                returnedHTML = selectInput();
+                break
+        }
+       
+    }
+}

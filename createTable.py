@@ -24,7 +24,7 @@ def createTable():
     # table vélo
     cursor.execute('''CREATE TABLE IF NOT EXISTS Bike (
                     id SERIAL PRIMARY KEY NOT NULL, --Id interne à la base de donné, obligatoire
-                    bycode VARCHAR(12),             --Numéro d identification antivol si existant
+                    bicycode VARCHAR(12),           --Numéro d identification antivol si existant
                     dateEntre DATE NOT NULL,        --date entré en stock
                     dateSortie DATE,                --date de la sortie du stock
                     marque VARCHAR(20),             --marque du vélo
@@ -36,7 +36,7 @@ def createTable():
                     photo3 BYTEA,                   --photo du vélo                
                     electrique BOOLEAN,             --est ce un vélo électrique
                     origine VARCHAR(11) NOT NULL,   --don, trouvé, récup...
-                    statusVelo VARCHAR(17) NOT NULL,--en stock, réservé, donné....
+                    statutVelo VARCHAR(17) NOT NULL,--en stock, réservé, donné....
                     etatVelo VARCHAR(11),           --Très bon, moyen, mauvais, pour pièces
                     prochaineAction VARCHAR(10),    --à vendre, à reparer, à recycler....
                     referent VARCHAR(30),           --personne en charge du velo

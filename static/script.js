@@ -29,7 +29,10 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     assoLogo.addEventListener("click", function(){
         window.location.href = "/"
     })
-    
+
+    if (document.querySelector('.autoForm')) {
+
+    }
 })
 
 
@@ -65,15 +68,15 @@ function fetchData(url, dataToSend, callback) {
 
 function booltoFrench(value){
     // transforme boolean en français pour l'affichage
-    if(value == true){return "oui"}
-    else if(value == false){return "non"}
+    if(value == true || value == "True" || value == "true"){return "oui"}
+    else if(value == false || value == "False" || value == "false"){return "non"}
     else{return value}
 }
 
 function frenchToBool(value){
     // transforme oui/non en bool pour l'enregistrement dans la db
-    if(value == "oui" || value == "True"){return true}
-    else if(value == "non" || value == "False"){return false}
+    if(value == "oui" || value == "True" || value == "true"){return true}
+    else if(value == "non" || value == "False" || value == "false"){return false}
     else{return value}
 }
 

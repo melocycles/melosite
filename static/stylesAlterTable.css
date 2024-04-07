@@ -1,0 +1,7 @@
+#topForm{
+    width: 50%;
+    margin: 5rem auto;
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+}

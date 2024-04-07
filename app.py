@@ -4,7 +4,6 @@ from flask import Flask, abort, jsonify, redirect, render_template, request, url
 
 import info  # contient les infos secètes qu'on ne veux pas exposer sur github
 import sqlCRUD
-import json
 
 app = Flask(__name__)
 app.secret_key = info.APP_SECRET
@@ -110,6 +109,13 @@ def suiviModif():
     else:
         abort(418)
 
+@app.route('/alterTable')
+def alterTable():
+    if checkCookieAdmin():
+        return render_template("/alterTable.html")
+    else:
+        abort(418)
+
 
     ### les interractions du site web avec la database
 
@@ -153,12 +159,10 @@ def APIreadBike() -> list[dict] | list[list]:
         # si il y a plusieurs vélo result est déjà dans le bon format de list[dict] on peut le renvoyer direct
         pass
 
-    if whoCall == "edit":
 
-        for i in result:
-            if i[0] == "tailleRoue":
-                print("app.py ligne 154 : ", i[1])
     return  ({'result': result})
+
+
 
 
 # route pour récupérer les valeurs éxistantes de filtre (aka toutes les marques enregistrés, tous les types de vélo....)
@@ -198,6 +202,7 @@ def APImodifyBike():
         if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])
     response = sqlCRUD.modifyBike(data)
+    print("modify in app response : ",response)
     return response # renvoie une réponse de succès sous forme {"status" : "ok"}
 
 
@@ -259,8 +264,7 @@ def getBikeOut():
 
 @app.route('/api/config', methods=["POST"])
 def get_config():
-    with open('config.json', 'r') as f:
-        config_data = json.load(f)
+    config_data = info.JSONCONFIG
     return jsonify(config_data)
 
 if __name__ == '__main__':

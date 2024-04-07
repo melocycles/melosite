@@ -1,3 +1,7 @@
+let globalAttributes
+let detailAttributes
+fetchData("api/config", {}, getConfig)
+
 document.addEventListener("DOMContentLoaded", function () { // quand la page se charge
     // récupération de l'id stocké dans le navigateur. On le transforme en int car il est stocké en string
     const bikeId = parseInt(sessionStorage.getItem("bikeId")); 
@@ -39,9 +43,13 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     });
 });
 
+function getConfig(returnFromFetch){
+    globalAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].global);
+    detailAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].detail);
+
+}
 
 function genererTitre(returnFromFetch){
-    console.log(returnFromFetch.result[0][1])
     const h3 = document.getElementById('title');
     h3.textContent = returnFromFetch.result[0][1]
 }
@@ -52,7 +60,6 @@ function genererTitre(returnFromFetch){
 */
 function genererListeCaracteristiques(returnFromFetch) {
     caracteristics = returnFromFetch.result
-    
     const photoKey = ["photo1", "photo2", "photo3"]; // pour simplifier le code plus loins
     const listColumnCaracteristics = document.getElementById('columnLeftCaracteristics'); // repère l'ellement html à modifier
     const listColumnValues = document.getElementById("columnRightCaracteristics"); // repère l'ellement html à modifier
@@ -67,13 +74,10 @@ function genererListeCaracteristiques(returnFromFetch) {
                         imgElement.src = "data:image/jpeg;base64," + pair[1]; 
                 }
             }
-        } else { // ce n'est pas une photo on l'ajoute dans les listes
+        }else { // ce n'est pas une photo on l'ajoute dans les listes
             // Créez un élément li pour la colonne de gauche (caractéristiques)
-            if(pair[0]=="electrique"){
-                listColumnCaracteristics.appendChild(createLi("électrique"));
-            }else{
-                listColumnCaracteristics.appendChild(createLi(pair[0]));
-            }
+            listColumnCaracteristics.appendChild(createLi(pair[0]));
+
             // Créez un élément li pour la colonne de droite (valeurs)
             if(booltoFrench(pair[1])){ // si l'attribut à une valeur on l'ajoute
                 var li = createLi(booltoFrench(pair[1]));
@@ -92,6 +96,7 @@ function genererListeCaracteristiques(returnFromFetch) {
 */
 function genererListeDetail(returnFromFetch) {
     caracteristics = returnFromFetch.result
+
     // caracteristics est le retour de fetchData
     const listColumnCaracteristics = document.getElementById('columnLeftDetail'); // repère l'ellement html à modifier
     const listColumnValues = document.getElementById("columnRightDetail"); // repère l'ellement html à modifier

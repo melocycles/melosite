@@ -1,14 +1,13 @@
-import csv
 import json
 import logging
 import os
-from datetime import date, datetime
+import datetime
 from hashlib import sha256
-
 import psycopg2
-
 import utility
+import info
 
+jsonConfig = info.JSONCONFIG
 
 def getConnection():
     database_url = os.environ.get("DATABASE_URL", "postgres://postgres:mdp@localhost/melodb")
@@ -28,26 +27,21 @@ def checkEntryType(errorMessage:int, dictionary:dict) -> list[str]:
         1 : addBike
         2 : modifyBike, readBike
         """
-    dictExpectedType = {"id":int, "benevole" : str, "title" : str, "bycode":str, "dateEntre":str, "marque":str, "typeVelo":str, "tailleRoue":str, "tailleCadre":str, "photo1":bytes, "photo2":bytes, "photo3":bytes, "electrique":bool, "origine":str, "statusVelo":str, "etatVelo":str, "prochaineAction":str, "referent":str, "valeur":float, "destinataireVelo":str, "descriptionPublic":str, "descriptionPrive":str, "dateSortie":str, "typeSortie":str}
     listError = []
-
     for key, value in dictionary.items(): # on parcour le dictionnaire
-        if type(value) != dictExpectedType[key] and value != None: # si la valeur n'est pas celle attendu et n'est pas None (valeur non renseigné)
-            if key == "valeur" and type(value) == int:  # js = caca pas capable de faire un float correctement
-                pass
-            elif errorMessage == 1: # erreur venant de addBike
-                # éxemple:        bycode est "input" (un     str      ) alors qu'il devrait être un         int 
-                listError.append(f"{key} est  (un {type(value)}) alors qu'il devrait être un {dictExpectedType[key]}")
+        if type(value).__name__ != jsonConfig[key]["type"] and value != None: # si la valeur n'est pas celle attendu et n'est pas None (valeur non renseigné)
+            if errorMessage == 1: # erreur venant de addBike
+                # éxemple:        bicycode est "input" (un     str      ) alors qu'il devrait être un         int 
+                listError.append(f"{key} est  (un {type(value)}) alors qu'il devrait être un {jsonConfig[key]}")
             elif errorMessage == 2: # erreur venant de modifyBike ou readBike
-                listError.append(f"{key} est du mauvais type : {type(value)} au lieu de {dictExpectedType[key]}. valeur entré : {value}")
-            
+                listError.append(f"{key} est du mauvais type : {type(value)} au lieu de {jsonConfig[key]}. valeur entré : {value}")
+    
     return listError
 
 
 def checkIsItAColumn(potentialColumn:str) -> bool:
     """vérifie que potentialColumn est bien une des colonnes de la table de la base de donné"""
-    listAttributesName = ["bycode", "benevole", "title", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "photo1", "photo2", "photo3", "electrique", "origine", "statusVelo", "etatVelo", "prochaineAction", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie"]
-    if potentialColumn in listAttributesName:
+    if potentialColumn in jsonConfig:
         return True
     return False
 
@@ -63,57 +57,52 @@ def addBike(dictOfValue):
     typeCheck = checkEntryType(1, dictOfValue)
     if typeCheck: # si il y a des erreurs on arrête le programme et renvoie l'erreur sous forme d'un liste de string
         return typeCheck
-    
+    listAttributesRequired = []
+    listAttributesUnRequired = []
+
+    for key in jsonConfig:
+        if jsonConfig[key]["addBike"]:
+            if jsonConfig[key]["addRequired"]:
+                listAttributesRequired.append(key)
+            else:
+                listAttributesUnRequired.append(key)    
+    listAttributes = listAttributesRequired + listAttributesUnRequired
+    listAttributes.extend(("photo1", "photo2", "photo3"))
+
     # on vérifie que les attributs nécessaires soient remplis sinon on n'ajoute pas le vélo.
-    listAttributesRequired = ["dateEntre", "origine", "statusVelo", "benevole", "title"]
     for attribute in listAttributesRequired:
         if attribute not in dictOfValue:
             return "%s est nécessaire veuillez le renseigner"
         
     # On remplit les attributs non nécessaires n'ayant pas de valeur par None
-    listAttributesName = ["bycode", "referent", "marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie", "photo1", "photo2", "photo3"]
-    for attribute in listAttributesName:
+    for attribute in listAttributes:
         if attribute not in dictOfValue:
             dictOfValue[attribute] = None
-
     # Connexion à la base de données
     connection = getConnection()
     cursor = connection.cursor() # création du curseur
 
     # ajout du vélo dans la base de donné Bike
-    query = (f"INSERT INTO Bike (bycode, dateEntre, title, marque, typeVelo, tailleRoue, tailleCadre, electrique, origine, statusVelo, etatVelo, prochaineAction, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie, photo1, photo2, photo3) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
-    values =(
-        dictOfValue['bycode'],
-        dictOfValue['dateEntre'],
-        dictOfValue['title'],
-        dictOfValue['marque'],
-        dictOfValue['typeVelo'],
-        dictOfValue['tailleRoue'],
-        dictOfValue['tailleCadre'],
-        dictOfValue['electrique'],
-        dictOfValue['origine'],
-        dictOfValue['statusVelo'],
-        dictOfValue['etatVelo'],
-        dictOfValue['prochaineAction'],
-        dictOfValue['referent'],
-        dictOfValue['valeur'],
-        dictOfValue['destinataireVelo'],
-        dictOfValue['descriptionPublic'],
-        dictOfValue['descriptionPrive'],
-        dictOfValue['dateSortie'],
-        dictOfValue['typeSortie'],
-        psycopg2.Binary(dictOfValue["photo1"]),
-        psycopg2.Binary(dictOfValue["photo2"]),
-        psycopg2.Binary(dictOfValue["photo3"])
-    )
+    query = (f"INSERT INTO Bike ({', '.join(attr for attr in listAttributes if attr != 'benevole')}) VALUES ({', '.join(['%s'] * (len(listAttributes)-1))}) RETURNING id")
+
+    #values = tuple(dictOfValue[attr] for attr in listAttributes if attr != "benevole") # récupère les valeurs renseigné par l'user
+    values = []
+    print("\n\n\n")
+    print(dictOfValue)
+    for attr in listAttributes:
+        print(attr)
+        if attr != "benevole":
+            values.append(dictOfValue[attr])
+    values = tuple(values)
+
     logging.info(query)
     logging.info(values)
     cursor.execute(query, values)
     bike_id = cursor.fetchone()[0] #on récupère l'id du vélo qui a été crée pour l'enregistrer dans la table modification (on la récupère car à la fin de la query il y a RETURNING id)
 
     suiviModifData ={
-        "dateOfModification" : date.today().isoformat(),
-        "timestamp" : datetime.now().isoformat(),
+        "dateOfModification" : datetime.date.today().isoformat(),
+        "timestamp" : datetime.datetime.now().isoformat(),
         "benevole" : dictOfValue["benevole"],
         "fieldModified" : "création",
         "oldValue" : None,
@@ -151,6 +140,7 @@ def modifyBike(dictOfChange):
 
     cursor = connection.cursor() # création du curseur
     for key, value in dictOfChange.items():
+        print(key," ",value)
         if checkIsItAColumn(key) and key != "benevole": # on vérifie que la clef est bien une colonne de la table de la base de donné
             # on récupère d'abord l'ancienne valeur de l'attribut pour l'enregistrer dans la table de Modification
             cursor.execute("SELECT {} FROM Bike WHERE id = %s".format(key), (dictOfChange["id"],))
@@ -173,7 +163,7 @@ def modifyBike(dictOfChange):
             if "photo" in key:
                 if oldValue:
                     suiviModifData ={
-                        "dateOfModification" : date.today().isoformat(),
+                        "dateOfModification" : datetime.date.today().isoformat(),
                         "benevole" : dictOfChange["benevole"],
                         "fieldModified" : key,
                         "oldValue" : True,
@@ -181,7 +171,7 @@ def modifyBike(dictOfChange):
                     }
                 else:
                     suiviModifData ={
-                        "dateOfModification" : date.today().isoformat(),
+                        "dateOfModification" : datetime.date.today().isoformat(),
                         "benevole" : dictOfChange["benevole"],
                         "fieldModified" : key,
                         "oldValue" : False,
@@ -189,8 +179,8 @@ def modifyBike(dictOfChange):
                     }
             else:
                 suiviModifData ={
-                    "dateOfModification" : date.today().isoformat(),
-                    "timestamp" : datetime.now().isoformat(),
+                    "dateOfModification" : datetime.date.today().isoformat(),
+                    "timestamp" : datetime.datetime.now().isoformat(),
                     "benevole" : dictOfChange["benevole"],
                     "fieldModified" : key,
                     "oldValue" : oldValue,
@@ -225,25 +215,18 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
             ou bien {"id" : bikeId} pour la page de détail
 
         search : photo1, title, id
-        global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, statusVelo, état, valeur, descriptionPublic, id
-        detail : bycode, origine, prochaine action, référent, destinataire, descriptionPrive
+        global : marque, type, taille de roue, taille du cadre, photo1, photo2, photo3, statutVelo, état, valeur, descriptionPublic, id
+        detail : bicycode, origine, prochaine action, référent, destinataire, descriptionPrive
         edit   : tous les ellements
     """
 
     # on sélectionne les attrtibuts à renvoyer en fonction de l'endroit où à lieux l'appel
-    if whoCall == "search":
-        caracteristicToReturn = "photo1, title, id"
-    elif whoCall == "global":
-        caracteristicToReturn = "marque, typeVelo, tailleRoue, tailleCadre, photo1, photo2, photo3, statusVelo, etatVelo, electrique, descriptionPublic, dateentre"
-    elif whoCall == "detail":
-        caracteristicToReturn = "bycode, origine, prochaineAction, referent, valeur, destinataireVelo, descriptionPrive, id"
-    elif whoCall == "edit":
-        caracteristicToReturn = "*"
-    elif whoCall == "title":
-        caracteristicToReturn = "title"
-    else:
-        print("Error in whoCall")
-        return "Error in whoCall" # !! gestion d'erreur non implémenté !!
+    caracteristicToReturn = ""
+    for i in jsonConfig: # on récupère tous les éléments concerné
+        if jsonConfig[i][whoCall]:
+            caracteristicToReturn += "%s, "%(i)
+
+    caracteristicToReturn = caracteristicToReturn[:len(caracteristicToReturn)-2] # on retire la dernière virgule
 
     
     # vérifie que les entrés soient du bon type
@@ -285,22 +268,31 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
 
         if whoCall == "global" or whoCall == "detail":
             for i in range(len(columns)):
+                    #row[i] = row[i].strftime('%Y-%m-%d')
                 columns[i] = utility.addSpaceBetweenWord(columns[i]) # on ajoute des espaces pour l'affichage sur la page web
+                
         elif whoCall == "edit":
             for i in range(len(columns)):
                 columns[i] = utility.toCamelCase(columns[i]) # on le transforme en camelCase car la base de donné est caseLess et que le code est camelCase
 
         row_dict = dict(zip(columns, row)) # on met les colonne dans l'ordre pour avoir le bon ordre d'affichage
+        if whoCall == "detail":
+            for key in row_dict:
+                if isinstance(row_dict[key], datetime.date):
+                    year,month,day = row_dict[key].year, row_dict[key].month, row_dict[key].day
+                    row_dict[key] = "%s %s %s"%(day, utility.numToMonth(month), year)
         rows.append(row_dict)
-
+    
     return rows
 
 
 def getBikeOut(dictOfValues):
     """"""
-    columnsLabel = "bycode, dateEntre, marque, typeVelo, tailleRoue, tailleCadre, electrique, origine, statusVelo, etatVelo, referent, valeur, destinataireVelo, descriptionPublic, descriptionPrive, dateSortie, typeSortie"
-    returnValues = [("bycode", "dateEntre", "marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "origine", "statusVelo", "etatVelo", "referent", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive", "dateSortie", "typeSortie",)]
-
+    columnsLabel = ""
+    for i in jsonConfig:
+        columnsLabel += "%s, "%(i)
+    columnsLabel = columnsLabel[:len(columnsLabel)-2]
+    returnValues = tuple(columnsLabel)
     query = "SELECT %s FROM bike WHERE 1=1"%(columnsLabel)
     values = []
     conditions = []
@@ -324,7 +316,7 @@ def getBikeOut(dictOfValues):
         query += " AND " + " AND ".join(conditions)
 
     if dictOfValues["bikeStatus"]:
-        status_clause = " OR ".join(["statusVelo = %s" for _ in dictOfValues["bikeStatus"]])
+        status_clause = " OR ".join(["statutVelo = %s" for _ in dictOfValues["bikeStatus"]])
         values.extend(dictOfValues["bikeStatus"])
         query += " AND (" + status_clause + ")"
 
@@ -348,10 +340,12 @@ def getFilterValues() -> dict[list]:
     """" Retoure toutes les valeurs des attributs filtrables. Permet de rendre dynamique les options de filtres
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
     """
-    listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "electrique", "etatVelo", "statusVelo", "origine", "prochaineAction", "referent", "destinataireVelo", "id"]
-    dictReturn = {"marque" : [], "typeVelo" : [], "tailleRoue" : [], "tailleCadre" : [], "electrique" : [], "etatVelo" : [], "statusVelo" : [], "origine" : [], "prochaineAction" : [], "referent" : [], "destinataireVelo" : [], "id" : []}
-    dictSortOrder = {"typeVelo" : ["VTT", "Vélo de route", "VTC", "BMX", "cargo", "pliant"], "tailleRoue" : ["12 pouces", "14 pouces", "16 pouces", "20 pouces", "24 pouces", "26 pouces", "27.5 pouces", "29 pouces", "600", "650","700"], "tailleCadre" : ["enfant", "XS", "S", "M", "L", "XL", "XXL"], "etatVelo" : ["très bon", "moyen", "mauvais", "pour pièces"], "statusVelo" : ["en stock", "réservé", "vendu", "donné", "recyclé", "perdu", "démonté"], "origine" : ["don", "trouvé", "achat", "récup", "déchetterie"], "prochaineAction" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]}
-    listAttributesToOrder = ["marque", "destinataireVelo", "referent"]
+    listAttributes = []
+    dictReturn = {}
+    for i in jsonConfig:
+        if jsonConfig[i]["filter"]:
+            listAttributes.append(i),
+            dictReturn[i] = []
 
     # Connexion à la base de données
     connection = getConnection()
@@ -363,10 +357,12 @@ def getFilterValues() -> dict[list]:
         for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
             if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None and valueTupple[0] != "": # on vérifie que c'est la première occurence 
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
-        if attribut in dictSortOrder:
-            indexOfelement = lambda x: dictSortOrder[attribut].index(x)
+
+        if jsonConfig[attribut]["values"]: # si il a des valeurs prédéfinit on les trie dans l'ordre
+            indexOfelement = lambda x: jsonConfig[attribut]["values"].index(utility.frenchToBool(x))
+            
             dictReturn[attribut].sort(key = indexOfelement)
-        elif attribut in listAttributesToOrder:
+        else: #sinon on les trie dans l'ordre alphabétique
             dictReturn[attribut].sort()
 
     connection.close()
@@ -426,7 +422,7 @@ def deleteBike(userName:str, bikeID:int) -> None:
     cursor.execute("SELECT suiviModif FROM Modification WHERE bikeID = %s", (bikeID,)) # sélectionne le suivid de modif du vélo correspondant
     result = cursor.fetchone() # récupère le suivi de modif
     currentSuiviModif = result[0] 
-    newInformation = f"{currentSuiviModif}\nle {date.today()} {userName} à supprimer le vélo en précisnat {commentaire}" # ajoute la modif qui vient d'être faite aux précédentes
+    newInformation = f"{currentSuiviModif}\nle {datetime.date.today()} {userName} à supprimer le vélo en précisnat {commentaire}" # ajoute la modif qui vient d'être faite aux précédentes
     cursor.execute("UPDATE Modification SET suiviModif = %s WHERE bikeID = %s", (newInformation, bikeID)) # remplace le suivi de modif par celui update
     connection.commit() # effectue la mise à jour
 

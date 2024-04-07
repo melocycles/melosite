@@ -1,4 +1,5 @@
 let filteredAttributes
+
 document.addEventListener("DOMContentLoaded", function () { // action lors du changement de la page
         // récupération des élémennts html
     var formContainer = document.getElementById('formContainer');
@@ -9,10 +10,10 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
     var resetButton = document.getElementById('resetButton');
 
 
-    fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
-
+    //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
+    fetchData("api/config", {}, getConfig)
         // récupération des donnés depuis le backend
-    fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statusVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
+    fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
     
 
@@ -42,7 +43,13 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 });
 
 function getConfig(returnFromFetch){
-    filteredAttributes = Object.keys(returnFromFetch).filter(key => returnFromFetch[key].filter);
+    const returnFromFetchArray = Object.entries(returnFromFetch);
+    returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
+    const sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
+
+    filteredAttributes = Object.keys(sortedreturnFromFetch).filter(key => sortedreturnFromFetch[key].filter);
+
+    createFilters()
 }
 
 /* affiche/masque le formualaire. En réalité il fait 80% de l'écran en largeur. pour le cacher on l'envoie de sa taille à droite (donc hors de l'écran).
@@ -166,7 +173,7 @@ function addOptionsToSelect(returnFromFetch) {
             option.value = booltoFrench(optionValue); // assignation de sa valeur pour le renvoi du formulaire
             option.text = booltoFrench(optionValue); // assignatioin d'un texte
             selectElement.add(option); // ajout de l'ellement
-            if(selectElement.id == "statusVelo" && option.value == "en stock"){
+            if(selectElement.id == "statutVelo" && option.value == "en stock"){
                 option.selected =true
             }
         }
@@ -182,3 +189,23 @@ function addOptionsToSelect(returnFromFetch) {
 };
 
 
+function createFilters(){
+    const lastButtons = document.getElementById("buttonFilterContainer")
+    for(currentAttribut of filteredAttributes){
+        const newLabel = document.createElement('label');
+        newLabel.setAttribute('for', currentAttribut);
+        newLabel.textContent = currentAttribut + ":"; 
+
+        const newSelect = document.createElement('select');
+        newSelect.id = currentAttribut; // Utilisation de la variable i
+        newSelect.classList.add('filter');
+        newSelect.name = currentAttribut; // Utilisation de la variable i
+
+        var option = document.createElement('option');
+        option.value = 'None';
+        newSelect.appendChild(option);
+
+        formContainer.insertBefore(newLabel, lastButtons)
+        formContainer.insertBefore(newSelect, lastButtons)
+    }
+}
