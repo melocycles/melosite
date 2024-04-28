@@ -1,4 +1,5 @@
 let filteredAttributes
+let sortedreturnFromFetch
 
 document.addEventListener("DOMContentLoaded", function () { // action lors du changement de la page
         // récupération des élémennts html
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 function getConfig(returnFromFetch){
     const returnFromFetchArray = Object.entries(returnFromFetch);
     returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
-    const sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
+    sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
 
     filteredAttributes = Object.keys(sortedreturnFromFetch).filter(key => sortedreturnFromFetch[key].filter);
 
@@ -194,7 +195,7 @@ function createFilters(){
     for(currentAttribut of filteredAttributes){
         const newLabel = document.createElement('label');
         newLabel.setAttribute('for', currentAttribut);
-        newLabel.textContent = currentAttribut + ":"; 
+        newLabel.textContent = sortedreturnFromFetch[currentAttribut].withSpace + ":"; 
 
         const newSelect = document.createElement('select');
         newSelect.id = currentAttribut; // Utilisation de la variable i
@@ -208,4 +209,5 @@ function createFilters(){
         formContainer.insertBefore(newLabel, lastButtons)
         formContainer.insertBefore(newSelect, lastButtons)
     }
+
 }
