@@ -87,10 +87,7 @@ def addBike(dictOfValue):
 
     #values = tuple(dictOfValue[attr] for attr in listAttributes if attr != "benevole") # récupère les valeurs renseigné par l'user
     values = []
-    print("\n\n\n")
-    print(dictOfValue)
     for attr in listAttributes:
-        print(attr)
         if attr != "benevole":
             values.append(dictOfValue[attr])
     values = tuple(values)
@@ -140,7 +137,6 @@ def modifyBike(dictOfChange):
 
     cursor = connection.cursor() # création du curseur
     for key, value in dictOfChange.items():
-        print(key," ",value)
         if checkIsItAColumn(key) and key != "benevole": # on vérifie que la clef est bien une colonne de la table de la base de donné
             # on récupère d'abord l'ancienne valeur de l'attribut pour l'enregistrer dans la table de Modification
             cursor.execute("SELECT {} FROM Bike WHERE id = %s".format(key), (dictOfChange["id"],))
@@ -444,3 +440,23 @@ def readModification(bikeID):
 
     return(result)
 ### /!!
+
+
+def addColumn(columnName, columnType, addRequired):
+    if not columnType[1]:
+        columnType = columnType[0]
+    else:
+        columnType = columnType[1]
+    dictOfType = {"text" : "VARCHAR(100)", "textarea" : "TEXT", "select" : "VARCHAR(100)", "number" : "INTEGER", "date" : "DATE"}
+    sqlQuerry = f"ALTER TABLE bike ADD COLUMN  {columnName} {dictOfType[columnType]}"
+    
+    if addRequired:
+        sqlQuerry += " NOT NULL"
+
+    sqlQuerry += ";"
+ 
+    connection = getConnection()
+    cursor = connection.cursor()
+    cursor.execute(sqlQuerry) # éxécute la requette
+    connection.commit()
+    connection.close()

@@ -1,6 +1,7 @@
-import base64
-
 from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
+import base64
+import os
+import json
 
 import info  # contient les infos secètes qu'on ne veux pas exposer sur github
 import sqlCRUD
@@ -199,6 +200,7 @@ def APImodifyBike():
     """
     data = request.json # récupération des donnés
     for attribute in data:
+        
         if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])
     response = sqlCRUD.modifyBike(data)
@@ -212,6 +214,8 @@ def login():
     data = request.json
     if "userName" in data and "password" in data: 
         result = sqlCRUD.checkUser(data["userName"], data["password"])
+        
+        
 
         if result["status"]:
             if result["role"] == "user":
@@ -266,6 +270,30 @@ def getBikeOut():
 def get_config():
     config_data = info.JSONCONFIG
     return jsonify(config_data)
+
+@app.route('/api/editConfigFile', methods=["POST"])
+def editConfigFile():
+    configData = request.json
+
+    if type(configData) == dict: # ajouter une colonne
+        num = 0
+        for i in info.JSONCONFIG:
+            if info.JSONCONFIG[i]["order"] > num:
+                num = info.JSONCONFIG[i]["order"]
+        configData["order"] = num+1
+
+        jsonToRec = info.JSONCONFIG
+        jsonToRec[configData["camelCase"]] = configData
+        os.environ['herokuJson'] = json.dumps(jsonToRec)
+        print(json.dumps(jsonToRec))
+
+        sqlCRUD.addColumn(configData["camelCase"],configData["entryType"], configData["addRequired"])
+        
+    else:
+        aFaire = "editer multiChoice"
+    
+    return {"status" : "ok"}
+
 
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')

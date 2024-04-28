@@ -1,7 +1,91 @@
-#topForm{
+/*#region générale */
+h4{
+    text-align: center;
+    margin-top: 3rem;
+}
+
+input{
+    margin-bottom: 0.5rem;
+}
+
+#topSection{
+	margin: 1rem auto;
+	width: 80%;
+	display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#topSection > *{
+    margin: 0.5rem auto;
+}
+
+#addSelectValueSection, #addAColumnSection, #modifyAColumnSection{
+    display: none;
+}
+
+.addTextInput{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-left: 2rem;
+}
+.form{
     width: 50%;
-    margin: 5rem auto;
+    margin: 1rem auto;
     display: flex;
     justify-content: center;
     justify-content: space-between;
 }
+/*#endregion*/
+
+
+/*#region  ajouter ue valeur*/
+
+
+#existingAttribut,#addAttribut{
+    margin-right: 1rem;
+}
+
+#addForm{
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+}
+.leftShift{
+    margin-left: 0.5rem;
+}
+#addForm > *{
+    max-width: 90%;
+}
+.labelToMargin{
+    margin-bottom: 0.5rem;
+}
+
+#globalDisplayDiv, #detailDisplayDiv, #filterDisplayDiv, #addRequiredDisplayDiv{
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+.parentDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+#inputDiv{
+    margin-top: 1rem;
+}
+
+#submitAddAColumn{
+    max-width: 5rem;
+}
+/*#endregion*/
+
+
+/*#region  */
+
+/*#endregion*/
+
+/*#region  */
+
+/*#endregion*/

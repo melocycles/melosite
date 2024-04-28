@@ -15,13 +15,65 @@
         </div>
     </header>
 
-    <form id="topForm">
-        <select id="existingAttribut">
-            <option value=""></option>
-        </select>
+    <div id="topSection">
+        <button id="addSelectValueButton">Ajouter une valeur</button>
+        <button id="addAColumnButton">ajouter une colonne</button>
+        <button id="modifyAColumnButton">modifier une colonne</button>
+    </div>
 
-        <button id="addAttribut">ajouter</button>
-    </form>
+    <div id="addSelectValueSection">
+        <div id="addSelectValue">
+            <h4 id="addSelectValue_Title">Ajouter une valeur</h4>
+            <form id="topForm", class="form">
+                <select id="existingAttribut">
+                </select>
+                <button id="addAttribut">selectioner</button>
+            </form>
+            <form id="bottomForm" class="addTextInput"></form>
+        </div>
+    </div>
+
+    <div id="addAColumnSection">
+        <h4>Ajouter une colonne</h4>
+        <form id="addForm">
+            <div id="labelDiv" class="parentDiv">
+                <label for="name" class="labelToMargin">nom du nouvel attribut</label>
+                <input type="text" id="name" class="leftShift">
+            </div>
+
+            <div id="entryTypeDiv" class="parentDiv">
+                <label for="entryType" class="labelToMargin">type de donné</label>
+                <select id="entryTypeSelect" class="leftShift">
+                    <option value='["input", "text"]'>texte court</option>
+                    <option value='["textarea", ""]'>texte long</option>
+                    <option value='["select", ""]'>a choix multiple</option>
+                    <option value='["input", "number"]'>nombre</option>
+                    <option value='["input", "date"]'>date</option>
+                </select>
+            </div>
+            <p>afficher dans:</p>
+            <div id="globalDisplayDiv" class="parentDiv leftShift">
+                <input type="checkbox" id="global">
+                <label for="global">premier bloc d'affichage</label>
+            </div>
+            <div id="detailDisplayDiv" class="parentDiv leftShift">
+                <input type="checkbox" id="detail">
+                <label for="detail">second bloc d'affichage</label>
+            </div>
+            <div id="filterDisplayDiv" class="parentDiv leftShift">
+                <input type="checkbox" id="filter">
+                <label for="filter">est une option de filtre</label>
+            </div>
+            <div id="addRequiredDisplayDiv" class="parentDiv leftShift">
+                <input type="checkbox" id="addRequired">
+                <label for="addRequired">est obligatoire lors de l'enregistrement d'un vélo</label>
+            </div>
+            <button id="submitAddAColumn">valider</button>
+        </form>
+    </div>
+
+    <div id="modifyAColumnSection">
+    </div>
     
     <script src="{{ url_for('static', filename='script.js') }}" ></script>
     <script src="{{ url_for('static', filename='scriptAlterTable.js') }}" ></script>
