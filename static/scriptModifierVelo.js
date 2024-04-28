@@ -278,7 +278,7 @@ function addField(){
         
         const newLabel = document.createElement('label');
         newLabel.setAttribute('for', currentAttribut);
-        newLabel.textContent = currentAttribut + ":";
+        newLabel.textContent = objects[currentAttribut].withSpace + ":";
         if(requiredFields.includes(currentAttribut)){
             newLabel.innerHTML += (" <b>*</b>");
         }
