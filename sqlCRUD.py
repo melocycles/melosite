@@ -355,9 +355,12 @@ def getFilterValues() -> dict[list]:
                 dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
 
         if jsonConfig[attribut]["values"]: # si il a des valeurs prédéfinit on les trie dans l'ordre
-            indexOfelement = lambda x: jsonConfig[attribut]["values"].index(utility.frenchToBool(x))
-            
-            dictReturn[attribut].sort(key = indexOfelement)
+            try:
+                indexOfelement = lambda x: jsonConfig[attribut]["values"].index(utility.frenchToBool(x))
+                dictReturn[attribut].sort(key = indexOfelement)
+            except:
+                pass
+                 
         else: #sinon on les trie dans l'ordre alphabétique
             dictReturn[attribut].sort()
 
