@@ -114,6 +114,7 @@ function sendFilter(){
     est appelé par le callback de fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); 
 */
 function displayBikes(returnFromFetch) {
+    console.time("displayBike")
     bikesData = returnFromFetch.result
     var veloPart = document.getElementById('veloPart'); // récupère le conteneur global des vélo
 
@@ -146,6 +147,7 @@ function displayBikes(returnFromFetch) {
         
         veloCadre.addEventListener('click', function() { // ajoute une interraction au click qui renvoie vers la page velo.html avec l'id du vélo
             goToOneBike(bike.id);
+        console.timeEnd("displayBike")
         });})
 
 
