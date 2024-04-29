@@ -12,16 +12,10 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
 
     //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
-    console.time("api/config")
     fetchData("api/config", {}, getConfig)
-    console.timeEnd("api/config")
         // récupération des donnés depuis le backend
-    console.time('/api/readBike')
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
-    console.timeEnd('/api/readBike')
-    console.time("/api/getFilterValue")
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
-    console.timeEnd("/api/getFilterValue")
 
 
         // gestion des bouttons
@@ -114,7 +108,9 @@ function sendFilter(){
     est appelé par le callback de fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); 
 */
 function displayBikes(returnFromFetch) {
-    console.time("displayBike")
+    console.time("displayBikeGlobal")
+
+    console.time("displayBike block 1")
     bikesData = returnFromFetch.result
     var veloPart = document.getElementById('veloPart'); // récupère le conteneur global des vélo
 
@@ -125,9 +121,12 @@ function displayBikes(returnFromFetch) {
             noBike.style.display = "none";
         }
     }
+    console.timeEnd("displayBike block 1")
 
+    console.time("displayBike for each global")
     bikesData.forEach(function(bike) { // parcourt tous les vélos pour les créer un par un dans la page web
         // crée le conteneur du vélo avec  comme classe veloCadre
+        console.time(`for each de : ${bike}`)
         var veloCadre = document.createElement('div'); 
         veloCadre.classList.add('veloCadre');
         
@@ -147,8 +146,9 @@ function displayBikes(returnFromFetch) {
         
         veloCadre.addEventListener('click', function() { // ajoute une interraction au click qui renvoie vers la page velo.html avec l'id du vélo
             goToOneBike(bike.id);
+        console.timeEnd(`for each de : ${bike}`)
         });})
-
+    console.timeEnd("displayBike for each global")
 
         function cutString(string){ // découpe la description pour que le nom du vélo ne fasse pas plus de 2 lignes et que la découpe se fasse au mot près
             if(string == null){ // si la valeur n'a pas été renseigné on renvoie une string vide
@@ -165,7 +165,7 @@ function displayBikes(returnFromFetch) {
             sessionStorage.setItem("bikeId", bikeId); // enregistre l'id du vélo dans le navigateur web pour que le bon vélo puisse être affiché
             window.location.href = "/velo";
         }
-    console.timeEnd("displayBike")
+    console.timeEnd("displayBikeGlobal")
 
 };
 
