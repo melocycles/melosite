@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
 
     //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
+    console.time("getconfig")
     fetchData("api/config", {}, getConfig)
         // récupération des donnés depuis le backend
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
@@ -43,7 +44,6 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 });
 
 function getConfig(returnFromFetch){
-    console.time("getconfig")
     const returnFromFetchArray = Object.entries(returnFromFetch);
     returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
     sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
@@ -127,7 +127,6 @@ function displayBikes(returnFromFetch) {
     let count =0
     bikesData.forEach(function(bike) { // parcourt tous les vélos pour les créer un par un dans la page web
         count = count +1
-        console.time(`forEach n°${count}`)
         // crée le conteneur du vélo avec  comme classe veloCadre
         var veloCadre = document.createElement('div'); 
         veloCadre.classList.add('veloCadre');
@@ -150,7 +149,6 @@ function displayBikes(returnFromFetch) {
             goToOneBike(bike.id);
         
         });
-        console.timeEnd(`forEach n°${count}`)
     })
     console.timeEnd("displayBike for each global")
 
