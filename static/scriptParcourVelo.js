@@ -147,7 +147,6 @@ function displayBikes(returnFromFetch) {
         
         veloCadre.addEventListener('click', function() { // ajoute une interraction au click qui renvoie vers la page velo.html avec l'id du vélo
             goToOneBike(bike.id);
-        console.timeEnd("displayBike")
         });})
 
 
@@ -166,6 +165,8 @@ function displayBikes(returnFromFetch) {
             sessionStorage.setItem("bikeId", bikeId); // enregistre l'id du vélo dans le navigateur web pour que le bon vélo puisse être affiché
             window.location.href = "/velo";
         }
+    console.timeEnd("displayBike")
+
 };
 
 
