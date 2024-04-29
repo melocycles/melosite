@@ -12,11 +12,16 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
 
     //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
+    console.time("api/config")
     fetchData("api/config", {}, getConfig)
+    console.timeEnd("api/config")
         // récupération des donnés depuis le backend
+    console.time('/api/readBike')
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
+    console.timeEnd('/api/readBike')
+    console.time("/api/getFilterValue")
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
-    
+    console.timeEnd("/api/getFilterValue")
 
 
         // gestion des bouttons
