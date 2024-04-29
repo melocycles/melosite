@@ -126,7 +126,8 @@ function displayBikes(returnFromFetch) {
     console.time("displayBike for each global")
     bikesData.forEach(function(bike) { // parcourt tous les vélos pour les créer un par un dans la page web
         // crée le conteneur du vélo avec  comme classe veloCadre
-        console.time(`for each de : ${bike}`)
+        console.log(bike.title)
+        console.time(`for each de : ${bike.title}`)
         var veloCadre = document.createElement('div'); 
         veloCadre.classList.add('veloCadre');
         
@@ -146,8 +147,10 @@ function displayBikes(returnFromFetch) {
         
         veloCadre.addEventListener('click', function() { // ajoute une interraction au click qui renvoie vers la page velo.html avec l'id du vélo
             goToOneBike(bike.id);
-        console.timeEnd(`for each de : ${bike}`)
-        });})
+        
+        });
+        console.timeEnd(`for each de : ${bike.title}`)  
+    })
     console.timeEnd("displayBike for each global")
 
         function cutString(string){ // découpe la description pour que le nom du vélo ne fasse pas plus de 2 lignes et que la découpe se fasse au mot près
