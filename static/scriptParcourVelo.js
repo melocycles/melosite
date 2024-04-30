@@ -13,9 +13,12 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
     //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
     console.time("getconfig")
+    console.time("FETCHconfig")
     fetchData("api/config", {}, getConfig)
         // récupération des donnés depuis le backend
+    console.time("FETCHreadBike")
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
+    console.time("FETCHgetFIlterValue")
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
 
 
@@ -44,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 });
 
 function getConfig(returnFromFetch){
+    console.timeEnd("FETCHconfig")
     const returnFromFetchArray = Object.entries(returnFromFetch);
     returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
     sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
@@ -110,6 +114,7 @@ function sendFilter(){
     est appelé par le callback de fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); 
 */
 function displayBikes(returnFromFetch) {
+    console.timeEnd("FETCHreadBike")
     console.time("displayBikeGlobal")
 
     bikesData = returnFromFetch.result
@@ -177,7 +182,7 @@ function displayBikes(returnFromFetch) {
     est appelé par le callback de fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect);
 */
 function addOptionsToSelect(returnFromFetch) {
-
+    console.timeEnd("FETCHgetFIlterValue")
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
             var option = document.createElement("option"); // création d'une option (d'un élément html)
