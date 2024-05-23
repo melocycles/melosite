@@ -428,7 +428,7 @@
             "lowCase" : "id",
             "camelCase" : "id",
             "values" : [],
-            "edit" : true,
+            "edit" : false,
             "order" : 22,
             "entryType" : ["", ""]
         }
