@@ -2,6 +2,8 @@
 
 let requiredFields
 let listeAttributes
+const listSatutOutOfStock = ["vendu", "donné", "démonté", "recyclé", "perdu"]
+
 fetchData("api/config", {}, getConfig) 
 
 
@@ -31,8 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
 
         if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
-            updateBike(); // envoie les donnés renseigné à la database
-        }
+            if(document.getElementById("statutVelo").value == "en stock" ){ // si le vélo est en stock on part dans addBike()
+                updateBike()
+        }else if(listSatutOutOfStock.includes(document.getElementById("statutVelo").value)){ // sinon ça veut dire qu'il est sorti du stock
+            if(confirm("attention avec cette valeur de statut vélo le vélo sera considéré comme sorti du stock !")){ // on demande à l'utilisateur si il veut vraiment que le vélo soit sorti du stock
+                updateBike()
+            }
+        }        }
     });
 });
 
@@ -100,7 +107,8 @@ function updateBike(){
             } else if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float
                 hasTheValueChange(attribute, parseFloat(document.getElementById(attribute).value))
 
-            }else{ // sinon on l'ajoute jsute (string)
+            }
+            else{ // sinon on l'ajoute juste (string)
                 hasTheValueChange(attribute, document.getElementById(attribute).value); // on assigne à l'attribut sa valeur 
             }
     }

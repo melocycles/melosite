@@ -1,0 +1,18 @@
+{
+  "name": "meloapp",
+  "version": "1.0.0",
+  "description": "Road to V0:\r ajouter la page de gestion admin:\r *supression d'un vélo",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "image-js": "^0.35.5"
+  }
+}

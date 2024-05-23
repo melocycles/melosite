@@ -2,6 +2,8 @@
 let requiredFields
 let listeAttributes
 let allAttributes
+const listSatutOutOfStock = ["vendu", "donné", "démonté", "recyclé", "perdu"]
+
 fetchData("api/config", {}, getConfig) 
     
 // C'est là que seront stocké les photos prises. On les stock dans une liste pour y accéder plus simplement
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
     formContainer.addEventListener('submit', function (event) {
         event.preventDefault(); // empeche que clicker sur un bouton du formulaire redirige vers une page
     });
+
     returnButton.addEventListener('click', function () { // boutton Retour
         window.location.href = "/"; // retourne à la page parcourVelo
     });
@@ -35,7 +38,14 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
         const missingFields = requiredFields.filter(field => !document.getElementById(field).value);
 
         if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
-            addBike(); // envoie les donnés à la database
+
+            if(document.getElementById("statutVelo").value == "en stock" ){ // si le vélo est en stock on part dans addBike()
+                    addBike()
+            }else if(listSatutOutOfStock.includes(document.getElementById("statutVelo").value)){ // sinon ça veut dire qu'il est sorti du stock
+                if(confirm("attention avec cette valeur de statut vélo le vélo sera considéré comme sorti du stock !")){ // on demande à l'utilisateur si il veut vraiment que le vélo soit sorti du stock
+                    addBike()
+                }
+            }
         } 
     });
 
@@ -78,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
             // on crée un ellement input qui permet d'utiliser l'appareil photo du téléphonne ()
             const inputElement = document.createElement('input');
             inputElement.type = 'file';
-            //inputElement.setAttribute('capture', 'environment'); // a activer si on veut utiliser uniquement l'appareil photo
+            //inputElement.setAttribute('capture', ''); // a activer si on veut utiliser uniquement l'appareil photo
             inputElement.setAttribute('accept', 'image/*'); // on accepte que des images
             inputElement.click()
 
@@ -112,44 +122,66 @@ function displayPicture(file, canvas, index) {
        canvas : l'ellement html canvas où sera affiché l'image
        index : le numéro (entre 1 et 3) de la photo
     */
+   function resize(width, height){
+    const maxWidth = 600;
+    const maxHeight = 300;
+    var ratioWidth = 1;
+        var ratioHeight = 1;
+        var ratio = 1;
+        if (width > maxWidth){ // on vérifie si l'image dépasse la dimension maximale
+            ratioWidth = maxWidth/width
+        }if(height > maxHeight){ // on vérifie si l'image dépasse la dimension maximale
+            ratioHeight = maxHeight/height
+        }
+        ratio = Math.min(ratioWidth, ratioHeight) // on récupère le ratio le plus bas pour redimensionner l'image
+        return([width*ratio, height*ratio])
+   }
+
+   function isFormatAuthorized(format){
+    let authorizedFormat = ["png;", "jpeg", "jpg;", "webp", "jpeg"]
+    if(authorizedFormat.includes(format)){return true}
+    
+    return false
+   }
+
     const reader = new FileReader();
     reader.readAsDataURL(file); // on charge le fichier
     var img = new Image(); // intialisation de d'une image vide
-
     reader.onload = function (loadedImage) { // Quand le fichier est chargé avec succès
-       
+        //console.log(loadedImage)     
+
         img.src = loadedImage.target.result; // on ajoute la photo prise dans l'image crée
-        const maxWidth = 600;
-        const maxHeight = 300;
-        var ratioWidth = 1;
-        var ratioHeight = 1;
-        var ratio = 1;
         let count = true
-        
-        img.onload = function () { // quand l'image est prête
+
+        if(!isFormatAuthorized(loadedImage.explicitOriginalTarget.result.substring(11,15))){
+            //console.log("prout")
+            //const { Image } = require('image-js');
+            //Image.load(img.src).then(tiffImage => {})
+        }
+
+        img.onload = function () { // quand l'image est prête1
             if(count){
                 count = false;
                 // on récupère les dimensions de l'image
-            originalImageWidth = img.width;
-            originalImageHeight = img.height;
-            if (originalImageWidth > maxWidth){ // on vérifie si l'image dépasse la dimension maximale
-                ratioWidth = maxWidth/originalImageWidth
-            }if(originalImageHeight > maxHeight){ // on vérifie si l'image dépasse la dimension maximale
-                ratioHeight = maxHeight/originalImageHeight
-            }
-            ratio = Math.min(ratioWidth, ratioHeight) // on récupère le ratio le plus bas pour redimensionner l'image
+                originalImageWidth = img.width;
+                originalImageHeight = img.height;
                 
-                // on redimensionne l'image grace au ratio obtenu précedemment
-            canvas.width = img.width*ratio;
-            canvas.height = img.height*ratio;
+                [canvas.width,canvas.height] = resize(img.width,img.height)
 
                 // on dessine l'image
-            const context = canvas.getContext('2d');
-            context.drawImage(img, 0, 0, img.width*ratio, img.height*ratio); // on affiche l'image dans le canvas
-            img.src  = canvas.toDataURL();} // on récupère l'image redimensionné dans la variable img
-        };}
+                const context = canvas.getContext('2d');
+                context.drawImage(img, 0, 0, canvas.width, canvas.height); // on affiche l'image dans le canvas
+                img.src  = canvas.toDataURL('image/jpeg');
+            
+
+            // on récupère l'image redimensionné dans la variable img (dans img.src)  
+            } // fin if count
+        }; // fin img.onload
+        
+    } // fin reader.onload
+    
         photoList[index - 1] = img; // enregistrement de l'image qui vient d'être prise
-    };
+    }; // fin siplayPicture
 
 
 
@@ -169,23 +201,26 @@ function addBike(){
     // crée le dictionnaire à envoyer à sqlCRUD.py
     for (const attribute of listeAttributes) { // parcourt tous les ellements qui peuvent être rensignés
 
-        if (document.getElementById(attribute).value !== "") { // si l'utilisateur a renseigné une valeur            
+        if (document.getElementById(attribute).value !== "") { // si l'utilisateur a renseigné une valeur 
+            let currentAttributValue = document.getElementById(attribute).value
             if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float (aka nombre à virgules)
-                formData[attribute] = parseInt(document.getElementById(attribute).value)
+                formData[attribute] = parseInt(currentAttributValue)
 
             }else if(attribute == "dateEntre"){ // si l'attribut est la date on la formate
-                let dateValue = new Date(document.getElementById(attribute).value);
+                let dateValue = new Date(currentAttributValue);
                 const formattedDate = new Date(dateValue).toISOString().split('T')[0]; // formate sous la forme yyyy-mm-dd
                 formData[attribute] = formattedDate
                 
+            }else if(attribute == "statutVelo" && listSatutOutOfStock.includes(currentAttributValue)){ // le vélo est sorti du stock
+                formData["dateSortie"] = formData["dateEntre"] 
             }else{ // sinon on l'ajoute sans avoir à la préparer (car c'est une string (aka chaine de caractère))
-                formData[attribute] = frenchToBool(document.getElementById(attribute).value); // on assigne à l'attribut sa valeur 
+                formData[attribute] = frenchToBool(currentAttributValue); // on assigne à l'attribut sa valeur 
             }
         }
     }
 
     // envoi deu formulaire au backend pour l'enregistrement dans la database pui redirection vers la apge parcoursVelo
-    fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
+    //fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
 };
 
 
