@@ -1,4 +1,4 @@
-    // déclaration à la racine car utilisé à plusieurs endroits
+// déclaration à la racine car utilisé à plusieurs endroits
 
 let requiredFields
 let listeAttributes
@@ -30,16 +30,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     submitButton.addEventListener('click', function () { // bouton valider
-        const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
-
-        if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
-            if(document.getElementById("statutVelo").value == "en stock" ){ // si le vélo est en stock on part dans addBike()
-                updateBike()
-        }else if(listSatutOutOfStock.includes(document.getElementById("statutVelo").value)){ // sinon ça veut dire qu'il est sorti du stock
-            if(confirm("attention avec cette valeur de statut vélo le vélo sera considéré comme sorti du stock !")){ // on demande à l'utilisateur si il veut vraiment que le vélo soit sorti du stock
-                updateBike()
+        var missingFields = false
+        requiredFields.forEach(element => {
+            if(document.getElementById(element).value == ""){
+                missingFields = true
             }
-        }        }
+        });
+        //const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
+
+        if (!missingFields) { // si il ne manque pas de donné nécessaire
+
+            if(document.getElementById("statutVelo").value == "en stock" ){ // si le vélo est en stock on part dans addBike()
+                //updateBike()
+            }else if(listSatutOutOfStock.includes(document.getElementById("statutVelo").value)){ // sinon ça veut dire qu'il est sorti du stock
+                let dateE = new Date(document.getElementById("dateEntre").value)
+                let dateS = new Date(document.getElementById("dateSortie").value)
+                if(confirm("attention avec cette valeur de statut vélo le vélo sera considéré comme sorti du stock !")){ // on demande à l'utilisateur si il veut vraiment que le vélo soit sorti du stock
+                    if(!document.getElementById("dateSortie").value){ // on vérifie la présence de dateSortie 
+                        alert("date de sortie non renseigné")
+                    }else if(dateS <= dateE){ // on vérifie que date sortie est bien postérieur à la date d'entré
+                        alert("la date de sortie est antérieur à la date d'entré")
+                    }else{
+                        updateBike()                        
+                    }
+                }
+            }        
+        }
     });
 });
 
@@ -49,10 +65,16 @@ function getConfig(returnFromFetch){
     objects = Object.fromEntries(returnFromFetchArray);
 
     requiredFields = Object.keys(objects).filter(key => objects[key].addRequired);
-    listeAttributes = Object.keys(objects).filter(key => objects[key].addBike);
+    listeAttributes = Object.keys(objects).filter(key => objects[key].edit);
 
+    for (let i = 1; i < 4; i++) {
+        listeAttributes.splice(listeAttributes.indexOf(`photo${i}`), 1)
+    }
+    listeAttributes.unshift("benevole")
     addField()
 }
+
+
 
 
 /* rempli le formulaire avec les informations du vélo enregistré dans la database
@@ -63,14 +85,13 @@ function fillForm(returnFromFetch) {
     // formSata est le retour de fetchData
     formData.forEach(function(attribute) { // parcourt tous les attributs renvoyé par le backend
         var element = document.getElementById(attribute[0]); // on récupère l'élément html correspondant
-
         if (element) { // on vérifie que l'élément éxiste
             if(element.type != "date"){ // il faut enregistrer la date à part car elle a besoin d'être formatté sous forme yyyy-mm-dd
                 memoire[attribute[0]] = attribute[1]
             }
             if (element.type === 'checkbox') { // pas utilisé pour l'instant, je le laisse pour que l'implémentation de chackbox soit plus simple
                 element.checked = attribute[1];
-            }else if (element.type === 'date') {
+            }else if (element.type === 'date' && attribute[1]) {
                 // Formater la date au format YYYY-MM-DD
                 const formattedDate = new Date(attribute[1]).toISOString().split('T')[0];
                 memoire[attribute[0]] = formattedDate   
@@ -281,7 +302,7 @@ function addField(){
     }
 
     const lastButtons = document.getElementById("confirmButton")
-    
+
     for(currentAttribut of listeAttributes){
         
         const newLabel = document.createElement('label');
