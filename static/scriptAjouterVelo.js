@@ -123,8 +123,8 @@ function displayPicture(file, canvas, index) {
        index : le numéro (entre 1 et 3) de la photo
     */
    function resize(width, height){
-    const maxWidth = 600;
-    const maxHeight = 300;
+    const maxWidth = 800;
+    const maxHeight = 600;
     var ratioWidth = 1;
         var ratioHeight = 1;
         var ratio = 1;
