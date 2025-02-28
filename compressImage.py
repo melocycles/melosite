@@ -2,7 +2,7 @@ from PIL import Image
 
 imageDir = "static//images//"
 listeNameBike = ["bike1.jpg", "bike2.jpg", "bike3.jpg", "bike4.jpg"]
-maxWidth = 600
+maxWidth = 800
 
 # parcour toute les images à compresser
 for currentBike in listeNameBike:
