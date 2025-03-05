@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesParcourVeloReadOnly.css') }}">
+    <title>parcour vélo</title>
+</head>
+
+<body>
+    <header id="header">
+        <div id="headerButtons">
+            <button id="filterButton" class="buttonRight">Filtrer</button>
+        </div>
+    </header>
+
+    <div id="bodyContent">
+        <form id="formContainer" action="Non">
+            <button id="resetButton">reset</button>
+
+            <label for="marque">Marque:</label>
+            <select id="marque" class="filter" name="marque">
+                <option value="None"></option>
+            </select>
+
+            <label for="typeVelo">Type de vélo:</label>
+            <select id="typeVelo" class="filter" name="typeVelo">
+                <option value="None"></option>
+            </select>
+
+            <label for="tailleRoue">Taille des roues:</label>
+            <select id="tailleRoue" class="filter" name="tailleRoue">
+                <option value="None"></option>
+            </select>
+
+            <label for="tailleCadre">Taille du cadre:</label>
+            <select id="tailleCadre" class="filter" name="tailleCadre">
+                <option value="None"></option>
+            </select>
+
+            <label for="electrique">electrique</label>
+            <select id="electrique" class="filter" name="electrique">
+                <option value="None"></option>
+            </select>
+
+            <label for="etatVelo">État du vélo:</label>
+            <select id="etatVelo" class="filter" name="etatVelo">
+                <option value="None"></option>
+            </select>
+            <div id="buttonFilterContainer">
+                <button id="confirmButton" class="buttonRight">confirmer</button>
+                <button id="cancelButton" class="buttonLeft">annuler</button>
+            </div>
+
+        </form>
+
+        <div id="veloPart"></div>
+        <script src="{{ url_for('static', filename='scriptParcourVeloReadOnly.js') }}" ></script>
+        <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    </div>
+</body>
+</html>

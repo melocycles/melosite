@@ -1,0 +1,56 @@
+#dateWrapper{
+    display: flex;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}   
+
+#dateWrapper > *{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.dateInput{
+    margin-top: 15px;
+}
+
+#statusLabel{
+    display: block;
+    margin: 1rem auto;
+    width: 90%;
+}
+
+/* 
+#checkBoxes{
+    width: 90%;
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 45% 45%;
+    background-color: coral;
+    border: solid green;
+}
+*/
+
+#checkBoxes{
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    height: 50px;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+.checkBoxWrapper{
+    display: flex;
+}
+
+#submitButton, #downloadButton{
+    display: block;
+    margin: 40px auto;
+}
+
+#downloadButton{
+    display: none;
+}

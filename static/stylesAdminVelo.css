@@ -1,0 +1,54 @@
+li{
+    padding: 2px 0px;
+    list-style-type: none;
+}
+
+#largeImage {
+    max-width: 80%;
+    height: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+#smallImageContener {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+#smallImageContener img {
+    max-width: 5rem; /* Définit la largeur maximale à 100% de la largeur du conteneur parent */
+    height: auto;    /* Permet au navigateur de calculer automatiquement la hauteur pour maintenir les proportions */
+}
+
+
+#caracteristics{
+    display: flex;
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+.column {
+    flex: 1;
+}
+
+#detail {
+    display: flex;
+    padding: 20px;
+    padding-top: 0px;
+}
+
+#bikeInfoSection{
+    display: none;
+}
+
+#modificationTrackingSection{
+    padding-left: 30px;
+    padding-top: 10px;
+}
+
+#modificationTrackingSection > li{
+    margin-top: 10px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesAjouterVelo.css') }}">
+
+    <title>modifier vélo</title>
+</head>
+<body>
+
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+        </div>
+    </header>
+
+
+    <form id="formContainer" class="autoForm">        
+        <div id="canvasContener">   
+            <canvas id="photo1"></canvas>
+            <canvas id="photo2"></canvas>
+            <canvas id="photo3"></canvas>
+        </div>
+
+
+        <button id="confirmButton" class="buttonCenter" type="submit">valider</button>
+    
+    </form>
+
+    <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    <script src="{{ url_for('static', filename='scriptModifierVelo.js') }}" ></script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+scriptajoutervelo:
+*retirer let capturephoto* car on peut jsute append la liste photolist dans display bike?
+    !!! modifier également l'ajout des photo dans formData de la fonction addbike
+
+*dans const file = event.target.files[0]; if (file) {
+  ajouter une gestion d'erreur "le téléphonne n'a pas envoyé de photo"
+
+* voir si on peut sortir la fonction display bike de DOMContentLoader pour plus de claireté
+
+*mettre en commun l'ajout des photo avec modifier vélo?
+
+
+global:
+*rassembler tous les fetchData en un seul

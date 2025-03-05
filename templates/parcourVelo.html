@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesParcourVelo.css') }}">
+    <title>parcour vélo</title>
+    <link rel="preload" as="image" href="static/images/connectionLogoWhite.png" />
+    <link rel="preload" as="image" href="static/images/logoHeader.jpg" />
+
+</head>
+
+<body>
+    <header id="header">
+        <div id="headerButtons">
+            <button id="addButton" class="buttonLeft">Ajouter</button>
+            <button id="filterButton" class="buttonRight">Filtrer</button>
+        </div>
+    </header>
+
+    <p id="noBike">Aucun vélo ne correspond à ces critères</p>
+
+    <div id="bodyContent">
+        <form id="formContainer" action="Non">
+            <button id="resetButton">reset</button>
+
+            <div id="buttonFilterContainer">
+                <button id="confirmButton" class="buttonRight">confirmer</button>
+                <button id="cancelButton" class="buttonLeft">annuler</button>
+            </div>
+
+        </form>
+
+        <div id="veloPart"></div>
+        <script src="{{ url_for('static', filename='script.js') }}" ></script>
+        <script src="{{ url_for('static', filename='scriptParcourVelo.js') }}" ></script>
+    </div>
+</body>
+</html>
