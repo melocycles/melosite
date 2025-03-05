@@ -76,10 +76,10 @@ function fillForm(returnFromFetch) {
             }
             if (element.type === 'checkbox') { // pas utilisé pour l'instant, je le laisse pour que l'implémentation de chackbox soit plus simple
                 element.checked = attribute[1];
-            }else if (element.type === 'date') {
+            }else if (element.type === 'date' && attribute[1] !== null) {
                 // Formater la date au format YYYY-MM-DD
                 const formattedDate = new Date(attribute[1]).toISOString().split('T')[0];
-                memoire[attribute[0]] = formattedDate   
+                memoire[attribute[0]] = formattedDate  
                 element.value = formattedDate;
             }else if (attribute[0].includes("photo")) {
                 photoList.push(attribute[1]);

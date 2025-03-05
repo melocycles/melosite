@@ -247,9 +247,7 @@
         }
         console.log(formData)
         // envoi deu formulaire au backend pour l'enregistrement dans la database pui redirection vers la apge parcoursVelo
-        //fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
-        fetchData('/api/addBike', formData);
-
+        fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
     };
     
     
