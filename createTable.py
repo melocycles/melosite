@@ -22,7 +22,7 @@ def createTable():
                    )''')            
 
     # table vélo
-cursor.execute('''CREATE TABLE IF NOT EXISTS Bike (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Bike (
                     id SERIAL PRIMARY KEY NOT NULL, --Id interne à la base de donné, obligatoire
                     bicycode VARCHAR(12),           --Numéro d identification antivol si existant
                     dateEntre DATE NOT NULL,        --date entré en stock

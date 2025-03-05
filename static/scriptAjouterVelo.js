@@ -51,8 +51,21 @@
     
         submitButton.addEventListener('click', function () { // vérifie que "dateEntre", "origine", "benevole" sont bien renseigné avant d'enregistrer le vélo
             const missingFields = requiredFields.filter(field => !document.getElementById(field).value);
-    
-            if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
+            
+            const inDateEntry = document.getElementById("dateEntre").value
+            const outDateEntry = document.getElementById("dateSortie").value
+            const stautVeloEntry = document.getElementById("statutVelo").value
+            const listOfOutReason = ["vendu", "donné", "démonté", "recyclé", "perdu"]
+            const listOfInReason = ["en stock","réservé"]
+            
+            if (outDateEntry === "" && listOfOutReason.includes(stautVeloEntry)){
+                window.alert("une date de sortie doit être renseigné avec le statut " + stautVeloEntry);
+            }else if (outDateEntry !== "" && listOfInReason.includes(stautVeloEntry)){
+                window.alert("la date de sortie ne peut pas être précisé avec le statut " + stautVeloEntry);
+            }else if (outDateEntry !== "" && outDateEntry < inDateEntry){
+                window.alert("la date de sortie est posterieur à la date d'entrée")
+            }
+            else if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
                 addBike(); // envoie les donnés à la database
             } 
         });
@@ -232,9 +245,11 @@
                 }
             }
         }
-    
+        console.log(formData)
         // envoi deu formulaire au backend pour l'enregistrement dans la database pui redirection vers la apge parcoursVelo
-        fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
+        //fetchData('/api/addBike', formData, window.location.href = '/parcourVelo');
+        fetchData('/api/addBike', formData);
+
     };
     
     
