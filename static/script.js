@@ -57,8 +57,6 @@ function fetchData(url, dataToSend, callback) {
     })  
 
     .then(data => {
-        console.log("here here ",data)
-
         callback(data); // appel de la fonction prévu dans callback
     })
 
