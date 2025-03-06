@@ -15,29 +15,24 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
 
     submitButton.addEventListener('click', function () { // bouton envoyer
             // récupération des valeurs du formulaire
-        const inStartDate = document.getElementById("inStartDateInput").value;
-        const inEndDate = document.getElementById("inEndDateInput").value;
         const outStartDate =  document.getElementById("outStartDateInput").value;
         const outEndDate =  document.getElementById("outEndDateInput").value;
 
         checkBoxToSend = [] // remise à zéro de la liste qui contient les valeurs du status des vélos
-        if (inStartDate || inEndDate || outStartDate || outEndDate) { // si au moins un élément est renseigné
+        if (outStartDate || outEndDate) { // si au moins un élément est renseigné
             for (var element of listCheckBox){
                 if(element.checked){
                     checkBoxToSend.push(element.value)
                 }
             }
-            fetchData("/api/getBikeOut", {"inStartDate" : inStartDate, "inEndDate" : inEndDate, "outStartDate" : outStartDate, "outEndDate" : outEndDate, "bikeStatus" : checkBoxToSend}, downloadCsv); // envoie les donnés à la database
+            fetchData("/api/getBikeOut", {"outStartDate" : outStartDate, "outEndDate" : outEndDate, "bikeStatus" : checkBoxToSend}, downloadCsv); // envoie les donnés à la database
         } 
     });
 
 })
 
+
 function downloadCsv(data){
-    for (var i = 1; i < data.csv.length; i++) { // on parcourt l'object json saufla 1ere ligne (la 1ere ligne est le nom des colonnes)
-        data.csv[i][1] = new Date().toISOString().split('T')[0]; // on formate la date en yyyy-mm-dd 
-    }
-    
     const csvContent = data.csv.map(row => row.join(',')).join('\n'); // on csvise les donnés
     
     var csvToDownload = new Blob([csvContent], {type:'text/csv'}) // Crée un objet Blob contenant les données CSV avec le type MIME 'text/csv'

@@ -69,10 +69,6 @@ def addBike(dictOfValue):
     listAttributes = listAttributesRequired + listAttributesUnRequired
     listAttributes.extend(("photo1", "photo2", "photo3"))
     
-    print("\n\nSTART HERE\n")
-    for i in dictOfValue:
-        print(f"\n{i}")
-    print("\nSTOP HERE\n\n")
     # on vérifie que les attributs nécessaires soient remplis sinon on n'ajoute pas le vélo.
     for attribute in listAttributesRequired:
         if attribute not in dictOfValue:
@@ -287,23 +283,18 @@ def readBike(whoCall : str, dictOfFilters : dict = None) -> list[dict]:
 
 
 def getBikeOut(dictOfValues):
-    """"""
+    """"""    
     columnsLabel = ""
     for i in jsonConfig:
-        columnsLabel += "%s, "%(i)
+        if i != "benevole" and "photo" not in i:
+            columnsLabel += "%s, "%(i)
+    
     columnsLabel = columnsLabel[:len(columnsLabel)-2]
-    returnValues = tuple(columnsLabel)
+    
     query = "SELECT %s FROM bike WHERE 1=1"%(columnsLabel)
     values = []
     conditions = []
 
-
-    if dictOfValues["inStartDate"]:
-        conditions.append("dateentre >= %s")
-        values.append(dictOfValues["inStartDate"])
-    if dictOfValues["inEndDate"]:
-        conditions.append("dateentre <= %s")
-        values.append(dictOfValues["inEndDate"])
     if dictOfValues["outStartDate"]:
         conditions.append("datesortie >= %s")
         values.append(dictOfValues["outStartDate"])
@@ -321,18 +312,44 @@ def getBikeOut(dictOfValues):
         query += " AND (" + status_clause + ")"
 
     connection = getConnection()
-
     cursor = connection.cursor()
     cursor.execute(query, values)
     connection.commit()
     results = cursor.fetchall()
     connection.close()
-
-    for i in results:
-        returnValues.append(i)
     
-    returnValues = tuple(returnValues)
+    columnsLabel = columnsLabel.split(",")
 
+    returnValues = []
+    tempReturnValues = []
+    returnValues.append(columnsLabel)
+    for oneBike in results:
+        for index in range(len(oneBike)):
+            if "date" in columnsLabel[index]:
+                tempReturnValues.append(oneBike[index].isoformat())
+            else:
+                tempReturnValues.append(oneBike[index])
+
+            
+        returnValues.append(tempReturnValues)
+        tempReturnValues = []
+
+    if 0:
+        tempReturnValues = {}
+
+        for oneBike in results:
+            for index in range(len(oneBike)):
+                if "date" in columnsLabel[index]:
+                    tempReturnValues[columnsLabel[index]] = oneBike[index].isoformat()
+                else:
+                    tempReturnValues[columnsLabel[index]] = oneBike[index]
+
+                
+            returnValues.append(tempReturnValues)
+            tempReturnValues = {}
+
+    returnValues = tuple(returnValues)
+    
     return returnValues
 
    

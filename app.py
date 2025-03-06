@@ -263,7 +263,6 @@ def APIfetchTest():
 def getBikeOut():
     data = request.json
     response = sqlCRUD.getBikeOut(data)
-
     return {"status" : "ok", "csv" : response}
 
 @app.route('/api/config', methods=["POST"])
@@ -299,3 +298,6 @@ if __name__ == '__main__':
     context = ('server.crt', 'server.key')
     #app.run(debug=True, host='0.0.0.0') # version http
     app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https    
+
+
+    ['photo1', ' photo2', ' photo3', ' referent', ' title', ' dateEntre', ' dateSortie', ' statutVelo', ' origine', ' etatVelo', ' marque', ' typeVelo', ' tailleRoue', ' tailleCadre', ' bicycode', ' electrique', ' prochaineAction', ' valeur', ' destinataireVelo', ' descriptionPublic', ' descriptionPrive', ' id']
