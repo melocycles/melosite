@@ -4,8 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Member:
     """
-        Classe représentant les membres (utilisateurs) qui utilisent l'application.
-        Répond aux contraintes de la table Member.
+        Class representing members (users) that use the app.
     """
     id: int         # Identifiant
     username: str   # Login
