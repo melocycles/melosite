@@ -44,6 +44,7 @@ def createTable():
                     destinataireVelo TEXT,          --personne ou entité qui a récuperé le vélo
                     descriptionPublic TEXT,         --texte libre affiché sur le site
                     descriptionPrive TEXT,          --aucune idée de l'utilité mais je suis un bon petit soldat
+                    title VARCHAR(25),              --Nom affiché dans parcour vélo
                     typeSortie VARCHAR(7)           --vendu, donné, démonté....
                 )''')
 
