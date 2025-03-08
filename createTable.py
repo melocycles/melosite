@@ -25,19 +25,19 @@ def createTable():
     cursor.execute('''CREATE TABLE IF NOT EXISTS Bike (
                     id SERIAL PRIMARY KEY NOT NULL,     --Id interne à la base de donné, obligatoire
                     bicycode VARCHAR(12),               --Numéro d identification antivol si existant
-                    entry_daye DATE NOT NULL,           --date entré en stock
+                    entry_date DATE NOT NULL,           --date entré en stock
                     exit_date DATE,                     --date de la sortie du stock
                     brand VARCHAR(20),                  --marque du vélo
                     bike_type VARCHAR(20),              --vtc, vtt....
                     wheel_size VARCHAR(15),             --12pouces, 14pouces...
                     frame_size VARCHAR(6),              --enfant, S, M ...
                     is_electric BOOLEAN,                --est ce un vélo électrique
-                    origine VARCHAR(11) NOT NULL,       --don, trouvé, récup...
+                    origin VARCHAR(11) NOT NULL,       --don, trouvé, récup...
                     bike_status VARCHAR(17) NOT NULL,   --en stock, réservé, donné....
                     bike_state VARCHAR(11),             --Très bon, moyen, mauvais, pour pièces
                     next_action VARCHAR(10),            --à vendre, à reparer, à recycler....
                     ref VARCHAR(30),                    --personne en charge du velo
-                    values FLOAT,                       --valeur en euro
+                    value FLOAT,                       --valeur en euro
                     bike_dest TEXT,                     --personne ou entité qui a récuperé le vélo
                     public_desc TEXT,                   --texte libre affiché sur le site
                     private_desc TEXT,                  --aucune idée de l'utilité mais je suis un bon petit soldat
@@ -48,7 +48,7 @@ def createTable():
     # table photo
     cursor.execute('''CREATE TABLE IF NOT EXISTS Pictures(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
-                   bikeID INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
+                   bike_id INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
                    name VARCHAR(70) NOT NULL,               --nom de l'image
                    is_principal BOOL NOT NULL,              --est ce que c'est la photo principal
                    data BYTEA                               --champ modifié
@@ -57,7 +57,7 @@ def createTable():
     # table modif
     cursor.execute('''CREATE TABLE IF NOT EXISTS Modification(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
-                   bikeID INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
+                   bike_id INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
                    timestamp datetime.datetime NOT NULL,    --date de modification
                    volunteer VARCHAR(70) NOT NULL,          --bénévole faisant la modif
                    modified_field VARCHAR(70) NOT NULL,     --champ modifié
