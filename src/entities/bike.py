@@ -27,4 +27,4 @@ class Bike:
     private_desc: str
     exit_type: str
     name: str
-    photos: list[Picture]
+    pictures: list[Picture]
