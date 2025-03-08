@@ -12,14 +12,16 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 
 
     //fetchData("api/config", {}, getConfig) // assigne les attributs ayant true comme valeur de filter à filteredAttributes
-    console.time("getconfig")
-    console.time("FETCHconfig")
+    console.time("api/config")
     fetchData("api/config", {}, getConfig)
+    console.timeEnd("api/config")
         // récupération des donnés depuis le backend
-    console.time("FETCHreadBike")
+    console.time('/api/readBike')
     fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {statutVelo : "en stock"}}, displayBikes); // récupération de la photo1, la descriptionPublic & l'id puis on les display
-    console.time("FETCHgetFIlterValue")
+    console.timeEnd('/api/readBike')
+    console.time("/api/getFilterValue")
     fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect); // récupération des valeurs éxistantes dans chacun des paramètres pour ajouter des valeurs de filtre
+    console.timeEnd("/api/getFilterValue")
 
 
         // gestion des bouttons
@@ -47,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () { // action lors du ch
 });
 
 function getConfig(returnFromFetch){
-    console.timeEnd("FETCHconfig")
     const returnFromFetchArray = Object.entries(returnFromFetch);
     returnFromFetchArray.sort((a, b) => a[1].order - b[1].order);
     sortedreturnFromFetch = Object.fromEntries(returnFromFetchArray);
@@ -55,7 +56,6 @@ function getConfig(returnFromFetch){
     filteredAttributes = Object.keys(sortedreturnFromFetch).filter(key => sortedreturnFromFetch[key].filter);
 
     createFilters()
-    console.timeEnd("getconfig")
 }
 
 /* affiche/masque le formualaire. En réalité il fait 80% de l'écran en largeur. pour le cacher on l'envoie de sa taille à droite (donc hors de l'écran).
@@ -114,9 +114,6 @@ function sendFilter(){
     est appelé par le callback de fetchData('/api/readBike', {"whoCall" : 'search', "parameters" : {}}, displayBikes); 
 */
 function displayBikes(returnFromFetch) {
-    console.timeEnd("FETCHreadBike")
-    console.time("displayBikeGlobal")
-
     bikesData = returnFromFetch.result
     var veloPart = document.getElementById('veloPart'); // récupère le conteneur global des vélo
 
@@ -128,10 +125,7 @@ function displayBikes(returnFromFetch) {
         }
     }
 
-    console.time("displayBike for each global")
-    let count =0
     bikesData.forEach(function(bike) { // parcourt tous les vélos pour les créer un par un dans la page web
-        count = count +1
         // crée le conteneur du vélo avec  comme classe veloCadre
         var veloCadre = document.createElement('div'); 
         veloCadre.classList.add('veloCadre');
@@ -152,10 +146,8 @@ function displayBikes(returnFromFetch) {
         
         veloCadre.addEventListener('click', function() { // ajoute une interraction au click qui renvoie vers la page velo.html avec l'id du vélo
             goToOneBike(bike.id);
-        
-        });
-    })
-    console.timeEnd("displayBike for each global")
+        });})
+
 
         function cutString(string){ // découpe la description pour que le nom du vélo ne fasse pas plus de 2 lignes et que la découpe se fasse au mot près
             if(string == null){ // si la valeur n'a pas été renseigné on renvoie une string vide
@@ -172,8 +164,6 @@ function displayBikes(returnFromFetch) {
             sessionStorage.setItem("bikeId", bikeId); // enregistre l'id du vélo dans le navigateur web pour que le bon vélo puisse être affiché
             window.location.href = "/velo";
         }
-    console.timeEnd("displayBikeGlobal")
-
 };
 
 
@@ -182,7 +172,7 @@ function displayBikes(returnFromFetch) {
     est appelé par le callback de fetchData("/api/getFilterValue", {"whoCall" : "", "parameters" : ""}, addOptionsToSelect);
 */
 function addOptionsToSelect(returnFromFetch) {
-    console.timeEnd("FETCHgetFIlterValue")
+
     function addOption(optionsArray, selectElement){
         optionsArray.forEach(function (optionValue) { // parcourt toutes las valeurs éxistantes
             var option = document.createElement("option"); // création d'une option (d'un élément html)
@@ -194,7 +184,7 @@ function addOptionsToSelect(returnFromFetch) {
             }
         }
     )};
-    console.time("addOptionsToSelect")
+
     result = returnFromFetch.result
     
     for (const i of filteredAttributes) {
@@ -202,7 +192,6 @@ function addOptionsToSelect(returnFromFetch) {
             addOption(result[i], document.getElementById(i))
         }
     }    
-    console.timeEnd("addOptionsToSelect")
 };
 
 

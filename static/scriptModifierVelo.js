@@ -1,9 +1,7 @@
-// déclaration à la racine car utilisé à plusieurs endroits
+    // déclaration à la racine car utilisé à plusieurs endroits
 
 let requiredFields
 let listeAttributes
-const listSatutOutOfStock = ["vendu", "donné", "démonté", "recyclé", "perdu"]
-
 fetchData("api/config", {}, getConfig) 
 
 
@@ -30,31 +28,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     submitButton.addEventListener('click', function () { // bouton valider
-        var missingFields = false
-        requiredFields.forEach(element => {
-            if(document.getElementById(element).value == ""){
-                missingFields = true
+        const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
+
+        const inDateEntry = document.getElementById("dateEntre").value
+            const outDateEntry = document.getElementById("dateSortie").value
+            const stautVeloEntry = document.getElementById("statutVelo").value
+            const listOfOutReason = ["vendu", "donné", "démonté", "recyclé", "perdu"]
+            const listOfInReason = ["en stock","réservé"]
+            
+            if (outDateEntry === "" && listOfOutReason.includes(stautVeloEntry)){
+                window.alert("une date de sortie doit être renseigné avec le statut " + stautVeloEntry);
+            }else if (outDateEntry !== "" && listOfInReason.includes(stautVeloEntry)){
+                window.alert("la date de sortie ne peut pas être précisé avec le statut " + stautVeloEntry);
+            }else if (outDateEntry !== "" && outDateEntry < inDateEntry){
+                window.alert("la date de sortie est posterieur à la date d'entrée")
             }
-        });
-        //const missingFields = requiredFields.filter(field => !document.getElementById(field).value); // vérfie que les 4 requiredFields ne sont pas vides
-
-        if (!missingFields) { // si il ne manque pas de donné nécessaire
-
-            if(document.getElementById("statutVelo").value == "en stock" ){ // si le vélo est en stock on part dans addBike()
-                //updateBike()
-            }else if(listSatutOutOfStock.includes(document.getElementById("statutVelo").value)){ // sinon ça veut dire qu'il est sorti du stock
-                let dateE = new Date(document.getElementById("dateEntre").value)
-                let dateS = new Date(document.getElementById("dateSortie").value)
-                if(confirm("attention avec cette valeur de statut vélo le vélo sera considéré comme sorti du stock !")){ // on demande à l'utilisateur si il veut vraiment que le vélo soit sorti du stock
-                    if(!document.getElementById("dateSortie").value){ // on vérifie la présence de dateSortie 
-                        alert("date de sortie non renseigné")
-                    }else if(dateS <= dateE){ // on vérifie que date sortie est bien postérieur à la date d'entré
-                        alert("la date de sortie est antérieur à la date d'entré")
-                    }else{
-                        updateBike()                        
-                    }
-                }
-            }        
+            else if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
+            updateBike(); // envoie les donnés renseigné à la database
         }
     });
 });
@@ -65,16 +55,10 @@ function getConfig(returnFromFetch){
     objects = Object.fromEntries(returnFromFetchArray);
 
     requiredFields = Object.keys(objects).filter(key => objects[key].addRequired);
-    listeAttributes = Object.keys(objects).filter(key => objects[key].edit);
+    listeAttributes = Object.keys(objects).filter(key => objects[key].addBike);
 
-    for (let i = 1; i < 4; i++) {
-        listeAttributes.splice(listeAttributes.indexOf(`photo${i}`), 1)
-    }
-    listeAttributes.unshift("benevole")
     addField()
 }
-
-
 
 
 /* rempli le formulaire avec les informations du vélo enregistré dans la database
@@ -85,16 +69,17 @@ function fillForm(returnFromFetch) {
     // formSata est le retour de fetchData
     formData.forEach(function(attribute) { // parcourt tous les attributs renvoyé par le backend
         var element = document.getElementById(attribute[0]); // on récupère l'élément html correspondant
+
         if (element) { // on vérifie que l'élément éxiste
             if(element.type != "date"){ // il faut enregistrer la date à part car elle a besoin d'être formatté sous forme yyyy-mm-dd
                 memoire[attribute[0]] = attribute[1]
             }
             if (element.type === 'checkbox') { // pas utilisé pour l'instant, je le laisse pour que l'implémentation de chackbox soit plus simple
                 element.checked = attribute[1];
-            }else if (element.type === 'date' && attribute[1]) {
+            }else if (element.type === 'date' && attribute[1] !== null) {
                 // Formater la date au format YYYY-MM-DD
                 const formattedDate = new Date(attribute[1]).toISOString().split('T')[0];
-                memoire[attribute[0]] = formattedDate   
+                memoire[attribute[0]] = formattedDate  
                 element.value = formattedDate;
             }else if (attribute[0].includes("photo")) {
                 photoList.push(attribute[1]);
@@ -128,8 +113,7 @@ function updateBike(){
             } else if(attribute == "valeur"){ // si l'attribut est valeur on le transforme en float
                 hasTheValueChange(attribute, parseFloat(document.getElementById(attribute).value))
 
-            }
-            else{ // sinon on l'ajoute juste (string)
+            }else{ // sinon on l'ajoute jsute (string)
                 hasTheValueChange(attribute, document.getElementById(attribute).value); // on assigne à l'attribut sa valeur 
             }
     }
@@ -302,7 +286,7 @@ function addField(){
     }
 
     const lastButtons = document.getElementById("confirmButton")
-
+    
     for(currentAttribut of listeAttributes){
         
         const newLabel = document.createElement('label');

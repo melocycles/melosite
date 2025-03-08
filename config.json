@@ -141,7 +141,7 @@
             "title" : false,
             "filter" : false,
             "addRequired" : false,
-            "addBike" : false,
+            "addBike" : true,
             "withSpace" : "date de sortie",
             "lowCase" : "datesortie",
             "camelCase" : "dateSortie",
@@ -428,7 +428,7 @@
             "lowCase" : "id",
             "camelCase" : "id",
             "values" : [],
-            "edit" : false,
+            "edit" : true,
             "order" : 22,
             "entryType" : ["", ""]
         }

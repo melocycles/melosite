@@ -7,7 +7,6 @@
 /* pour la connexion/déconnexion. Présent sur toutes les pages
 */
 document.addEventListener("DOMContentLoaded", function () { // quand la page se charge
-    console.time("header")
     const header = this.getElementById("header")
     var connectionLogo = document.createElement('img');
     connectionLogo.src = 'static/images/connectionLogoWhite.png';
@@ -34,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () { // quand la page se 
     if (document.querySelector('.autoForm')) {
 
     }
-    console.timeEnd("header")
 })
 
 

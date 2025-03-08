@@ -8,8 +8,7 @@
 
     <title>ajouter un vélo</title>
 </head>
-<body>
-
+<body>    
     <header id="header">
         <div id="headerButtons">
             <button id="returnButton" class="buttonLeft">Retour</button>
@@ -18,8 +17,7 @@
 
 
     <form id="formContainer" class="autoForm">
-        <p id="photoDisclaimer">ne pas utiliser l'appareil photo</p>
-        <div id="canvasContener">
+        <div id="canvasContener">   
                 <canvas id="photo1"></canvas>
                 <canvas id="photo2"></canvas>
                 <canvas id="photo3"></canvas>
@@ -29,9 +27,10 @@
 
         <button id="confirmButton" class="buttonCenter" type="submit">Valider</button>
     
-    </form>
-
+    </form>    
     <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    <script src="{{ url_for('static', filename='tiff.js') }}"></script>
+    <script src="{{ url_for('static', filename='heic2any.js') }}"></script>
     <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script>
 
 </body>
