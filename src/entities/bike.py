@@ -17,6 +17,7 @@ class Bike:
     wheel_size: str
     frame_size: str
     is_electric: bool
+    origin: str
     bike_status: str
     bike_state: str
     next_action: str
@@ -25,6 +26,6 @@ class Bike:
     bike_dest: str
     public_desc: str
     private_desc: str
-    exit_type: str
     name: str
-    pictures: list[Picture]
+    exit_type: str
+    pictures: list[Picture] = []

@@ -10,7 +10,7 @@ class Modification:
         Act as a log.
     """
     id: int
-    bike: Bike                      # The modified bike
+    bike: Bike = None               # The modified bike
     timestamp: datetime.datetime    # Time of modification
     volunteer: str                  # Name of the modifier
     modified_field: str             # Bike field

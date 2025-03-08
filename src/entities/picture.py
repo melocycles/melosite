@@ -9,6 +9,7 @@ class Picture:
         Many-to-one relationship: one bike -> several pictures.
     """
     id: int
-    bike: Bike
+    bike: Bike = None
     name: str       # Filename like "toto.jpg"
+    is_principal: bool
     data: str       # Blob (rawbyte encoding)
