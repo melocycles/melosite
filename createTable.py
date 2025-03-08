@@ -45,6 +45,15 @@ def createTable():
                     exit_type VARCHAR(25)               --vendu, donné, démonté....
                 )''')
 
+    # table photo
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Pictures(
+                   id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
+                   bikeID INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
+                   name VARCHAR(70) NOT NULL,               --nom de l'image
+                   is_principal BOOL NOT NULL,              --est ce que c'est la photo principal
+                   data BYTEA                               --champ modifié
+                   )''')
+
     # table modif
     cursor.execute('''CREATE TABLE IF NOT EXISTS Modification(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
