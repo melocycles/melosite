@@ -46,12 +46,12 @@ def createTable():
                 )''')
 
     # table photo
-    cursor.execute('''CREATE TABLE IF NOT EXISTS Pictures(
+    cursor.execute('''CREATE TABLE IF NOT EXISTS Picture(
                    id SERIAL PRIMARY KEY NOT NULL,          --Id interne à la base de donné, obligatoire
-                   bike_id INTEGER NOT NULL,                 --id d'entrée de table de la table Bike
+                   bike_id INTEGER NOT NULL,                --id d'entrée de table de la table Bike
                    name VARCHAR(70) NOT NULL,               --nom de l'image
                    is_principal BOOL NOT NULL,              --est ce que c'est la photo principal
-                   data BYTEA                               --champ modifié
+                   data BYTEA                               --données binaires de l'image
                    )''')
 
     # table modif
