@@ -27,7 +27,7 @@ dict_form = {
     'bicycode':         {"type": "text",    "is_required": False},
     'electrique':       {"type": "select",  "is_required": False, "select_values" : ["non", "oui"]},
     'prochaineAction':  {"type": "select",  "is_required": False, "select_values" : ["à vendre", "à donner", "à démonter", "à recycler", "à réparer"]},
-    'valeur':           {"type": "float",   "is_required": False},
+    'valeur':           {"type": "int",   "is_required": False},
     'destinataireVelo': {"type": "text",    "is_required": False},
     'descriptionPublic':{"type": "textarea","is_required": False},
     'descriptionPrive': {"type": "textarea","is_required": False}
