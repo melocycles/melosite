@@ -5,33 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesAjouterVelo.css') }}">
-
     <title>ajouter un vélo</title>
 </head>
-<body>    
-    <header id="header">
-        <div id="headerButtons">
-            <button id="returnButton" class="buttonLeft">Retour</button>
-        </div>
-    </header>
-
+<body>   
+    {% import "macros.html" as global_macro %} 
+    {{global_macro.header()}}
 
     <form id="formContainer" class="autoForm">
-        <div id="canvasContener">   
-                <canvas id="photo1"></canvas>
-                <canvas id="photo2"></canvas>
-                <canvas id="photo3"></canvas>
-        </div>
-
-        
+    {{global_macro.picture_canvas()}}
+    
+    {% for key, value in dict_form.items(): %} <!-- form_element est un dictionnaire de type 'benevole': {"type": "text", "is_required": True} -->
+        {{global_macro.form_label(key, value["is_required"])}}
+        {{global_macro.form_input(key, value["type"], value["is_required"], value["select_values"])}}
+    {% endfor %}
+    
 
         <button id="confirmButton" class="buttonCenter" type="submit">Valider</button>
     
     </form>    
     <script src="{{ url_for('static', filename='script.js') }}" ></script>
+    <!-- <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script> -->
     <script src="{{ url_for('static', filename='tiff.js') }}"></script>
     <script src="{{ url_for('static', filename='heic2any.js') }}"></script>
-    <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script>
 
 </body>
 </html>

@@ -73,7 +73,7 @@ def showSingleBike():
 @app.route('/ajouterVelo')
 def addBikePage():
     if checkCookieUser() or checkCookieAdmin():
-        return render_template("ajouterVelo.html")
+        return render_template("ajouterVelo.html", dict_form = info.dict_form)
     else:
         abort(418)
         
@@ -297,7 +297,4 @@ def editConfigFile():
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')
     #app.run(debug=True, host='0.0.0.0') # version http
-    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https    
-
-
-    ['photo1', ' photo2', ' photo3', ' referent', ' title', ' dateEntre', ' dateSortie', ' statutVelo', ' origine', ' etatVelo', ' marque', ' typeVelo', ' tailleRoue', ' tailleCadre', ' bicycode', ' electrique', ' prochaineAction', ' valeur', ' destinataireVelo', ' descriptionPublic', ' descriptionPrive', ' id']
+    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https
