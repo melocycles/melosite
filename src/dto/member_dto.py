@@ -57,7 +57,7 @@ class MemberDTO:
         """
         conn = Database.get_db()
         cur = conn.cursor()
-        query = "SELECT id, id, password, role, uuid FROM MEMBER WHERE id=%s"
+        query = "SELECT id, username, password, role, uuid FROM MEMBER WHERE id=%s"
 
         # Maybe add try catch, the psycopg2 doc is not clear about thrown errors
         cur.execute(query, (id,))
