@@ -11,9 +11,9 @@
 <!-- crée les 3canvas qui contiendront les photos -->
 {% macro picture_canvas() %}
     <div id="canvasContener">   
-        <canvas id="photo1"></canvas>
-        <canvas id="photo2"></canvas>
-        <canvas id="photo3"></canvas>
+        <canvas id="picture1"></canvas>
+        <canvas id="picture2"></canvas>
+        <canvas id="picture3"></canvas>
     </div>
 {% endmacro %}
 
@@ -29,13 +29,13 @@
 
 {% macro form_input(name, type="text", is_required=false, select_values = "") %}
     {% if select_values %}
-        <select id="{{name}}" name="{{name}}" {% if is_required %} required {% endif %}>
+            <select id="{{name}}" name="{{name}}"> <!-- {% if is_required %} required {% endif %}> -->
             <option value=""></option>
             {% for value in select_values: %}
                 <option value="{{value}}">{{value}}</option>
             {% endfor %}        </select>
     {% else %}
-        <input id="{{name}}" name="{{name}}" type="{{type}}" {% if is_required %} required {% endif %}>
+        <input id="{{name}}" name="{{name}}" type="{{type}}"> <!--{% if is_required %} required {% endif %}> -->
     {% endif %}
 {% endmacro %}
 
