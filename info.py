@@ -14,7 +14,7 @@ except:
 dict_form = {
     'benevole':         {"type": "text",    "is_required": True},
     'referent':         {"type": "text",    "is_required": False},
-    'title':            {"type": "text",    "is_required": True},
+    'titre':            {"type": "text",    "is_required": True},
     'dateEntre':        {"type": "date",    "is_required": True},
     'dateSortie':       {"type": "date",    "is_required": False},
     'statutVelo':       {"type": "select",  "is_required": True,  "select_values" : ["en stock", "réservé", "vendu", "donné", "démonté", "recyclé", "perdu"]},
