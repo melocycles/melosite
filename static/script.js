@@ -125,7 +125,7 @@ let logoHeight = 150;
 logo1.src = svgPath;
 let canvas1 = document.getElementById("picture1")
 let canvas2 = document.getElementById("picture2")
-let canvas3 = document.getElementById("picture")
+let canvas3 = document.getElementById("picture3")
 var context1 = canvas1.getContext('2d');
 logo1.onload = function() {context1.drawImage(logo1,  logoPositionX, logoPositionY, logoWidth, logoHeight);}
 var context2 = canvas2.getContext('2d');
@@ -141,7 +141,7 @@ let capturedPhoto3 = null;
 var photoList = [capturedPhoto1, capturedPhoto2, capturedPhoto3]
 
 for (let i = 1; i <= 3; i++) {
-    const canvasButton = document.getElementById('photo' + i); // on récupère les canvas un par un (car dans l'html ils s'appellent canvas1, canvas2 et canvas3)
+    const canvasButton = document.getElementById('picture' + i); // on récupère les canvas un par un (car dans l'html ils s'appellent canvas1, canvas2 et canvas3)
     const index = i; // on conserve i car on en a besoin dans displayNike() pour enregistrer la photo prise dans photoList
 
     canvasButton.addEventListener('click', async (ev) => { // lorsque l'on click sur un canvas
