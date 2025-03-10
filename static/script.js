@@ -7,6 +7,7 @@
 /* pour la connexion/déconnexion. Présent sur toutes les pages
 */
 document.addEventListener("DOMContentLoaded", function () { // quand la page se charge
+    listeAttributes = ["benevole", "referent", "titre", "dateEntre", "dateSortie", "statutVelo", "origine", "etatVelo", "marque", "typeVelo", "tailleRoue", "tailleCadre", "bicycode", "electrique", "prochaineAction", "valeur", "destinataireVelo", "descriptionPublic", "descriptionPrive"]
     const header = this.getElementById("header")
     var connectionLogo = document.createElement('img');
     connectionLogo.src = 'static/images/connectionLogoWhite.png';

@@ -11,7 +11,7 @@
     {% import "macros.html" as global_macro %} 
     {{global_macro.header()}}
 
-    <form id="formContainer" class="autoForm">
+    <form id="formContainer" class="autoForm" method="POST">
     {{global_macro.picture_canvas()}}
     
     {% for key, value in dict_form.items(): %} <!-- form_element est un dictionnaire de type 'benevole': {"type": "text", "is_required": True} -->
@@ -24,9 +24,9 @@
     
     </form>    
     <script src="{{ url_for('static', filename='script.js') }}" ></script>
-    <!-- <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script> -->
+    <script src="{{ url_for('static', filename='scriptAjouterVelo.js') }}" ></script>
     <script src="{{ url_for('static', filename='tiff.js') }}"></script>
     <script src="{{ url_for('static', filename='heic2any.js') }}"></script>
 
 </body>
-</html>
+</html> 
