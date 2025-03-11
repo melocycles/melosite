@@ -53,21 +53,21 @@
             const missingFields = requiredFields.filter(field => !document.getElementById(field).value);
             
             const inDateEntry = document.getElementById("dateEntre").value
-            const outDateEntry = document.getElementById("dateSortie").value
+            // const outDateEntry = document.getElementById("dateSortie").value
             const stautVeloEntry = document.getElementById("statutVelo").value
             const listOfOutReason = ["vendu", "donné", "démonté", "recyclé", "perdu"]
             const listOfInReason = ["en stock","réservé"]
             
-            if (outDateEntry === "" && listOfOutReason.includes(stautVeloEntry)){
-                window.alert("une date de sortie doit être renseigné avec le statut " + stautVeloEntry);
-            }else if (outDateEntry !== "" && listOfInReason.includes(stautVeloEntry)){
-                window.alert("la date de sortie ne peut pas être précisé avec le statut " + stautVeloEntry);
-            }else if (outDateEntry !== "" && outDateEntry < inDateEntry){
-                window.alert("la date de sortie est posterieur à la date d'entrée")
-            }
-            else if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
+            // if (outDateEntry === "" && listOfOutReason.includes(stautVeloEntry)){
+                // window.alert("une date de sortie doit être renseigné avec le statut " + stautVeloEntry);
+            // }else if (outDateEntry !== "" && listOfInReason.includes(stautVeloEntry)){
+                // window.alert("la date de sortie ne peut pas être précisé avec le statut " + stautVeloEntry);
+            // }else if (outDateEntry !== "" && outDateEntry < inDateEntry){
+                // window.alert("la date de sortie est posterieur à la date d'entrée")
+            // }
+            // else if (missingFields.length == 0) { // si il ne manque pas de donné nécessaire
                 addBike(); // envoie les donnés à la database
-            } 
+            // } 
         });
     
     
