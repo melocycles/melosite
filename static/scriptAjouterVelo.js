@@ -114,18 +114,21 @@
     
                 inputElement.addEventListener('input', (event) => { // quand la photo prise
                     const file = event.target.files[0]; // on récupère la photo
-                    if(file && file.name.includes(".heic")){
-                        // get image as blob url
-                        let blobURL = URL.createObjectURL(file);
-                        
-                        // convert "fetch" the new blob url
-                        let blobRes = fetch(blobURL).then(res=>{return res.blob()})
-                        .then(blob=>{return heic2any({blob})})
-                        .then(imageBlob => {displayPicture(new File([imageBlob], file.name.split(".")[0]+".png"), canvasButton,index)})
-                        console.log(file.name.split(".")[0]+".png")
-                    }       
-                    else if (file) { // on vérifie que le téléphonne nous a bien envoyé une photo
-                        displayPicture(file, canvasButton, index);// on envoie la photo à displayBike pour l'afficher
+
+                    if(file){
+                        if(file.name.endsWith(".heic") || file.name.endsWith(".heif")){
+                            // get image as blob url
+                            let blobURL = URL.createObjectURL(file);
+                            
+                            // convert "fetch" the new blob url
+                            let blobRes = fetch(blobURL).then(res=>{return res.blob()})
+                            .then(blob=>{return heic2any({blob})})
+                            .then(imageBlob => {displayPicture(new File([imageBlob], file.name.split(".")[0]+".png"), canvasButton,index)})
+                            console.log(file.name.split(".")[0]+".png")
+                        }       
+                        else{ // on vérifie que le téléphonne nous a bien envoyé une photo
+                            displayPicture(file, canvasButton, index);// on envoie la photo à displayBike pour l'afficher
+                        }
                     }
                 },false);
     

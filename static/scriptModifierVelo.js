@@ -9,7 +9,25 @@
     var memoire = {};
     // récupération du bikeId
     const bikeId = parseInt(sessionStorage.getItem("bikeId"));
-
+    function convertTIFFToJPG(dataURL, quality = 0.9) {
+        return new Promise((resolve, reject) => {
+            if (typeof Tiff === 'undefined') {
+                reject("Tiff.js n'est pas chargé correctement.");
+            }
+    
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', dataURL, true);
+            xhr.responseType = 'arraybuffer';
+            xhr.onload = function(e) {
+                var tiff = new Tiff({ buffer: xhr.response });
+                var canvas = tiff.toCanvas();
+                var jpgDataURL = canvas.toDataURL('image/jpeg', quality);
+                resolve(jpgDataURL);
+            };
+            xhr.send();
+        });
+    }        
+    
     document.addEventListener('DOMContentLoaded', function () {
         
             // récupération des élémennts html
@@ -176,9 +194,20 @@
 
                 inputElement.addEventListener('input', (event) => { // quand la photo prise
                     const file = event.target.files[0]; // on récupère la photo
-                    if (file) { // on vérifie que le téléphonne nous a bien envoyé une photo
+                    if(file.name.endsWith(".heic") || file.name.endsWith(".heif")){
+                        // get image as blob url
+                        let blobURL = URL.createObjectURL(file);
+                        
+                        // convert "fetch" the new blob url
+                        let blobRes = fetch(blobURL).then(res=>{return res.blob()})
+                        .then(blob=>{return heic2any({blob})})
+                        .then(imageBlob => {displayPicture(new File([imageBlob], file.name.split(".")[0]+".png"), canvasButton,index)})
+                        console.log(file.name.split(".")[0]+".png")
+                    }       
+                    else{ // on vérifie que le téléphonne nous a bien envoyé une photo
                         displayPicture(file, canvasButton, index);// on envoie la photo à displayBike pour l'afficher
                     }
+                
                 },false);
 
                 // Cliquez sur l'élément input pour ouvrir l'appareil photo
@@ -210,11 +239,26 @@
             reader.readAsDataURL(file); // on charge le fichier
             
             reader.onload = function (loadedImage) { // Quand le fichier est chargé avec succès
-
+                if (true){
+                    const fileType = file.type.toLowerCase();
+        
+                    if (fileType === 'image/tiff' || fileType === 'image/tif') {
+                        convertTIFFToJPG(loadedImage.target.result).then(jpgDataURL => {
+                            img.src = jpgDataURL; // Utiliser l'image JPEG convertie
+                            })
+                        }else if (fileType === 'image/heic') {
+                            heic2any(loadedImage.target.result)
+                            .then((jpgDataURL) => {
+                                console.log(jpgDataURL)
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            })
+                        }
+                    }
                 // on récupère le binaire de la photo puis on la stock dans photoList
-                const imageData = loadedImage.target.result;
-                photoList[index - 1] = imageData;
-                
+                // const imageData = loadedImage.target.result;
+                // photoList[index - 1] = imageData;
                 const img = new Image(); // intialisation de d'une image vide
                 const maxWidth = 600;
                 var ratioWidth = 1;
@@ -237,6 +281,7 @@
                     canvas.height = img.height*ratio;
 
                         // on dessine l'image
+                    photoList[index - 1] = img.src
                     const context = canvas.getContext('2d');
                     context.drawImage(img, 0, 0, img.width*ratio, img.height*ratio); // on affiche l'image dans le canvas
                 };
