@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () { // ci dessous est ef
 
 
 function downloadCsv(data){
-    const csvContent = data.csv.map(row => row.join(',')).join('\n'); // on csvise les donnés
+    qt csvContent = data.csv.map(row => row.join(',')).join('\n'); // on csvise les donnés
     
     var csvToDownload = new Blob([csvContent], {type:'text/csv'}) // Crée un objet Blob contenant les données CSV avec le type MIME 'text/csv'
 

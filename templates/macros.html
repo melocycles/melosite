@@ -1,0 +1,44 @@
+<!-- crée le header avec le bouton retour -->
+{% macro header() %}
+    <header id="header">
+        <div id="headerButtons">
+            <button id="returnButton" class="buttonLeft">Retour</button>
+        </div>
+    </header>
+{% endmacro %}
+
+
+<!-- crée les 3canvas qui contiendront les photos -->
+{% macro picture_canvas() %}
+    <div id="canvasContener">   
+        <canvas id="picture1"></canvas>
+        <canvas id="picture2"></canvas>
+        <canvas id="picture3"></canvas>
+    </div>
+{% endmacro %}
+
+
+<!-- crée le formumaire pour remplir les informations des vélos -->
+{% macro form_label(name, is_required=false) %}
+    {% if is_required %}
+        <label for="{{name}}">{{ name }}: <b>*</b></label>
+    {% else %}
+        <label for="{{name}}">{{ name }}: </label>
+    {% endif %}
+{% endmacro %}
+
+{% macro form_input(name, type="text", is_required=false, select_values = "") %}
+    {% if select_values %}
+            <select id="{{name}}" name="{{name}}" {% if is_required %} required {% endif %}>
+            <option value=""></option>
+            {% for value in select_values: %}
+                <option value="{{value}}">{{value}}</option>
+            {% endfor %}        </select>
+    {% else %}
+        <input id="{{name}}" name="{{name}}" type="{{type}}" {% if is_required %} required {% endif %}>
+    {% endif %}
+{% endmacro %}
+
+{% macro create_form_bike() %}
+<p></p>
+{% endmacro %}

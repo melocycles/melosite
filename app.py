@@ -70,10 +70,10 @@ def showSingleBike():
 
 
 # page ajouter un vélo
-@app.route('/ajouterVelo')
+@app.route('/ajouterVelo', methods =["GET", "POST"])
 def addBikePage():
     if checkCookieUser() or checkCookieAdmin():
-        return render_template("ajouterVelo.html")
+        return render_template("ajouterVelo.html", dict_form = info.dict_form)
     else:
         abort(418)
         
@@ -164,8 +164,6 @@ def APIreadBike() -> list[dict] | list[list]:
     return  ({'result': result})
 
 
-
-
 # route pour récupérer les valeurs éxistantes de filtre (aka toutes les marques enregistrés, tous les types de vélo....)
 @app.route('/api/getFilterValue', methods=["POST"])
 def APIgetFilterValue() -> dict[list]: 
@@ -183,12 +181,11 @@ def APIaddbike():
     data = request.get_json() # récupération des donnés
 
     for attribute in data:
-        if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
+        if attribute.startswith("picture"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])
-    
-    app.logger.info(data)
-    
+
     result = sqlCRUD.addBike(data)
+
     return result # renvoie une réponse de succès sous forme {"status" : "ok"}
 
 
@@ -297,7 +294,4 @@ def editConfigFile():
 if __name__ == '__main__':
     context = ('server.crt', 'server.key')
     #app.run(debug=True, host='0.0.0.0') # version http
-    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https    
-
-
-    ['photo1', ' photo2', ' photo3', ' referent', ' title', ' dateEntre', ' dateSortie', ' statutVelo', ' origine', ' etatVelo', ' marque', ' typeVelo', ' tailleRoue', ' tailleCadre', ' bicycode', ' electrique', ' prochaineAction', ' valeur', ' destinataireVelo', ' descriptionPublic', ' descriptionPrive', ' id']
+    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https
