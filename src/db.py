@@ -12,7 +12,7 @@ class Database():
         This class is not instiable, you can get the db connection using Database.get_db()
     """
 
-    @classmethod
+    @staticmethod
     def get_db(self) -> psycopg2.connect:
         """Returns the database connection, if it does not exist it creates it."""
         if "db" not in g:
