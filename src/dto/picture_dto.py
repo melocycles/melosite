@@ -1,103 +1,3 @@
-from src.db import Database
-from src.entities.picture import Picture
-from src.entities.bike import Bike
-
-
-class PictureDTO:
-
-    @staticmethod
-    def get_all_pictures(self) -> list[Picture]:
-        """
-        Requests all pictures from the database and returns them.
-
-        :return: the list of all pictures, empty list if no picture in the database
-        :rtype: list[Picture]
-        """
-        conn = Database.get_db()
-        cur = conn.cursor()
-        query = "SELECT id, name, is_principal, data FROM PICTURE;"
-
-        # Maybe add try catch, the psycopg2 doc is not clear about thrown errors
-        cur.execute(query)
-        pictures = cur.fetchall()
-
-        return [Picture(p[0], None, p[1], p[2], p[3]) for p in pictures]
-
-    @staticmethod
-    def get_picture_by_id(self, id: int) -> Picture | None:
-        """
-        Requests one picture with the correct id from the database.
-
-        :param int id: the id of the picture
-        :return: the picture with the correct id, None if not found
-        :rtype: Picture | None
-        """
-        conn = Database.get_db()
-        cur = conn.cursor()
-        query = "SELECT id, name, is_principal, data FROM PICTURE WHERE id=%s;"
-
-        # Maybe add try catch, the psycopg2 doc is not clear about thrown errors
-        cur.execute(query, (id,))
-        fetched = cur.fetchone()
-
-        # The picture has been found in database
-        if fetched is not None:
-            return Picture(fetched[0], None, fetched[1], fetched[2], fetched[3])
-
-        # If no member has been found then None is returned
-        return None
-
-    @staticmethod
-    def get_principal_picture_by_bike(self, bike: Bike) -> Picture | None:
-        """
-        Requests the principal picture of a bike from the database.
-
-        :param Bike bike: the bike associated to the picture
-        :return: the principal picture with the correct associated bike, None if not found
-        :rtype: Picture | None
-        """
-        conn = Database.get_db()
-        cur = conn.cursor()
-        query = "SELECT id, name, is_principal, data FROM PICTURE WHERE bike_id=%s AND is_principal IS TRUE;"
-
-        # Maybe add try catch, the psycopg2 doc is not clear about thrown errors
-        cur.execute(query, (bike.id,))
-        fetched = cur.fetchone()
-
-        # The picture has been found in database
-        if fetched is not None:
-            return Picture(fetched[0], bike, fetched[1], fetched[2], fetched[3])
-
-        # If no picture has been found then None is returned
-        return None
-
-    @staticmethod
-    def get_all_pictures_by_bike(self, bike: Bike) -> list[Picture]:
-        """
-        Requests all pictures of a bike from the database.
-
-        :param Bike bike: the bike associated to the picture
-        :return: all pictures with the correct associated bike, None if not found
-        :rtype: list[Picture] | None
-        """
-        conn = Database.get_db()
-        cur = conn.cursor()
-        query = "SELECT id, name, is_principal, data FROM PICTURE WHERE bike_id=%s AND is_principal IS TRUE;"
-
-        # Maybe add try catch, the psycopg2 doc is not clear about thrown errors
-        cur.execute(query, (bike.id,))
-        pictures = cur.fetchall()
-
-        return [Picture(p[0], bike, p[1], p[2], p[3]) for p in pictures]
-
-
-
-
-
-
-
-
-
 import psycopg2
 from psycopg2 import sql
 from src.db import Database
@@ -126,12 +26,10 @@ class PictureDTO:
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error fetching pictures: {error}")
             return []
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def get_picture_by_id(cls, id: int) -> Picture | None:
+    def get_picture_by_id(id: int) -> Picture | None:
         """
         Requests one picture with the correct id from the database.
 
@@ -154,14 +52,12 @@ class PictureDTO:
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error fetching picture by ID {id}: {error}")
             return None
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def get_principal_picture_by_bike(cls, bike: Bike) -> Picture | None:
+    def get_principal_picture_by_bike(bike: Bike) -> Picture | None:
         """
-        Requests the principal picture of a bike from the database.
+        Requests the principal picture of a bike from the database, sets the bike as a picture's attribute.
 
         :param Bike bike: the bike associated with the picture
         :return: the principal picture with the correct associated bike, None if not found
@@ -182,14 +78,12 @@ class PictureDTO:
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error fetching principal picture for bike ID {bike.id}: {error}")
             return None
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def get_all_pictures_by_bike(cls, bike: Bike) -> list[Picture]:
+    def get_all_pictures_by_bike(bike: Bike) -> list[Picture]:
         """
-        Requests all pictures of a bike from the database.
+        Requests all pictures of a bike from the database and set the bike as an attribute for each of them.
 
         :param Bike bike: the bike associated with the pictures
         :return: all pictures with the correct associated bike, empty list if not found
@@ -207,14 +101,12 @@ class PictureDTO:
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error fetching pictures for bike ID {bike.id}: {error}")
             return []
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def create_picture(cls, picture: Picture) -> int:
+    def create_picture(picture: Picture) -> int:
         """
-        Inserts a new picture into the database.
+        Inserts a new picture into the database and returns its id.
 
         :param Picture picture: the picture to insert
         :return: the id of the inserted picture
@@ -229,7 +121,9 @@ class PictureDTO:
                 VALUES (%s, %s, %s, %s)
                 RETURNING id;
                 """
-                cur.execute(query, (picture.bike.id if picture.bike else None, picture.name, picture.is_principal, picture.data))
+                if picture.bike is None:
+                    raise Exception("No bike for this picture")
+                cur.execute(query, (picture.bike.id, picture.name, picture.is_principal, picture.data))
                 conn.commit()
                 return cur.fetchone()[0]
         except (Exception, psycopg2.DatabaseError) as error:
@@ -237,12 +131,10 @@ class PictureDTO:
             if conn:
                 conn.rollback()
             return -1
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def update_picture(cls, picture: Picture) -> None:
+    def update_picture(picture: Picture):
         """
         Updates an existing picture in the database.
 
@@ -257,22 +149,22 @@ class PictureDTO:
                 SET bike_id=%s, name=%s, is_principal=%s, data=%s
                 WHERE id=%s;
                 """
-                cur.execute(query, (picture.bike.id if picture.bike else None, picture.name, picture.is_principal, picture.data, picture.id))
+                if picture.bike is None:
+                    raise Exception("No bike for this picture")
+                cur.execute(query, (picture.bike.id, picture.name, picture.is_principal, picture.data, picture.id))
                 conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error updating picture: {error}")
             if conn:
                 conn.rollback()
-        finally:
-            if conn is not None:
-                conn.close()
+
 
     @staticmethod
-    def delete_picture(cls, id: int) -> None:
+    def delete_picture(picture: Picture):
         """
-        Deletes a picture from the database by its id.
+        Deletes a picture from the database.
 
-        :param int id: the id of the picture to delete
+        :param picture Picture: the picture to delete
         """
         conn = None
         try:
@@ -285,7 +177,4 @@ class PictureDTO:
             print(f"Error deleting picture with ID {id}: {error}")
             if conn:
                 conn.rollback()
-        finally:
-            if conn is not None:
-                conn.close()
 

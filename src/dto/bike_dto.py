@@ -19,7 +19,7 @@ class BikeDTO:
             conn = Database.get_db()
             with conn.cursor() as cur:
                 query = """
-                SELECT id, bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, bike_state, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type
+                SELECT id, bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type
                 FROM BIKE;
                 """
                 cur.execute(query)
@@ -30,7 +30,7 @@ class BikeDTO:
                         b[0], b[1], b[2], b[3], b[4],
                         b[5], b[6], b[7], b[8], b[9],
                         b[10], b[11], b[12], b[13], b[14],
-                        b[15], b[16], b[17], b[18], b[19]
+                        b[15], b[16], b[17], b[18]
                     ) for b in bikes
                 ]
         except (Exception, psycopg2.DatabaseError) as error:
@@ -53,7 +53,7 @@ class BikeDTO:
             conn = Database.get_db()
             with conn.cursor() as cur:
                 query = """
-                SELECT id, bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, bike_state, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type
+                SELECT id, bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type
                 FROM BIKE
                 WHERE id=%s;
                 """
@@ -65,7 +65,7 @@ class BikeDTO:
                         fetched[0], fetched[1], fetched[2], fetched[3], fetched[4],
                         fetched[5], fetched[6], fetched[7], fetched[8], fetched[9],
                         fetched[10], fetched[11], fetched[12], fetched[13], fetched[14],
-                        fetched[15], fetched[16], fetched[17], fetched[18], fetched[19]
+                        fetched[15], fetched[16], fetched[17], fetched[18]
                     )
 
             return None
@@ -88,14 +88,14 @@ class BikeDTO:
             conn = Database.get_db()
             with conn.cursor() as cur:
                 query = """
-                INSERT INTO BIKE (bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, bike_state, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO BIKE (bicycode, entry_date, exit_date, brand, bike_type, wheel_size, frame_size, is_electric, origin, bike_status, next_action, ref, value, bike_dest, public_desc, private_desc, name, exit_type)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id;
                 """
                 cur.execute(query, (
                     bike.bicycode, bike.entry_date, bike.exit_date, bike.brand, bike.bike_type,
                     bike.wheel_size, bike.frame_size, bike.is_electric, bike.origin, bike.bike_status,
-                    bike.bike_state, bike.next_action, bike.ref, bike.value, bike.bike_dest,
+                    bike.next_action, bike.ref, bike.value, bike.bike_dest,
                     bike.public_desc, bike.private_desc, bike.name, bike.exit_type
                 ))
                 conn.commit()
@@ -120,13 +120,13 @@ class BikeDTO:
                 with conn.cursor() as cur:
                 query = """
                 UPDATE BIKE
-                SET bicycode=%s, entry_date=%s, exit_date=%s, brand=%s, bike_type=%s, wheel_size=%s, frame_size=%s, is_electric=%s, origin=%s, bike_status=%s, bike_state=%s, next_action=%s, ref=%s, value=%s, bike_dest=%s, public_desc=%s, private_desc=%s, name=%s, exit_type=%s
+                SET bicycode=%s, entry_date=%s, exit_date=%s, brand=%s, bike_type=%s, wheel_size=%s, frame_size=%s, is_electric=%s, origin=%s, bike_status=%s, next_action=%s, ref=%s, value=%s, bike_dest=%s, public_desc=%s, private_desc=%s, name=%s, exit_type=%s
                 WHERE id=%s;
                 """
                 cur.execute(query, (
                     bike.bicycode, bike.entry_date, bike.exit_date, bike.brand, bike.bike_type,
                     bike.wheel_size, bike.frame_size, bike.is_electric, bike.origin, bike.bike_status,
-                    bike.bike_state, bike.next_action, bike.ref, bike.value, bike.bike_dest,
+                    bike.next_action, bike.ref, bike.value, bike.bike_dest,
                     bike.public_desc, bike.private_desc, bike.name, bike.exit_type, bike.id
                 ))
                 conn.commit()
