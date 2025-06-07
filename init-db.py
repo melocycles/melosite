@@ -2,6 +2,7 @@ import os
 import time
 import psycopg2
 import logging
+import importlib.util
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -102,8 +103,29 @@ def create_tables():
         logging.error(f"Error creating tables: {e}")
         return False
 
+def run_optimizations():
+    """Run the optimizations from optimizeBikeTable.py"""
+    try:
+        # Dynamically import the optimizeBikeTable module
+        spec = importlib.util.spec_from_file_location(
+            "optimizeBikeTable", 
+            os.path.join(os.path.dirname(__file__), "optimizeBikeTable.py")
+        )
+        optimize_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(optimize_module)
+
+        # Run the optimization function
+        logging.info("Running bike table optimizations...")
+        optimize_module.optimize_bike_table()
+        logging.info("Bike table optimizations completed successfully")
+        return True
+    except Exception as e:
+        logging.error(f"Error running optimizations: {e}")
+        return False
+
 if __name__ == "__main__":
     if wait_for_db():
-        create_tables()
+        if create_tables():
+            run_optimizations()
     else:
         logging.error("Could not initialize the database")
