@@ -23,7 +23,7 @@ def checkCookieUser():
 
     if cookieUuid == info.USER_UUID: # on compare les uuid
         return True # identique on renvoié true
-      
+
     return False # différent on renvoi false
 
 # vérifie la connexion au compte admin (cf ci dessus)
@@ -35,7 +35,7 @@ def checkCookieAdmin():
 
     if cookieUuid == info.ADMIN_UUID:
         return True
-    
+
     return False
 
 # redirige depuis la site racine vers parcourVélo
@@ -76,7 +76,7 @@ def addBikePage():
         return render_template("ajouterVelo.html", dict_form = info.dict_form)
     else:
         abort(418)
-        
+
 
 # page modifier un vélo
 @app.route('/modifierVelo')
@@ -197,7 +197,7 @@ def APImodifyBike():
     """
     data = request.json # récupération des donnés
     for attribute in data:
-        
+
         if attribute.startswith("photo"): # on cherche si il y a des photos pour les envoyer dans removeEncoderHeader()
             data[attribute] = base64.b64decode(data[attribute].split(',')[1])
     response = sqlCRUD.modifyBike(data)
@@ -211,8 +211,6 @@ def login():
     data = request.json
     if "userName" in data and "password" in data: 
         result = sqlCRUD.checkUser(data["userName"], data["password"])
-        
-        
 
         if result["status"]:
             if result["role"] == "user":
@@ -284,14 +282,19 @@ def editConfigFile():
         print(json.dumps(jsonToRec))
 
         sqlCRUD.addColumn(configData["camelCase"],configData["entryType"], configData["addRequired"])
-        
+
     else:
         aFaire = "editer multiChoice"
-    
+
     return {"status" : "ok"}
 
 
 if __name__ == '__main__':
+    # This block is only executed when running the app directly with `python app.py`
+    # When running with Gunicorn, this block is not executed
     context = ('server.crt', 'server.key')
-    #app.run(debug=True, host='0.0.0.0') # version http
-    app.run(ssl_context=context, debug=True, host='0.0.0.0') # version https
+    # Determine if we're in development or production
+    is_dev = os.environ.get('FLASK_ENV') == 'development'
+
+    #app.run(debug=is_dev, host='0.0.0.0') # version http
+    app.run(ssl_context=context, debug=is_dev, host='0.0.0.0') # version https
