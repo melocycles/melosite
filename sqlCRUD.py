@@ -467,6 +467,7 @@ def getFilterValues() -> dict[list]:
         listAttributes = ["marque", "typeVelo", "tailleRoue", "tailleCadre", "etatVelo"]
 
         Uses a simple cache to avoid querying the database too frequently.
+        Optimized to use a single query instead of multiple queries.
     """
     global filter_values_cache
 
@@ -480,28 +481,39 @@ def getFilterValues() -> dict[list]:
     dictReturn = {}
     for i in jsonConfig:
         if jsonConfig[i]["filter"]:
-            listAttributes.append(i),
+            listAttributes.append(i)
             dictReturn[i] = []
+
+    if not listAttributes:
+        return dictReturn
 
     # Connexion à la base de données
     connection = getConnection()
     cursor = connection.cursor()
 
     try:
-        for attribut in listAttributes: # parcourt les attributs
-            cursor.execute( "SELECT %s From bike" %(attribut)) # création de la requette qui sélectionne toutes les valeur un attribut après l'autre
-            result = cursor.fetchall()
-            for valueTupple in result: # on parcourt le résultat qui est une liste de tupple
-                if valueTupple[0] not in dictReturn[attribut] and valueTupple[0] != None and valueTupple[0] != "": # on vérifie que c'est la première occurence 
-                    dictReturn[attribut].append(valueTupple[0]) # si oui on l'enregistre
+        # Build a single optimized query that gets distinct values for all filter columns
+        # This is much more efficient than querying each column separately
+        query_parts = []
+        for attr in listAttributes:
+            query_parts.append(f"SELECT '{attr}' as attr_name, {attr} as attr_value FROM bike WHERE {attr} IS NOT NULL AND {attr} != '' GROUP BY {attr}")
 
+        query = " UNION ALL ".join(query_parts)
+        cursor.execute(query)
+
+        # Process the results
+        for attr_name, attr_value in cursor.fetchall():
+            if attr_value not in dictReturn[attr_name]:
+                dictReturn[attr_name].append(attr_value)
+
+        # Sort the values
+        for attribut in listAttributes:
             if jsonConfig[attribut]["values"]: # si il a des valeurs prédéfinit on les trie dans l'ordre
                 try:
                     indexOfelement = lambda x: jsonConfig[attribut]["values"].index(utility.frenchToBool(x))
                     dictReturn[attribut].sort(key = indexOfelement)
                 except:
                     pass
-
             else: #sinon on les trie dans l'ordre alphabétique
                 dictReturn[attribut].sort()
 
